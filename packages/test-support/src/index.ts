@@ -23,7 +23,7 @@ import {
 export const selectors = {
   form: (name?: string) => (name ? `[data-test-fw-form="${name}"]` : '[data-test-fw-form]'),
   field: (path: string) => `[data-test-fw-field="${normalize(path)}"]`,
-  option: (key: string) => `[data-test-fw-option="${key}"]`,
+  option: (key: string) => `[data-test-fw-option="${CSS.escape(key)}"]`,
 }
 
 function normalize(path: string) {

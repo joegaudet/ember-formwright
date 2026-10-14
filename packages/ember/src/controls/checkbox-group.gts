@@ -22,7 +22,10 @@ export default class CheckboxGroup extends Component<ControlSignature<unknown[]>
   labelFor = (option: unknown) => labelOf(option, this.args.optionLabel)
   isChecked = (option: unknown) => this.value.some(v => matches(v, option, this.args.optionKey))
   isDisabled = (option: unknown) =>
-    this.args.disabled || isDisabled(option) || (this.atMax && !this.isChecked(option))
+    this.args.disabled ||
+    this.args.readonly ||
+    isDisabled(option) ||
+    (this.atMax && !this.isChecked(option))
 
   toggle = (option: unknown) => {
     const next = this.isChecked(option)

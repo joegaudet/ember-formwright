@@ -112,8 +112,16 @@ export default class Form<M extends object = object>
   fields: Field[] = []
   children: Form<any>[] = []
   @tracked version = 0
-  /** The values fields started with (or were last saved with), by path. */
-  baseline = new Map<string, unknown>()
+  /**
+   * The values fields started with (or were last saved with), by path, per model: when the
+   * same form is reused for another `@model`, it gets its own baseline instead of the old one.
+   */
+  baselines = new WeakMap<object, Map<string, unknown>>()
+  /** The submit in progress; a second submit joins it instead of saving twice. */
+  inFlight: Promise<void> | null = null
+  /** An auto-submit arrived while saving: save again once the current save finishes. */
+  resubmit = false
+  validationRun = 0
   element?: HTMLElement
 
   constructor(owner: Owner, args: FormSignature<M>['Args']) {
@@ -174,8 +182,21 @@ export default class Form<M extends object = object>
     return !hasErrors(this.errors) && this.children.every(c => c.isValid)
   }
 
+  /** Not a getter: it creates the map on first use. */
+  baselineOf(): Map<string, unknown> {
+    let baseline = this.baselines.get(this.model)
+    if (!baseline) this.baselines.set(this.model, (baseline = new Map()))
+    return baseline
+  }
+
+  /** Form-level errors, plus any error no field of this form can show, so none is silent. */
   get formErrors(): string[] {
-    return this.errorsFor('')
+    void this.version
+    const shown = new Set(this.fields.map(f => f.path))
+    const orphans = Object.entries(this.errors)
+      .filter(([path]) => path !== '' && !shown.has(path))
+      .flatMap(([, messages]) => messages)
+    return [...this.errorsFor(''), ...orphans]
   }
 
   // ---- fields --------------------------------------------------------------------------
@@ -190,12 +211,18 @@ export default class Form<M extends object = object>
 
   isFieldDirty(path: string): boolean {
     void this.version
-    return this.baseline.has(path) && !same(this.baseline.get(path), this.read(path))
+    const baseline = this.baselineOf()
+    if (!baseline.has(path)) {
+      // First read for this model (e.g. @model just changed): what it holds now is clean.
+      baseline.set(path, snapshotOf(this.read(path)))
+      return false
+    }
+    return !same(baseline.get(path), this.read(path))
   }
 
   register(field: Field): void {
-    if (!this.baseline.has(field.path))
-      this.baseline.set(field.path, snapshotOf(this.read(field.path)))
+    if (!this.baselineOf().has(field.path))
+      this.baselineOf().set(field.path, snapshotOf(this.read(field.path)))
     this.fields.push(field)
     this.invalidateSoon()
   }
@@ -234,18 +261,20 @@ export default class Form<M extends object = object>
     this.adapter.set(this.model, path, value)
     this.args.onChange?.(path, value, this.model)
     if (this.root.hasFailedSubmit) void waitForPromise(this.root.validate())
-    if (this.args.autoSubmit) void this.submit()
+    if (this.args.autoSubmit) void this.root.submitTree(true)
   }
 
   // ---- validation ----------------------------------------------------------------------
 
   async validate(): Promise<boolean> {
-    const [errors] = await Promise.all([
+    const run = ++this.validationRun
+    const [errors, ...children] = await Promise.all([
       runValidator(this.args.validator, this.model),
       ...this.children.map(c => c.validate()),
     ])
-    if (!this.isDestroying) this.errors = errors
-    return this.isValid
+    // An older, slower validation finishing last must not overwrite a newer result.
+    if (run === this.validationRun && !this.isDestroying) this.errors = errors
+    return !hasErrors(errors) && children.every(Boolean)
   }
 
   async focusFirstInvalid(): Promise<void> {
@@ -256,12 +285,29 @@ export default class Form<M extends object = object>
 
   // ---- submit / reset ------------------------------------------------------------------
 
-  submit = (): Promise<void> => waitForPromise(this.root.submitTree())
+  submit = (): Promise<void> => this.root.submitTree(false)
 
   reset = (): Promise<void> => waitForPromise(this.resetTree())
 
-  async submitTree(): Promise<void> {
-    if (this.isSubmitting) return
+  submitTree(queue: boolean): Promise<void> {
+    if (this.inFlight) {
+      if (queue) this.resubmit = true
+      return this.inFlight
+    }
+    // Registered with the test waiters once, here; callers share the same promise.
+    this.inFlight = waitForPromise(
+      this.runSubmit().finally(() => {
+        this.inFlight = null
+        if (this.resubmit && !this.isDestroying) {
+          this.resubmit = false
+          return this.submitTree(false)
+        }
+      }),
+    )
+    return this.inFlight
+  }
+
+  async runSubmit(): Promise<void> {
     const model = this.model
 
     if (!(await this.validate())) {
@@ -295,13 +341,20 @@ export default class Form<M extends object = object>
   }
 
   async save(): Promise<void> {
-    await (this.args.onSubmit ? this.args.onSubmit(this.model) : this.adapter.save?.(this.model))
+    try {
+      await (this.args.onSubmit ? this.args.onSubmit(this.model) : this.adapter.save?.(this.model))
+    } catch (error) {
+      // A nested form hears about its own failure; the root still stops and reports it.
+      if (this.args.parent) this.args.failedSubmit?.(error)
+      throw error
+    }
     this.args.didSubmit?.(this.model)
   }
 
   markSaved(): void {
-    for (const field of this.fields)
-      this.baseline.set(field.path, snapshotOf(this.read(field.path)))
+    // Every path seen, not just rendered fields: a hidden field's saved value is clean too.
+    const baseline = this.baselineOf()
+    for (const path of baseline.keys()) baseline.set(path, snapshotOf(this.read(path)))
     this.version++ // the baseline isn't tracked
     this.hasFailedSubmit = false
     this.children.forEach(c => c.markSaved())
@@ -317,7 +370,7 @@ export default class Form<M extends object = object>
     if (this.adapter.rollback) {
       this.adapter.rollback(this.model)
     } else {
-      for (const [path, value] of this.baseline) {
+      for (const [path, value] of this.baselineOf()) {
         if (!same(value, this.read(path))) this.adapter.set(this.model, path, snapshotOf(value))
       }
     }

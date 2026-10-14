@@ -38,10 +38,11 @@ export default class Button extends Component<ButtonSignature> {
   onClick = async () => {
     if (this.busy || !this.args.onClick) return
     const result = this.args.onClick()
-    if (result instanceof Promise) {
+    // Any thenable (native, RSVP, ...) marks the button busy until it settles.
+    if (typeof (result as PromiseLike<unknown> | undefined)?.then === 'function') {
       this.acting = true
       try {
-        await waitForPromise(result)
+        await waitForPromise(Promise.resolve(result))
       } finally {
         this.acting = false
       }

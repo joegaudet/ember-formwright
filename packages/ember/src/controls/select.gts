@@ -39,7 +39,7 @@ export default class Select extends Component<ControlSignature> {
       id={{@id}}
       name={{@name}}
       class="fw-control fw-select"
-      disabled={{@disabled}}
+      disabled={{if @readonly true @disabled}}
       required={{@required}}
       aria-invalid={{if @invalid "true"}}
       aria-describedby={{@describedBy}}

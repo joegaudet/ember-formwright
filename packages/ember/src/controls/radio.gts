@@ -14,7 +14,7 @@ export default class Radio extends Component<ControlSignature> {
   keyFor = (option: unknown) => String(keyOf(option, this.args.optionKey))
   labelFor = (option: unknown) => labelOf(option, this.args.optionLabel)
   isChecked = (option: unknown) => matches(this.args.value, option, this.args.optionKey)
-  isDisabled = (option: unknown) => this.args.disabled || isDisabled(option)
+  isDisabled = (option: unknown) => this.args.disabled || this.args.readonly || isDisabled(option)
 
   choose = (option: unknown) =>
     this.args.onChange(toStored(option, this.args.storeKey, this.args.optionKey))

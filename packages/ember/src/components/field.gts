@@ -50,6 +50,12 @@ export interface FieldSignature {
     min?: number | string
     max?: number | string
     step?: number | string
+    /** For `textarea` (and inputs): a length cap, and whether to show a counter. */
+    maxLength?: number
+    showCount?: boolean
+    /** For `currency`: an ISO 4217 code (default USD) and a locale (default the browser's). */
+    currency?: string
+    locale?: string
     /** Formats the value when shown (inline editing). */
     format?: (value: unknown) => string
   }
@@ -349,6 +355,10 @@ const ControlArea: TOC<ControlAreaSignature> = <template>
             min=field.args.min
             max=field.args.max
             step=field.args.step
+            maxLength=field.args.maxLength
+            showCount=field.args.showCount
+            currency=field.args.currency
+            locale=field.args.locale
           )
           as |Control|
         }}

@@ -13,7 +13,7 @@ import '@formwright/ember/theme.css' // optional
 
 <template>
   <Form @model={{@user}} @validator={{userSchema}} as |f|>
-    <f.Field @for='email' @control='email' @label='Email' />
+    <f.Field @for="email" @control="email" @label="Email" />
     <f.Submit />
   </Form>
 </template>

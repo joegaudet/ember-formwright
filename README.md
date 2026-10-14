@@ -25,18 +25,17 @@ import { Form } from '@formwright/ember'
 import '@formwright/ember/theme.css' // optional: a theme driven by --fw-* custom properties
 import { z } from 'zod'
 
-const schema = z.object({
-  email: z.string().email('That email looks off'),
-  address: z.object({ city: z.string().min(1, 'City is required') }),
-})
+const userSchema = z.object({ email: z.string().email('That email looks off') })
+// A nested form validates its own model, so its errors land on its own fields.
+const addressSchema = z.object({ city: z.string().min(1, 'City is required') })
 
 <template>
-  <Form @model={{@user}} @name='signup' @validator={{schema}} @onSubmit={{@save}} as |f|>
-    <f.Field @for='email' @control='email' @label='Email' @hint='We never share it' />
-    <f.Field @for='plan' @control='select' @label='Plan' @options={{@plans}} />
+  <Form @model={{@user}} @name="signup" @validator={{userSchema}} @onSubmit={{@save}} as |f|>
+    <f.Field @for="email" @control="email" @label="Email" @hint="We never share it" />
+    <f.Field @for="plan" @control="select" @label="Plan" @options={{@plans}} />
 
-    <f.Form @model={{@user.address}} @name='address' @legend='Address' as |a|>
-      <a.Field @for='city' @label='City' />
+    <f.Form @model={{@user.address}} @name="address" @validator={{addressSchema}} as |a|>
+      <a.Field @for="city" @label="City" />
     </f.Form>
 
     <f.Errors />
@@ -108,7 +107,7 @@ import { registerControl, type ControlSignature } from '@formwright/ember'
 class Stepper extends Component<ControlSignature<number>> {
   inc = () => this.args.onChange((this.args.value ?? 0) + 1)
   <template>
-    <button id={{@id}} type='button' {{on 'click' this.inc}}>{{@value}}</button>
+    <button id={{@id}} type="button" {{on "click" this.inc}}>{{@value}}</button>
   </template>
 }
 

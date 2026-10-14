@@ -5,5 +5,5 @@
   "trailingComma": "all",
   "arrowParens": "avoid",
   "plugins": ["prettier-plugin-ember-template-tag"],
-  "overrides": [{ "files": "*.{gjs,gts}", "options": { "templateSingleQuote": false } }]
+  "templateSingleQuote": false
 }
