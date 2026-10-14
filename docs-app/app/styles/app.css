@@ -402,6 +402,11 @@ a {
   padding: 0.9rem;
 }
 
+/* No model panel (@noModel): the preview takes the full width. */
+.example-stage:not(:has(.example-model)) {
+  grid-template-columns: 1fr;
+}
+
 @media (max-width: 760px) {
   .example-stage {
     grid-template-columns: 1fr;
