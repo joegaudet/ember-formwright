@@ -1,12 +1,15 @@
 name: pages
 
-# Publishes docs/site, plus the live demo built from test-app, to GitHub Pages.
+# Publishes docs/site to GitHub Pages: the marketing page, plus the demo (built from test-app
+# into docs/site/demo) and the guide (built from docs-app into docs/site/guide).
 on:
   push:
     branches: [main]
     paths:
       - 'docs/site/**'
       - 'test-app/app/**'
+      - 'test-app/index.html'
+      - 'test-app/public/**'
       - 'docs-app/**'
       - 'packages/*/src/**'
       - '.github/workflows/pages.yml'
