@@ -12,6 +12,7 @@ export default tseslint.config(
       '**/*.d.ts',
       '.claude/**',
       'docs/**',
+      'examples/**',
       'test-app/config/**',
       '**/*.cjs',
     ],

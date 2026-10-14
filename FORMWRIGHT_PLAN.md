@@ -1,6 +1,18 @@
 # Formwright — modernization plan for ember-foxy-forms
 
-Status: draft, written 2026-10-14 from a 30-question intake. Nothing has been implemented yet.
+Status: implemented 2026-10-14 (phases 0–7; phase 8 is ready but not published).
+
+Deviations from the plan, and why:
+- Phases 1–4 landed as one rewrite, not a behaviour-preserving port first: the new API breaks
+  every component anyway, so porting the old suite to Ember 7 first would have been thrown away.
+  The old tests were used as the spec for the new ones.
+- Ember versions: latest is 7.3, previous LTS is 6.12. CI tests both.
+- The classic-build example runs on the workspace's Ember (7.3). In the monorepo a different
+  version only for one app loads two copies of Ember; the 6.12 job overrides it workspace-wide.
+- `@formwright/real-enums` reads real-enums duck-typed: real-enums 2 isn't on npm yet (1.1.0 ships
+  no JavaScript), so it's an optional peer.
+- Dropped and documented in MIGRATION.md rather than ported: composite fields, the form-for
+  service (notifications, navigation guard, class config), the destroy button, submit queueing.
 
 ## Decisions (from intake)
 

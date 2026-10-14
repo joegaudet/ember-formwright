@@ -1,0 +1,109 @@
+<!doctype html>
+<!-- Source of site/social-card.png. Render at 1200x630:
+     chrome --headless --window-size=1200,630 --screenshot=site/social-card.png social-card.html -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap"
+    />
+    <style>
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        align-items: center;
+        gap: 48px;
+        padding: 0 80px;
+        box-sizing: border-box;
+        font-family: Inter, sans-serif;
+        color: #f8fafc;
+        background:
+          radial-gradient(36rem 26rem at 78% 50%, rgb(79 70 229 / 0.45), transparent 70%), #0b0b14;
+      }
+      .brand {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        font-weight: 800;
+        font-size: 34px;
+        margin-bottom: 34px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 66px;
+        line-height: 1.04;
+        letter-spacing: -0.03em;
+        font-weight: 800;
+      }
+      .g {
+        background: linear-gradient(90deg, #a5b4fc, #fb7185);
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+      p {
+        margin: 26px 0 0;
+        color: #cbd5e1;
+        font-size: 26px;
+        font-weight: 500;
+      }
+      .card {
+        background: #fff;
+        color: #1b1d24;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 30px 80px -20px rgb(79 70 229 / 0.7);
+      }
+      .label {
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .input {
+        border: 2px solid #cfd3dc;
+        border-radius: 10px;
+        height: 46px;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        padding: 0 14px;
+        font-size: 18px;
+      }
+      .bad {
+        border-color: #c62828;
+      }
+      .err {
+        color: #c62828;
+        font-size: 16px;
+        margin: -10px 0 18px;
+      }
+      .btn {
+        background: #4f46e5;
+        color: #fff;
+        border-radius: 10px;
+        padding: 12px 20px;
+        display: inline-block;
+        font-weight: 700;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="brand"><img src="site/logo.svg" width="52" height="52" alt="" />Formwright</div>
+      <h1>Write the form.<br /><span class="g">The wiring writes itself.</span></h1>
+      <p>Accessible forms for Ember. Any validator, any data layer.</p>
+    </div>
+    <div class="card">
+      <div class="label">Email</div>
+      <div class="input bad">ada@</div>
+      <div class="err">That email looks off</div>
+      <div class="label">Plan</div>
+      <div class="input">Team — $12/seat</div>
+      <span class="btn">Create workspace</span>
+    </div>
+  </body>
+</html>

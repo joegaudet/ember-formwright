@@ -1,0 +1,88 @@
+name: release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release
+  # Never cancel a publish half-way through.
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      # Trusted publishing is OIDC: npm trades this short-lived token for
+      # publish rights, and attests the tarball back to this commit and this
+      # workflow. No NPM_TOKEN is involved, so there is no long-lived
+      # credential to leak or rotate.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+        with:
+          run_install: false
+      - uses: actions/setup-node@v7
+        with:
+          # Trusted publishing needs node >= 22.14.0; the npm upgrade below
+          # needs more than that again, so track the 24 line.
+          node-version: 24
+          # No `cache: pnpm`: unprivileged jobs can write that store, so a publish job never restores it.
+          registry-url: https://registry.npmjs.org
+
+      # The runner images ship npm 10.x, which predates trusted publishing and
+      # fails an OIDC publish with a misleading E404. npm >= 11.5.1 is the real
+      # requirement; upgrade before anything tries to publish.
+      # Pinned to the 11 line rather than @latest: npm 12 raised its own node
+      # floor past what this job pins, and an unpinned upgrade turns a node
+      # bump into a surprise release failure. 11.5.1 is the real minimum.
+      - name: Upgrade npm for trusted publishing
+        run: |
+          npm install -g 'npm@^11.5.1'
+          npm --version
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+      - name: Version PR, or publish if one was merged
+        id: changesets
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+        # changesets/action v2 renamed every input; the v1 names fail the step.
+        with:
+          version-script: pnpm changeset version
+          publish-script: pnpm release
+          commit-message: 'chore: version packages'
+          pr-title: 'chore: version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # No NODE_AUTH_TOKEN: publishing authenticates through OIDC. Each
+          # package must name this repository and this workflow file
+          # (release.yml) as a trusted publisher in its npmjs.com settings, or
+          # the publish is refused.
+          #
+          # `pnpm release` runs scripts/publish.mjs rather than
+          # `changeset publish` -- changesets hands the publish to pnpm in a
+          # pnpm workspace, and pnpm publish speaks neither OIDC nor
+          # provenance. See the script's header.
+
+      # scripts/publish.mjs does not create tags: the packages move in a fixed
+      # group, and one tag describes the release better than five do. Tag only
+      # when something was actually published, so a version-PR run leaves no tag.
+      - name: Tag the release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./packages/ember/package.json').version")
+          if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+            echo "v$version already exists"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v$version" -m "v$version"
+          git push origin "v$version"
