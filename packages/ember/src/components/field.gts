@@ -7,36 +7,23 @@ import { on } from '@ember/modifier'
 import { guidFor } from '@ember/object/internals'
 import { htmlSafe } from '@ember/template'
 import { modifier } from 'ember-modifier'
-import type { WithBoundArgs } from '@glint/template'
+import type { ComponentLike } from '@glint/template'
 import type Form from './form.gts'
 import Errors from './errors.gts'
 import { normalizePath } from '../path.ts'
 import { lookupControl, isGroupControl, type ControlComponent } from '../registry.ts'
-import type { OptionAccessor } from '../controls/signature.ts'
+import type { ControlSignature, OptionAccessor } from '../controls/signature.ts'
 import { labelOf, matches } from '../controls/options.ts'
 
-type BoundControl = WithBoundArgs<
-  ControlComponent,
-  | 'id'
-  | 'name'
-  | 'type'
-  | 'value'
-  | 'onChange'
-  | 'disabled'
-  | 'readonly'
-  | 'required'
-  | 'invalid'
-  | 'describedBy'
-  | 'placeholder'
-  | 'label'
-  | 'options'
-  | 'optionKey'
-  | 'optionLabel'
-  | 'storeKey'
-  | 'min'
-  | 'max'
-  | 'step'
->
+/**
+ * The control yielded by a field's block, with the field's wiring already bound. Its extra
+ * args depend on which control the field uses (`@maxLength`, `@currency`, `@mask`, ...),
+ * so they're typed loosely.
+ */
+type BoundControl = ComponentLike<{
+  Element: HTMLElement
+  Args: Partial<ControlSignature['Args']> & Record<string, unknown>
+}>
 
 export interface FieldSignature {
   Element: HTMLDivElement
