@@ -1,0 +1,34 @@
+packages:
+  - 'packages/*'
+  - 'test-app'
+  - 'docs-app'
+  - 'examples/*'
+
+allowBuilds:
+  core-js: false
+  esbuild: true
+
+# real-enums 2 is an optional peer that is not on npm yet.
+autoInstallPeers: false
+
+overrides:
+  # Examples ask for the published ranges; inside the workspace they get the local packages.
+  '@formwright/ember': 'workspace:*'
+  '@formwright/maskito': 'workspace:*'
+  # Kolay pins an older @glint/template; one copy keeps template types compatible.
+  '@glint/template': ^1.9.0
+  '@formwright/real-enums': 'workspace:*'
+  '@formwright/test-support': 'workspace:*'
+  '@formwright/warp-drive': 'workspace:*'
+
+# ember-repl (a Kolay dependency, used by docs-app) is a v2 addon with no addon-main file,
+# which the classic-compat build requires. The patch adds the standard shim.
+packageExtensions:
+  ember-repl@8:
+    dependencies:
+      '@embroider/addon-shim': ^1.10.3
+patchedDependencies:
+  ember-repl@8.2.3: patches/ember-repl@8.2.3.patch
+
+# ember-eslint-parser hits a require(esm) cycle error on Node 22.14; run scripts on 24.
+useNodeVersion: 24.11.1

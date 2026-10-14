@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Formwright</title>
+    <meta
+      name="description"
+      content="Declarative, accessible forms for Ember. One Form, one Field, any validator (zod, valibot, any Standard Schema), any data layer (WarpDrive, ember-data, plain objects), and test harnesses that read like your users."
+    />
+    <link rel="canonical" href="https://joegaudet.com/formwright/" />
+    <!-- Link previews (Slack, X, LinkedIn, iMessage). The card's source is docs/social-card.html. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Formwright" />
+    <meta property="og:title" content="Formwright: forms for Ember that wire themselves" />
+    <meta
+      property="og:description"
+      content="Declarative, accessible forms for Ember. Any validator, any data layer, and test harnesses that read like your users."
+    />
+    <meta property="og:url" content="https://joegaudet.com/formwright/" />
+    <meta property="og:image" content="https://joegaudet.com/formwright/social-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Formwright: forms for Ember that wire themselves." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css"
+      integrity="sha384-7P0NVe9LPDbUCAF+fH2R8Egwz1uqNH83Ns/bfJY0fN2XCDBMUI2S9gGzIOIRBKsA"
+      crossorigin="anonymous"
+    />
+    <!-- Code blocks are dark in both schemes, like an editor, so one theme. -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+      integrity="sha384-wFjoQjtV1y5jVHbt0p35Ui8aV8GVpEZkyF99OXWqP/eNJDU93D3Ugxkoyh6Y2I4A"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap"
+    />
+    <link rel="stylesheet" href="site.css" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  </head>
+  <body>
+    <nav class="site-nav">
+      <div class="container">
+        <ul>
+          <li class="brand">
+            <img src="logo.svg" alt="" width="28" height="28" /><strong>Formwright</strong>
+          </li>
+        </ul>
+        <ul>
+          <li class="wide-only"><a href="#why">Why</a></li>
+          <li><a href="#validation">Validation</a></li>
+          <li><a href="guide/">Guide</a></li>
+          <li class="wide-only"><a href="#testing">Testing</a></li>
+          <li class="wide-only"><a href="#adapters">Adapters</a></li>
+          <li class="wide-only"><a href="#demo">Demo</a></li>
+          <li><a href="https://github.com/joegaudet/formwright">GitHub</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <header class="hero-band">
+      <div class="container hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Forms for Ember 6.12 LTS and 7</p>
+          <h1>
+            Write the form.
+            <span class="gradient-text">The wiring writes itself.</span>
+          </h1>
+          <p class="hero-sub">
+            One <code>&lt;Form&gt;</code>, one <code>&lt;f.Field&gt;</code>. Labels, ids, errors,
+            <code>aria-invalid</code>, dirty state, reset and nested saves are handled. Bring any
+            validator (zod, valibot, any Standard Schema) and any data layer (WarpDrive, ember-data,
+            plain objects). Then test it with harnesses that read the way your users do.
+          </p>
+          <div class="hero-actions">
+            <a href="#demo" role="button">Try the demo</a>
+            <a href="https://github.com/joegaudet/formwright" role="button" class="ghost">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+                />
+              </svg>
+              GitHub
+            </a>
+          </div>
+          <div class="install">
+            <span class="prompt" aria-hidden="true">$</span>
+            <code>npm i @formwright/ember</code>
+          </div>
+          <p class="install-note">
+            Add <code>@formwright/test-support</code> for harnesses, and an adapter if you use one.
+          </p>
+        </div>
+
+        <div class="demo-window" aria-label="Live demo">
+          <div class="chrome" aria-hidden="true">
+            <i></i><i></i><i></i><span>live demo · it's the real addon</span>
+          </div>
+          <iframe src="demo/" title="Formwright live demo" loading="lazy"></iframe>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="why">
+        <p class="eyebrow">Why</p>
+        <h2>A field is ten things. You should write one.</h2>
+        <p>
+          An accessible field needs a label tied to its input, a hint and an error region the input
+          is described by, <code>aria-invalid</code> at the right moment, a value bound one way and
+          written back on change, and dirty state that knows what "unchanged" was. Formwright does
+          all of it from a model path.
+        </p>
+        <div class="grid">
+          <article>
+            <header><strong>By hand, for every field</strong></header>
+            <pre><code class="language-handlebars">&lt;label for="email-input"&gt;Email&lt;/label&gt;
+&lt;input
+  id="email-input"
+  type="email"
+  value={{this.user.email}}
+  aria-invalid={{if this.errors.email "true"}}
+  aria-describedby="email-hint email-errors"
+  {{on "input" this.updateEmail}}
+/&gt;
+&lt;p id="email-hint"&gt;We never share it&lt;/p&gt;
+&lt;ul id="email-errors" aria-live="polite"&gt;
+  {{#each this.errors.email as |e|}}&lt;li&gt;{{e}}&lt;/li&gt;{{/each}}
+&lt;/ul&gt;</code></pre>
+          </article>
+          <article>
+            <header><strong>With Formwright</strong></header>
+            <pre><code class="language-handlebars">&lt;Form @model={{this.user}} @validator={{userSchema}} as |f|&gt;
+  &lt;f.Field
+    @for="email"
+    @control="email"
+    @label="Email"
+    @hint="We never share it"
+  /&gt;
+  &lt;f.Submit /&gt;
+&lt;/Form&gt;</code></pre>
+          </article>
+        </div>
+
+        <div class="features">
+          <article>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 12l2 2 4-4" />
+              <path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z" />
+            </svg>
+            <h3>Any validator</h3>
+            <p>
+              Pass a zod, valibot or ArkType schema, anything that speaks Standard Schema, or a
+              plain function. Issue paths land on the right field.
+            </p>
+          </article>
+          <article>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <ellipse cx="12" cy="6" rx="8" ry="3" />
+              <path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6" />
+              <path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" />
+            </svg>
+            <h3>Any data layer</h3>
+            <p>
+              Plain objects and <code>@tracked</code> classes work out of the box. An adapter
+              teaches it WarpDrive and ember-data: save, rollback, server errors.
+            </p>
+          </article>
+          <article>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="5" r="2" />
+              <path d="M5 9l7 1 7-1M12 10v5l-3 6M12 15l3 6" />
+            </svg>
+            <h3>Accessible by default</h3>
+            <p>
+              Labels, legends for groups, <code>aria-describedby</code>, live error regions, and
+              focus on the first invalid field. Every test runs axe.
+            </p>
+          </article>
+          <article>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 20h4l10-10-4-4L4 16z" />
+              <path d="M13 7l4 4" />
+            </svg>
+            <h3>Inline editing</h3>
+            <p>
+              Click a value to edit it in place, or in a native <code>popover</code> anchored with
+              CSS. Confirm with ✔, cancel with Esc. No positioning library.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="usage">
+        <p class="eyebrow">Usage</p>
+        <h2>Strict mode, named args, nothing to register</h2>
+        <p>
+          Import <code>Form</code> into a <code>.gts</code> template. Fields, nested forms and
+          buttons come from the form itself, already bound to it.
+        </p>
+        <pre><code class="language-typescript">import { Form } from '@formwright/ember'
+import '@formwright/ember/theme.css' // optional
+
+&lt;template&gt;
+  &lt;Form @model={{@order}} @name="checkout" @onSubmit={{@save}} as |f|&gt;
+    &lt;f.Field @for="email" @control="email" @label="Email" @required={{true}} /&gt;
+    &lt;f.Field @for="size" @control="select" @label="Size" @options={{SIZES}} /&gt;
+    &lt;f.Field @for="gift" @control="checkbox" @label="This is a gift" /&gt;
+
+    &lt;f.Form @model={{@order.address}} @name="address" @legend="Ship to" as |a|&gt;
+      &lt;a.Field @for="city" @label="City" /&gt;
+    &lt;/f.Form&gt;
+
+    &lt;f.Errors /&gt;
+    &lt;f.Submit&gt;Place order&lt;/f.Submit&gt;
+    {{#if f.state.isDirty}}Unsaved changes{{/if}}
+  &lt;/Form&gt;
+&lt;/template&gt;</code></pre>
+        <p>
+          Built-in controls: <code>input</code>, <code>email</code>, <code>password</code>,
+          <code>search</code>, <code>tel</code>, <code>url</code>, <code>number</code>,
+          <code>range</code>, <code>color</code>, <code>date</code>, <code>datetime</code>,
+          <code>time</code>, <code>textarea</code>, <code>select</code>, <code>radio</code>,
+          <code>checkbox</code>, <code>checkbox-group</code> and <code>currency</code> (formatted
+          with <code>Intl</code>). Pass any component to <code>@control</code>, or register one by
+          name.
+        </p>
+        <p>
+          <a href="guide/" role="button">Read the guide</a>&nbsp; Every control, option and hook,
+          with live, tested examples.
+        </p>
+      </section>
+
+      <section id="validation">
+        <p class="eyebrow">Validation</p>
+        <h2>Bring the schema you already have</h2>
+        <p>
+          Validation runs on submit. After a failed submit it re-runs on every change, so errors
+          clear as they are fixed. Nested forms validate with their root.
+        </p>
+        <div class="grid">
+          <pre><code class="language-typescript">import { z } from 'zod'
+
+export const userSchema = z.object({
+  email: z.string().email('That email looks off'),
+  address: z.object({
+    city: z.string().min(1, 'City is required'),
+  }),
+})
+// "address.city" errors show on &lt;f.Field @for="address.city"&gt;</code></pre>
+          <pre><code class="language-typescript">// Or a function: return messages by path.
+// The empty path is for form-level errors.
+const validator = (user: User) =&gt; ({
+  ...(user.password !== user.confirm &amp;&amp; {
+    confirm: ['Passwords must match'],
+  }),
+  ...(user.banned &amp;&amp; { '': ['This account is locked'] }),
+})</code></pre>
+        </div>
+      </section>
+
+      <section id="testing">
+        <p class="eyebrow">Testing</p>
+        <h2>Harnesses: tests that read like your users</h2>
+        <p>
+          Describe a form once as a harness class. Decorators declare its fields, each with the
+          harness for its control, and its nested forms. Every harness is created once and looks up
+          the DOM live, so it survives re-renders. Custom controls get their own harness by
+          subclassing <code>FieldHarness</code>.
+        </p>
+        <div class="grid">
+          <pre><code class="language-typescript">import {
+  FormHarness, InputHarness, SelectHarness,
+  CheckboxGroupHarness, CheckboxHarness, field, form,
+} from '@formwright/test-support'
+
+export class AddressForm extends FormHarness {
+  @field(InputHarness) declare city: InputHarness
+}
+
+export class SignupForm extends FormHarness {
+  static formName = 'signup'
+
+  @field(InputHarness) declare email: InputHarness
+  @field(SelectHarness) declare plan: SelectHarness
+  @field(CheckboxGroupHarness) declare notify: CheckboxGroupHarness
+  @field(CheckboxHarness) declare terms: CheckboxHarness
+  @form(AddressForm) declare address: AddressForm
+}</code></pre>
+          <pre><code class="language-typescript">test('signing up', async function (assert) {
+  await render(&lt;template&gt;&lt;Signup /&gt;&lt;/template&gt;)
+  const signup = new SignupForm()
+
+  await signup.email.fillIn('ada@example.com')
+  await signup.plan.select('team')
+  await signup.notify.select(['email', 'sms'])
+  await signup.address.city.fillIn('Lisbon')
+  await signup.submit()
+
+  assert.deepEqual(signup.terms.errors, [
+    'Please accept the terms',
+  ])
+  assert.true(signup.terms.isInvalid)
+})</code></pre>
+        </div>
+        <div class="overflow-auto">
+          <table class="striped selector-list">
+            <thead>
+              <tr>
+                <th scope="col">Selector</th>
+                <th scope="col">On</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><code>data-test-fw-form="signup"</code></th>
+                <td>
+                  The <code>&lt;form&gt;</code>, or a nested form's <code>&lt;fieldset&gt;</code>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>data-test-fw-field="address.city"</code></th>
+                <td>
+                  A field, by model path. <code>items[0].name</code> normalizes to
+                  <code>items.0.name</code>.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>data-test-fw-path="signup.address.city"</code></th>
+                <td>The same field, from the root form</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>data-test-fw-type="select"</code></th>
+                <td>The control a field uses; the harness picks a driver from it</td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <code>-label</code> <code>-hint</code> <code>-error</code> <code>-option</code>
+                  <code>-submit</code> <code>-reset</code> <code>-commit</code> <code>-cancel</code>
+                  <code>-display</code>
+                </th>
+                <td>The parts of a field and form</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="adapters">
+        <p class="eyebrow">Adapters</p>
+        <h2>Small packages for the rest of your stack</h2>
+        <p>
+          The core edits any object. Each adapter is a few dozen lines, so it is easy to read, and
+          easy to write your own.
+        </p>
+        <div class="overflow-auto">
+          <table class="striped">
+            <thead>
+              <tr>
+                <th scope="col">Package</th>
+                <th scope="col">What it adds</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><code>@formwright/warp-drive</code></th>
+                <td>
+                  WarpDrive and ember-data records: <code>save()</code> on submit,
+                  <code>rollbackAttributes()</code> on reset, server errors on their fields, new
+                  nested records saved with their parent.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>@formwright/real-enums</code></th>
+                <td>
+                  <a href="https://joegaudet.com/real-enums/">real-enums</a> classes as
+                  <code>@options</code>, filtered with <code>enumOptions</code>, stored as members
+                  or raw strings, shown with their labels.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>@formwright/maskito</code></th>
+                <td>A <code>masked</code> control powered by Maskito: phones, cards, dates.</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>@formwright/test-support</code></th>
+                <td>The form harnesses above, with drivers you can extend for custom controls.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="install-block">
+          <pre><code class="language-typescript">// app/app.ts: every form edits WarpDrive records
+import { setDefaultAdapter } from '@formwright/ember'
+import { warpDriveAdapter } from '@formwright/warp-drive'
+
+setDefaultAdapter(warpDriveAdapter)</code></pre>
+        </div>
+        <pre><code class="language-handlebars">{{! options straight from a real-enums class }}
+&lt;f.Field @for="state" @control="radio" @label="State"
+  @options={{enumOptions OrderState except=(array OrderState.Cancelled)}} /&gt;</code></pre>
+      </section>
+
+      <section id="demo">
+        <p class="eyebrow">Demo</p>
+        <h2>Try it</h2>
+        <p>
+          This is the real addon, built from the repository's test app. Submit it empty, fix the
+          errors one by one, open the inline editor, and watch the model change on the right.
+        </p>
+        <div class="demo-window full">
+          <div class="chrome" aria-hidden="true">
+            <i></i><i></i><i></i><span>joegaudet.com/formwright/demo</span>
+          </div>
+          <iframe src="demo/" title="Formwright live demo, full size" loading="lazy"></iframe>
+        </div>
+      </section>
+
+      <section id="migrating">
+        <p class="eyebrow">Coming from ember-foxy-forms</p>
+        <h2>Formwright is its successor</h2>
+        <p>
+          Same idea, rebuilt for modern Ember: a v2 addon in TypeScript with
+          <code>.gts</code> components, named arguments only, and no runtime dependencies beyond
+          <code>ember-modifier</code>. The
+          <a href="https://github.com/joegaudet/formwright/blob/main/MIGRATION.md"
+            >migration guide</a
+          >
+          maps every old component and argument to its replacement.
+        </p>
+      </section>
+    </main>
+
+    <footer class="container">
+      <small>
+        MIT © Joe Gaudet ·
+        <a href="https://github.com/joegaudet/formwright#readme">README</a> ·
+        <a href="https://github.com/joegaudet/formwright/blob/main/MIGRATION.md">Migration guide</a>
+        ·
+        <a href="https://github.com/joegaudet/formwright/blob/main/CONTRIBUTING.md">Contributing</a>
+        · A sibling of <a href="https://joegaudet.com/real-enums/">real-enums</a>
+      </small>
+    </footer>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
+      integrity="sha384-06z5D//U/xpvxZHuUz92xBvq3DqBBFi7Up53HRrbV7Jlv7Yvh/MZ7oenfUe9iCEt"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"
+      integrity="sha384-PeOqKNW/piETaCg8rqKFy+Pm6KEk7e36/5YZE5XO/OaFdO+/Aw3O8qZ9qDPKVUgx"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js"
+      integrity="sha384-LMCbF6eKAywctm2tlnguxYpyYDf0/Z3ecx60ugk8J/pydfawrC24sn2gumP8MWBN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-handlebars.min.js"
+      integrity="sha384-ztX0VXoOKuZtIC5fdYHz1UPQzBgLQ+IS5Q3mhfHTv2vLoKSRSU0r15sc/9cnlWp5"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
