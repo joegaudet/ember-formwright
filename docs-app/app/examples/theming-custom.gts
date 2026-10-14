@@ -23,8 +23,10 @@ const NewsletterForm: TOC<{ Args: { model: Newsletter } }> = <template>
 
   <style>
     .sunset {
-      --fw-accent: #ea580c;
-      --fw-border-focus: #ea580c;
+      /* White on this orange is 5.2:1, above the 4.5:1 WCAG AA needs for text. */
+      --fw-accent: #c2410c;
+      --fw-accent-fg: #fff;
+      --fw-border-focus: #c2410c;
       --fw-radius: 14px;
       --fw-border: #fed7aa;
       --fw-field-gap: 1rem;

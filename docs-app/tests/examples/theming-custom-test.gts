@@ -19,7 +19,7 @@ module('Example | theming-custom', function (hooks) {
     const newsletter = new NewsletterHarness()
 
     const accent = getComputedStyle(newsletter.element).getPropertyValue('--fw-accent').trim()
-    assert.strictEqual(accent, '#ea580c')
+    assert.strictEqual(accent, '#c2410c')
     await newsletter.email.fillIn('ada@example.com')
     assert.strictEqual(model.email, 'ada@example.com')
     await a11yAudit()
