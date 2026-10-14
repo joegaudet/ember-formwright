@@ -129,17 +129,33 @@ The core edits any object through a `ModelAdapter` (`get`, `set`, and optionally
 
 ## Testing
 
-```ts
-import { form } from '@formwright/test-support'
+Describe each form once as a harness class. Decorators declare its fields (with the harness
+for their control) and nested forms; each is created once, on first use.
 
-await form('signup').field('email').fillIn('ada@example.com')
-await form('signup').field('plan').select('team')
-await form('signup').form('address').field('city').fillIn('Lisbon')
-await form('signup').submit()
-assert.deepEqual(form('signup').field('email').errors, [])
+```ts
+import { FormHarness, InputHarness, SelectHarness, field, form } from '@formwright/test-support'
+
+class AddressForm extends FormHarness {
+  @field(InputHarness) declare city: InputHarness
+}
+
+class SignupForm extends FormHarness {
+  static formName = 'signup'
+
+  @field(InputHarness) declare email: InputHarness
+  @field(SelectHarness) declare plan: SelectHarness
+  @form(AddressForm) declare address: AddressForm
+}
+
+const signup = new SignupForm()
+await signup.email.fillIn('ada@example.com')
+await signup.plan.select('team')
+await signup.address.city.fillIn('Lisbon')
+await signup.submit()
+assert.deepEqual(signup.email.errors, [])
 ```
 
-Every form renders normalized `data-test-fw-*` selectors; see the
+Every form renders normalized `data-test-fw-*` selectors that the harnesses use; see the
 [test-support README](packages/test-support/README.md).
 
 ## Repository

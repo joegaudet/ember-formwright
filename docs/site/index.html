@@ -272,25 +272,46 @@ const validator = (user: User) =&gt; ({
         <p class="eyebrow">Testing</p>
         <h2>Harnesses: tests that read like your users</h2>
         <p>
-          Every form renders the same normalized <code>data-test-fw-*</code> selectors, so
-          <code>@formwright/test-support</code> can drive any field by its model path, whatever
-          control it uses, inside nested forms too.
+          Describe a form once as a harness class. Decorators declare its fields, each with the
+          harness for its control, and its nested forms. Every harness is created once and looks up
+          the DOM live, so it survives re-renders. Custom controls get their own harness by
+          subclassing <code>FieldHarness</code>.
         </p>
-        <pre><code class="language-typescript">import { form } from '@formwright/test-support'
+        <div class="grid">
+          <pre><code class="language-typescript">import {
+  FormHarness, InputHarness, SelectHarness,
+  CheckboxGroupHarness, CheckboxHarness, field, form,
+} from '@formwright/test-support'
 
-test('signing up', async function (assert) {
-  await render(&lt;template&gt;&lt;SignupForm /&gt;&lt;/template&gt;)
-  const signup = form('signup')
+export class AddressForm extends FormHarness {
+  @field(InputHarness) declare city: InputHarness
+}
 
-  await signup.field('email').fillIn('ada@example.com')
-  await signup.field('plan').select('team')
-  await signup.field('notify').select(['email', 'sms'])
-  await signup.form('address').field('city').fillIn('Lisbon')
+export class SignupForm extends FormHarness {
+  static formName = 'signup'
+
+  @field(InputHarness) declare email: InputHarness
+  @field(SelectHarness) declare plan: SelectHarness
+  @field(CheckboxGroupHarness) declare notify: CheckboxGroupHarness
+  @field(CheckboxHarness) declare terms: CheckboxHarness
+  @form(AddressForm) declare address: AddressForm
+}</code></pre>
+          <pre><code class="language-typescript">test('signing up', async function (assert) {
+  await render(&lt;template&gt;&lt;Signup /&gt;&lt;/template&gt;)
+  const signup = new SignupForm()
+
+  await signup.email.fillIn('ada@example.com')
+  await signup.plan.select('team')
+  await signup.notify.select(['email', 'sms'])
+  await signup.address.city.fillIn('Lisbon')
   await signup.submit()
 
-  assert.deepEqual(signup.field('terms').errors, ['Please accept the terms'])
-  assert.true(signup.field('terms').isInvalid)
+  assert.deepEqual(signup.terms.errors, [
+    'Please accept the terms',
+  ])
+  assert.true(signup.terms.isInvalid)
 })</code></pre>
+        </div>
         <div class="overflow-auto">
           <table class="striped selector-list">
             <thead>

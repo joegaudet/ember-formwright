@@ -5,10 +5,14 @@ import Component from '@glimmer/component'
 import { on } from '@ember/modifier'
 import { Form, type ControlSignature } from '@formwright/ember'
 import {
+  FormHarness,
+  FieldHarness,
+  InputHarness,
+  SelectHarness,
+  CheckboxGroupHarness,
+  field,
   form,
-  registerControlHarness,
   selectors,
-  type FieldHarness,
 } from '@formwright/test-support'
 
 class Stepper extends Component<ControlSignature<number>> {
@@ -19,8 +23,109 @@ class Stepper extends Component<ControlSignature<number>> {
   </template>
 }
 
+/** A custom control gets its harness by subclassing FieldHarness. */
+class StepperHarness extends FieldHarness {
+  get value(): number {
+    return Number(this.element.querySelector('[data-test-stepper-value]')!.textContent)
+  }
+
+  async increment(): Promise<void> {
+    await click(this.element.querySelector('[data-test-stepper-inc]')!)
+  }
+}
+
+class CompanyForm extends FormHarness {
+  @field(InputHarness) declare name: InputHarness
+}
+
+class UserForm extends FormHarness {
+  static formName = 'user'
+
+  @field(InputHarness) declare name: InputHarness
+  @field(InputHarness, 'email') declare emailAddress: InputHarness
+  @field(SelectHarness) declare plan: SelectHarness
+  @field(CheckboxGroupHarness) declare notify: CheckboxGroupHarness
+  @field(StepperHarness) declare seats: StepperHarness
+  @form(CompanyForm) declare company: CompanyForm
+}
+
+const PLANS = ['hobby', 'team']
+const CHANNELS = ['email', 'sms']
+
 module('Integration | test-support harness', function (hooks) {
   setupRenderingTest(hooks)
+
+  test('form classes declare their fields and nested forms with decorators', async function (assert) {
+    const user = {
+      name: 'Ada',
+      email: '',
+      plan: 'hobby',
+      notify: [] as string[],
+      seats: 1,
+      company: { name: 'Analytical Engines' },
+    }
+
+    await render(
+      <template>
+        <Form @model={{user}} @name="user" as |f|>
+          <f.Field @for="name" @label="Your name" />
+          <f.Field @for="email" @control="email" @label="Email" />
+          <f.Field @for="plan" @control="select" @label="Plan" @options={{PLANS}} />
+          <f.Field @for="notify" @control="checkbox-group" @label="Notify" @options={{CHANNELS}} />
+          <f.Field @for="seats" @control={{Stepper}} @label="Seats" />
+          <f.Form @model={{user.company}} @name="company" as |c|>
+            <c.Field @for="name" @label="Company name" />
+          </f.Form>
+        </Form>
+      </template>,
+    )
+
+    const harness = new UserForm()
+    await harness.emailAddress.fillIn('ada@example.com')
+    await harness.plan.select('team')
+    await harness.notify.select(['email', 'sms'])
+    await harness.seats.increment()
+    await harness.company.name.fillIn('Babbage & Co')
+
+    assert.strictEqual(
+      user.email,
+      'ada@example.com',
+      'the path argument overrides the property name',
+    )
+    assert.strictEqual(user.plan, 'team')
+    assert.deepEqual(user.notify, ['email', 'sms'])
+    assert.strictEqual(harness.seats.value, 2, 'subclasses add their own reads and actions')
+    assert.strictEqual(user.company.name, 'Babbage & Co')
+    assert.strictEqual(harness.name.label, 'Your name', 'nested forms scope same-named fields')
+    assert.strictEqual(harness.company.name.label, 'Company name')
+  })
+
+  test('harnesses are created once and stay valid across re-renders', async function (assert) {
+    const user = { name: 'Ada', company: { name: 'x' } }
+
+    await render(
+      <template>
+        <Form @model={{user}} @name="user" as |f|>
+          <f.Field @for="name" @label="Your name" />
+          <f.Form @model={{user.company}} @name="company" as |c|>
+            <c.Field @for="name" @label="Company name" />
+          </f.Form>
+        </Form>
+      </template>,
+    )
+
+    const harness = new UserForm()
+    assert.strictEqual(
+      harness.name,
+      harness.name,
+      'a decorated field is the same instance on every read',
+    )
+    assert.strictEqual(harness.company, harness.company)
+    assert.strictEqual(harness.field('name', InputHarness), harness.field('name', InputHarness))
+
+    await harness.name.fillIn('Grace')
+    assert.strictEqual(harness.name.value, 'Grace', 'the element is looked up live')
+  })
 
   test('it reads label, hint, required, dirty and invalid state', async function (assert) {
     const model = { email: '' }
@@ -34,15 +139,16 @@ module('Integration | test-support harness', function (hooks) {
       </template>,
     )
 
-    const email = form('signup').field('email')
+    const email = new FormHarness('signup').field('email', InputHarness)
     assert.strictEqual(email.label, 'Email')
     assert.strictEqual(email.hint, 'Work address')
     assert.true(email.isRequired)
     assert.false(email.isDirty)
     await email.fillIn('x')
     assert.true(email.isDirty)
-    await form('signup').submit()
+    await new FormHarness('signup').submit()
     assert.true(email.isInvalid)
+    assert.deepEqual(email.errors, ['Required'])
   })
 
   test('paths are normalized: items[0].name and items.0.name are the same field', async function (assert) {
@@ -58,48 +164,8 @@ module('Integration | test-support harness', function (hooks) {
 
     assert.dom('[data-test-fw-field="items.0.name"]').exists()
     assert.strictEqual(selectors.field('items[0].name'), '[data-test-fw-field="items.0.name"]')
-    await form().field('items[0].name').fillIn('b')
+    await new FormHarness().field('items[0].name', InputHarness).fillIn('b')
     assert.strictEqual(model.items[0]!.name, 'b')
-  })
-
-  test('nested forms scope their fields: same path, different forms', async function (assert) {
-    const user = { name: 'Ada', company: { name: 'Analytical Engines' } }
-
-    await render(
-      <template>
-        <Form @model={{user}} @name="user" as |f|>
-          <f.Field @for="name" @label="Your name" />
-          <f.Form @model={{user.company}} @name="company" as |c|>
-            <c.Field @for="name" @label="Company name" />
-          </f.Form>
-        </Form>
-      </template>,
-    )
-
-    assert.strictEqual(form('user').field('name').label, 'Your name')
-    assert.strictEqual(form('user').form('company').field('name').label, 'Company name')
-    await form('user').form('company').field('name').fillIn('Babbage & Co')
-    assert.strictEqual(user.company.name, 'Babbage & Co')
-    assert.strictEqual(user.name, 'Ada')
-  })
-
-  test('custom controls can register a driver', async function (assert) {
-    registerControlHarness('custom', {
-      value: (field: FieldHarness) =>
-        Number(field.element.querySelector('[data-test-stepper-value]')!.textContent),
-    })
-    const model = { count: 1 }
-
-    await render(
-      <template>
-        <Form @model={{model}} as |f|>
-          <f.Field @for="count" @control={{Stepper}} @label="Count" />
-        </Form>
-      </template>,
-    )
-
-    await click('[data-test-stepper-inc]')
-    assert.strictEqual(form().field('count').value, 2)
   })
 
   test('missing things fail with a clear message', async function (assert) {
@@ -113,13 +179,11 @@ module('Integration | test-support harness', function (hooks) {
       </template>,
     )
 
-    assert.throws(() => form('nope').element, /no form "nope" found/)
-    assert.throws(() => form().field('b').element, /no field "b" found/)
-    try {
-      await form().field('a').select('x')
-      assert.ok(false)
-    } catch (e) {
-      assert.true(String(e).includes(`can't select on a "input" control`))
-    }
+    assert.throws(() => new FormHarness('nope').element, /no form "nope" found/)
+    assert.throws(() => new FormHarness().field('b', InputHarness).element, /no field "b" found/)
+    assert.throws(
+      () => new FormHarness().field('a', SelectHarness).value,
+      /field "a" is a "input" control; this harness drives select/,
+    )
   })
 })

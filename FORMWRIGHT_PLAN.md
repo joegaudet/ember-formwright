@@ -115,15 +115,26 @@ Illustrative shape, to finalize in the PR:
 - **Normalized selectors**, emitted by every control and documented as public API:
   `data-test-fw-form="<name>"`, `data-test-fw-field="<path>"`, `data-test-fw-control="<type>"`, `data-test-fw-label`, `data-test-fw-error`, `data-test-fw-hint`, `data-test-fw-submit`, `data-test-fw-cancel`.
   Paths normalized (`user.address.city`), so nested/child forms get stable, collision-free selectors.
-- **Harnesses** (page-object style, async, work in any `@ember/test-helpers` test):
+- **Harnesses are classes** (page-object style, async, work in any `@ember/test-helpers` test).
+  A form is a `FormHarness` subclass; decorators declare its fields and nested forms, and each
+  child harness is created once (on first use) and cached, while its DOM lookup stays live:
   ```ts
-  const form = formHarness('signup');
-  await form.field('email').fillIn('a@b.co');
-  await form.field('role').select(Role.ADMIN);
-  await form.submit();
-  assert.deepEqual(form.field('email').errors, ['…']);
+  class SignupForm extends FormHarness {
+    static formName = 'signup'
+    @field(InputHarness) declare email: InputHarness
+    @field(SelectHarness, 'role') declare role: SelectHarness
+    @form(AddressForm) declare address: AddressForm
+  }
+  const signup = new SignupForm()
+  await signup.email.fillIn('a@b.co')
+  await signup.role.select('admin')
+  await signup.submit()
+  assert.deepEqual(signup.email.errors, ['…'])
   ```
-  Each control type gets a harness (`fillIn`, `select`, `check`, `value`, `errors`, `isDisabled`, `isInvalid`), and they're extensible for custom controls.
+  Each control type has a harness class (`InputHarness`, `NumberHarness`, `CurrencyHarness`,
+  `SelectHarness`, `RadioHarness`, `CheckboxHarness`, `CheckboxGroupHarness`) that checks it is
+  pointed at that control. Custom controls subclass `FieldHarness`. The decorators work with
+  both legacy (`declare`) and standard (`accessor`) decorators.
 - The library's own test suite is rewritten onto the harnesses, which is how the harnesses get tested.
 
 ### Phase 7 — Marketing site + live demo

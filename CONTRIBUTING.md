@@ -33,7 +33,8 @@ whole workspace. To do that locally, add `ember-source: ~6.12.0` under `override
 ## Tests first
 
 Behaviour changes start with a failing test in `test-app/tests/`. Prefer the harness
-(`form('name').field('path')`) over raw selectors; new controls get a harness driver.
+(a `FormHarness` subclass with `@field` declarations; see `test-app/tests/helpers/test-form.ts`)
+over raw selectors. A new control gets a `FieldHarness` subclass.
 
 ## Changesets
 

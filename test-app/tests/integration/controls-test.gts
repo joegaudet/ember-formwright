@@ -6,7 +6,7 @@ import { on } from '@ember/modifier'
 import { get } from '@ember/helper'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { Form, registerControl, lookupControl, type ControlSignature } from '@formwright/ember'
-import { form } from '@formwright/test-support'
+import { TestForm } from 'test-app/tests/helpers/test-form'
 
 const SIZES = [
   { id: 's', label: 'Small' },
@@ -16,6 +16,11 @@ const SIZES = [
 
 module('Integration | controls', function (hooks) {
   setupRenderingTest(hooks)
+
+  let ui: TestForm
+  hooks.beforeEach(function () {
+    ui = new TestForm()
+  })
 
   test('input types map to native inputs', async function (assert) {
     const model = {}
@@ -60,9 +65,9 @@ module('Integration | controls', function (hooks) {
       </template>,
     )
 
-    await form().field('qty').fillIn('42')
+    await ui.qty.fillIn('42')
     assert.strictEqual(model.qty, 42)
-    await form().field('qty').fillIn('')
+    await ui.qty.fillIn('')
     assert.strictEqual(model.qty, null)
   })
 
@@ -86,9 +91,9 @@ module('Integration | controls', function (hooks) {
     assert.dom('select option:checked').hasText('Pick a size')
     assert.dom('[data-test-fw-option="l"]').isDisabled()
 
-    await form().field('size').select('m')
+    await ui.size.select('m')
     assert.strictEqual(model.size, SIZES[1], 'stores the option object by default')
-    assert.strictEqual(form().field('size').value, 'm')
+    assert.strictEqual(ui.size.value, 'm')
   })
 
   test('select: @storeKey stores the key, and primitives work', async function (assert) {
@@ -110,10 +115,10 @@ module('Integration | controls', function (hooks) {
       </template>,
     )
 
-    assert.strictEqual(form().field('size').value, 's', 'selects the stored key on first render')
-    await form().field('size').select('m')
+    assert.strictEqual(ui.size.value, 's', 'selects the stored key on first render')
+    await ui.size.select('m')
     assert.strictEqual(model.size, 'm')
-    await form().field('color').select('green')
+    await ui.color.select('green')
     assert.strictEqual(model.color, 'green')
   })
 
@@ -150,8 +155,8 @@ module('Integration | controls', function (hooks) {
     )
 
     assert.dom('[data-test-fw-field="size"] fieldset legend').hasText('Size')
-    assert.strictEqual(form().field('size').value, 's')
-    await form().field('size').select('m')
+    assert.strictEqual(ui.sizeRadio.value, 's')
+    await ui.sizeRadio.select('m')
     assert.strictEqual(model.size, 'm')
     await a11yAudit()
     assert.ok(true)
@@ -168,10 +173,10 @@ module('Integration | controls', function (hooks) {
       </template>,
     )
 
-    await form().field('agree').check()
+    await ui.agree.check()
     assert.true(model.agree)
-    assert.true(form().field('agree').value)
-    await form().field('agree').uncheck()
+    assert.true(ui.agree.value)
+    await ui.agree.uncheck()
     assert.false(model.agree)
   })
 
@@ -193,12 +198,12 @@ module('Integration | controls', function (hooks) {
       </template>,
     )
 
-    await form().field('sizes').select(['s'])
+    await ui.sizes.select(['s'])
     assert.deepEqual(model.sizes, ['s'])
     assert.dom('[data-test-fw-option="m"]').isDisabled('at max, unchecked options disable')
     await click('[data-test-fw-option="s"]')
     assert.deepEqual(model.sizes, [])
-    assert.deepEqual(form().field('sizes').value, [])
+    assert.deepEqual(ui.sizes.value, [])
   })
 
   test('textarea', async function (assert) {
@@ -212,8 +217,8 @@ module('Integration | controls', function (hooks) {
       </template>,
     )
 
-    assert.strictEqual(form().field('bio').value, 'hi')
-    await form().field('bio').fillIn('hello')
+    assert.strictEqual(ui.bio.value, 'hi')
+    await ui.bio.fillIn('hello')
     assert.strictEqual(model.bio, 'hello')
   })
 
@@ -234,11 +239,11 @@ module('Integration | controls', function (hooks) {
     // Intl puts a no-break space before the symbol.
     const shown = () => document.querySelector<HTMLInputElement>(input)!.value.replace(/\s/g, ' ')
     assert.strictEqual(shown(), '1.234,50 €')
-    await form().field('price').fillIn('99,9')
+    await ui.price.fillIn('99,9')
     assert.strictEqual(model.price, 99.9)
     await blur(input)
     assert.strictEqual(shown(), '99,90 €')
-    await form().field('price').fillIn('')
+    await ui.price.fillIn('')
     assert.strictEqual(model.price, null)
   })
 

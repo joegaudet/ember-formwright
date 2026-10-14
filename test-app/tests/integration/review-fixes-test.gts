@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'test-app/tests/helpers'
 import { render, settled, click } from '@ember/test-helpers'
 import { tracked } from '@glimmer/tracking'
 import { Form, type ErrorMap } from '@formwright/ember'
-import { form } from '@formwright/test-support'
+import { TestForm } from 'test-app/tests/helpers/test-form'
 
 class User {
   @tracked name: string
@@ -28,6 +28,11 @@ const SIZES = [
 module('Integration | review fixes', function (hooks) {
   setupRenderingTest(hooks)
 
+  let ui: TestForm
+  hooks.beforeEach(function () {
+    ui = new TestForm()
+  })
+
   test('swapping @model takes a fresh baseline; reset never writes one model into another', async function (assert) {
     const ada = new User('Ada')
     const grace = new User('Grace')
@@ -46,8 +51,8 @@ module('Integration | review fixes', function (hooks) {
     holder.user = grace
     await settled()
     assert.dom('[data-test-dirty]').hasText('clean')
-    await form().field('name').fillIn('Hopper')
-    await form().reset()
+    await ui.name.fillIn('Hopper')
+    await ui.reset()
     assert.strictEqual(grace.name, 'Grace')
     assert.strictEqual(ada.name, 'Ada')
   })
@@ -152,8 +157,8 @@ module('Integration | review fixes', function (hooks) {
       </template>,
     )
 
-    await form().submit()
-    assert.deepEqual(form().errors, ['Secret is required'])
+    await ui.submit()
+    assert.deepEqual(ui.errors, ['Secret is required'])
   })
 
   test("a nested form's failedSubmit hears about its own save failing", async function (assert) {
@@ -172,8 +177,8 @@ module('Integration | review fixes', function (hooks) {
       </template>,
     )
 
-    await form().form('address').field('city').fillIn('Lisbon')
-    await form().submit()
+    await ui.address.city.fillIn('Lisbon')
+    await ui.submit()
     assert.strictEqual((childFailure as Error)?.message, 'nope')
   })
 
@@ -221,11 +226,11 @@ module('Integration | review fixes', function (hooks) {
       </template>,
     )
 
-    await form().field('name').fillIn('Grace')
+    await ui.name.fillIn('Grace')
     holder.show = false
     await settled()
-    await form().submit()
-    await form().reset()
+    await ui.submit()
+    await ui.reset()
     assert.strictEqual(holder.user.name, 'Grace')
   })
 })

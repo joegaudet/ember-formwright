@@ -6,7 +6,7 @@ import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { z } from 'zod'
 import * as v from 'valibot'
 import { Form, type ErrorMap } from '@formwright/ember'
-import { form } from '@formwright/test-support'
+import { TestForm } from 'test-app/tests/helpers/test-form'
 
 class User {
   @tracked name = 'Ada'
@@ -16,6 +16,11 @@ class User {
 
 module('Integration | Form', function (hooks) {
   setupRenderingTest(hooks)
+
+  let ui: TestForm
+  hooks.beforeEach(function () {
+    ui = new TestForm()
+  })
 
   test('it renders a <form> with stable selectors and binds values both ways', async function (assert) {
     const user = { name: 'Ada', email: '' }
@@ -31,9 +36,9 @@ module('Integration | Form', function (hooks) {
 
     assert.dom('form[data-test-fw-form="signup"]').exists()
     assert.dom('[data-test-fw-field="name"] [data-test-fw-label]').hasText('Name')
-    assert.strictEqual(form('signup').field('name').value, 'Ada')
+    assert.strictEqual(ui.name.value, 'Ada')
 
-    await form('signup').field('email').fillIn('ada@example.com')
+    await ui.email.fillIn('ada@example.com')
     assert.strictEqual(user.email, 'ada@example.com', 'POJO model updated')
     assert.dom('[data-test-fw-field="email"] input').hasAttribute('type', 'email')
   })
@@ -57,9 +62,9 @@ module('Integration | Form', function (hooks) {
     assert.dom(input).hasAttribute('required')
     assert.dom(input).doesNotHaveAttribute('aria-invalid')
 
-    await form().submit()
+    await ui.submit()
 
-    assert.deepEqual(form().field('email').errors, ['Email is required'])
+    assert.deepEqual(ui.email.errors, ['Email is required'])
     assert.dom(input).hasAttribute('aria-invalid', 'true')
     const describedBy = document.querySelector(input)!.getAttribute('aria-describedby')!.split(' ')
     assert.strictEqual(describedBy.length, 2, 'hint and errors both describe the control')
@@ -88,20 +93,16 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().submit()
+    await ui.submit()
     assert.strictEqual(submitted, 0)
-    assert.deepEqual(form().field('email').errors, ['Not an email'])
-    assert.deepEqual(form().field('address.city').errors, ['City is required'])
+    assert.deepEqual(ui.email.errors, ['Not an email'])
+    assert.deepEqual(ui.city.errors, ['City is required'])
 
-    await form().field('email').fillIn('a@b.co')
-    assert.deepEqual(
-      form().field('email').errors,
-      [],
-      'revalidates on change after a failed submit',
-    )
+    await ui.email.fillIn('a@b.co')
+    assert.deepEqual(ui.email.errors, [], 'revalidates on change after a failed submit')
 
-    await form().field('address.city').fillIn('Lisbon')
-    await form().submit()
+    await ui.city.fillIn('Lisbon')
+    await ui.submit()
     assert.strictEqual(submitted, 1)
   })
 
@@ -117,8 +118,8 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().submit()
-    assert.deepEqual(form().field('name').errors, ['Too short'])
+    await ui.submit()
+    assert.deepEqual(ui.name.errors, ['Too short'])
   })
 
   test('form-level errors render in <f.Errors>', async function (assert) {
@@ -134,8 +135,8 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().submit()
-    assert.deepEqual(form().errors, ['Something is off'])
+    await ui.submit()
+    assert.deepEqual(ui.errors, ['Something is off'])
   })
 
   test('submit calls model.save() by default, and lifecycle hooks in order', async function (assert) {
@@ -159,7 +160,7 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().submit()
+    await ui.submit()
     assert.deepEqual(calls, ['willSubmit', 'save', 'didSubmit'])
   })
 
@@ -178,11 +179,11 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().submit()
+    await ui.submit()
     assert.strictEqual(failed, undefined)
 
     allow = true
-    await form().submit()
+    await ui.submit()
     assert.strictEqual((failed as Error).message, 'boom')
   })
 
@@ -241,12 +242,12 @@ module('Integration | Form', function (hooks) {
     )
 
     assert.dom('[data-test-dirty]').hasText('clean')
-    await form().field('name').fillIn('Grace')
+    await ui.name.fillIn('Grace')
     assert.strictEqual(user.name, 'Grace')
     assert.dom('[data-test-dirty]').hasText('dirty')
     assert.dom('[data-test-fw-field="name"]').hasAttribute('data-dirty')
 
-    await form().reset()
+    await ui.reset()
     assert.strictEqual(user.name, 'Ada')
     assert.dom('[data-test-dirty]').hasText('clean')
   })
@@ -264,10 +265,10 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().field('name').fillIn('Grace')
-    await form().submit()
+    await ui.name.fillIn('Grace')
+    await ui.submit()
     assert.dom('[data-test-dirty]').hasText('clean')
-    await form().reset()
+    await ui.reset()
     assert.strictEqual(user.name, 'Grace')
   })
 
@@ -284,7 +285,7 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().field('name').fillIn('Grace')
+    await ui.name.fillIn('Grace')
     assert.deepEqual(changes, [['name', 'Grace']])
   })
 
@@ -302,7 +303,7 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    assert.true(form().field('name').isDisabled)
+    assert.true(ui.name.isDisabled)
     assert.dom('[data-test-fw-form="ro"] input').hasAttribute('readonly')
   })
 
@@ -319,7 +320,7 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().field('name').fillIn('Grace')
+    await ui.name.fillIn('Grace')
     assert.strictEqual(submits, 1)
   })
 
@@ -334,7 +335,7 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    const name = form().field('name')
+    const name = ui.name
     assert.dom('[data-test-fw-commit]').doesNotExist('nothing to confirm yet')
     await name.fillIn('Grace')
     assert.strictEqual(user.name, 'Ada', 'not committed yet')
@@ -363,7 +364,7 @@ module('Integration | Form', function (hooks) {
     assert.dom('[data-test-fw-field="email"] [data-test-fw-display]').hasText('Add an email')
     assert.dom('[data-test-fw-field="name"] input').doesNotExist()
 
-    const name = form().field('name')
+    const name = ui.name
     await name.edit()
     assert.dom('[data-test-fw-field="name"] input').isFocused()
     await name.fillIn('Grace')
@@ -384,7 +385,7 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    const name = form().field('name')
+    const name = ui.name
     await name.edit()
     const popover = document.querySelector<HTMLElement>('[data-test-fw-field="name"] [popover]')!
     assert.ok(popover, 'renders a popover element')
@@ -427,7 +428,7 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().field('bio').fillIn('Hello')
+    await ui.bio.fillIn('Hello')
     assert.strictEqual(model.bio, 'Hello')
     assert.dom('textarea').hasAttribute('maxlength', '20')
     assert.dom('[data-test-fw-count]').hasText('5 / 20')
@@ -468,11 +469,11 @@ module('Integration | Form', function (hooks) {
       .dom('[data-test-fw-form="address"] [data-test-fw-field="city"]')
       .hasAttribute('data-test-fw-path', 'user.address.city')
 
-    const city = form('user').form('address').field('city')
+    const city = ui.address.city
     await city.fillIn('Lisbon')
     assert.strictEqual(address.city, 'Lisbon')
 
-    await form('user').submit()
+    await ui.submit()
     assert.deepEqual(order, ['user', 'address'], 'parent first, then the dirty child')
   })
 
@@ -494,9 +495,9 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form('user').submit()
+    await ui.submit()
     assert.false(saved)
-    assert.deepEqual(form('user').form('address').field('city').errors, ['Required'])
+    assert.deepEqual(ui.address.city.errors, ['Required'])
   })
 
   test('it resets unsaved changes when torn down', async function (assert) {
@@ -516,7 +517,7 @@ module('Integration | Form', function (hooks) {
       </template>,
     )
 
-    await form().field('name').fillIn('Grace')
+    await ui.name.fillIn('Grace')
     state.show = false
     await settled()
     assert.strictEqual(user.name, 'Ada')
@@ -531,7 +532,7 @@ module('Integration | Form', function (hooks) {
         </Form>
       </template>,
     )
-    await focus(form().field('name').control!)
+    await focus(ui.name.control)
     assert.dom('[data-test-fw-field="name"] input').isFocused()
   })
 })

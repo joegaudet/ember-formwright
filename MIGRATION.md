@@ -95,12 +95,19 @@ The `formFor` service and `ENV.APP['ember-foxy-forms']` config are gone.
 ## Tests
 
 `data-test-form-for`, `data-test-field-for` and the `--field-for__…` testing classes are
-replaced by normalized `data-test-fw-*` selectors and the harnesses in
+replaced by normalized `data-test-fw-*` selectors and the harness classes in
 `@formwright/test-support`:
 
 ```ts
 // before
 await fillIn('[data-test-field-for="user_email"] input', 'a@b.co')
-// after
-await form('signup').field('email').fillIn('a@b.co')
+
+// after: describe the form once…
+class UserForm extends FormHarness {
+  static formName = 'user'
+  @field(InputHarness) declare email: InputHarness
+}
+
+// …then use it
+await new UserForm().email.fillIn('a@b.co')
 ```

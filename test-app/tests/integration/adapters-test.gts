@@ -4,7 +4,7 @@ import { render } from '@ember/test-helpers'
 import { tracked } from '@glimmer/tracking'
 import { array } from '@ember/helper'
 import { Form } from '@formwright/ember'
-import { form } from '@formwright/test-support'
+import { TestForm } from 'test-app/tests/helpers/test-form'
 import { warpDriveAdapter } from '@formwright/warp-drive'
 import { enumOptions, enumValue, enumLabel } from '@formwright/real-enums'
 import { registerMaskedControl } from '@formwright/maskito'
@@ -70,6 +70,11 @@ class FakeRecord {
 module('Integration | adapters', function (hooks) {
   setupRenderingTest(hooks)
 
+  let ui: TestForm
+  hooks.beforeEach(function () {
+    ui = new TestForm()
+  })
+
   test('warp-drive: save, rollback and server errors', async function (assert) {
     const record = new FakeRecord()
 
@@ -83,19 +88,19 @@ module('Integration | adapters', function (hooks) {
       </template>,
     )
 
-    await form().field('name').fillIn('Grace')
-    await form().submit()
+    await ui.name.fillIn('Grace')
+    await ui.submit()
     assert.strictEqual(record.saves, 1, 'submit saves the record')
 
-    await form().field('name').fillIn('Hopper')
-    await form().reset()
+    await ui.name.fillIn('Hopper')
+    await ui.reset()
     assert.strictEqual(record.rollbacks, 1, 'reset rolls the record back')
     assert.strictEqual(record.name, 'Ada')
 
     record.failWith({ name: ['is taken'], base: ['Try again later'] })
-    await form().field('name').fillIn('Ada L')
-    assert.deepEqual(form().field('name').errors, ['is taken'])
-    assert.deepEqual(form().errors, ['Try again later'])
+    await ui.name.fillIn('Ada L')
+    assert.deepEqual(ui.name.errors, ['is taken'])
+    assert.deepEqual(ui.errors, ['Try again later'])
   })
 
   test('warp-drive: a nested new record saves with its parent even when untouched', async function (assert) {
@@ -114,7 +119,7 @@ module('Integration | adapters', function (hooks) {
       </template>,
     )
 
-    await form().submit()
+    await ui.submit()
     assert.strictEqual(parent.saves, 1)
     assert.strictEqual(
       child.saves,
@@ -148,12 +153,12 @@ module('Integration | adapters', function (hooks) {
     )
 
     assert.dom('[data-test-fw-field="state"] option:checked').hasText('Pending')
-    await form().field('state').select('shipped')
+    await ui.state.select('shipped')
     assert.strictEqual(order.state, OrderState.Shipped, 'stores the enum member')
 
     assert.dom('[data-test-fw-field="raw"] [data-test-fw-option]').exists({ count: 2 })
-    assert.strictEqual(form().field('raw').value, 'pending')
-    await form().field('raw').select('shipped')
+    assert.strictEqual(ui.raw.value, 'pending')
+    await ui.raw.select('shipped')
     assert.strictEqual(order.raw, 'shipped', 'stores the raw string')
   })
 
