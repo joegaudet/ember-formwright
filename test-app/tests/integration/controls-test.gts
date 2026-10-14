@@ -5,7 +5,12 @@ import Component from '@glimmer/component'
 import { on } from '@ember/modifier'
 import { get } from '@ember/helper'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
-import { Form, registerControl, lookupControl, type ControlSignature } from '@formwright/ember'
+import {
+  Form,
+  registerControl,
+  lookupControl,
+  type ControlSignature,
+} from '@ember-formwright/ember'
 import { TestForm } from 'test-app/tests/helpers/test-form'
 
 const SIZES = [

@@ -13,18 +13,18 @@ Every example in this guide is live. Type into it and watch **The model, live** 
 ## Install
 
 ```bash
-npm install @formwright/ember
-npm install --save-dev @formwright/test-support
+npm install @ember-formwright/ember
+npm install --save-dev @ember-formwright/test-support
 ```
 
 Formwright works with Ember 6.12 LTS and 7, in Vite (Embroider) apps and classic ember-cli
 apps. It is a v2 addon: import what you use into `.gjs`/`.gts` files.
 
 ```ts
-import { Form } from '@formwright/ember'
+import { Form } from '@ember-formwright/ember'
 
 // Optional: a theme driven by --fw-* custom properties. See "Theming".
-import '@formwright/ember/theme.css'
+import '@ember-formwright/ember/theme.css'
 ```
 
 ## How it works

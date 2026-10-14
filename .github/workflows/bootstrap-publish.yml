@@ -21,7 +21,7 @@
 #      - Deployment branches and tags: "Selected branches and tags", adding
 #        `main` and `changeset-release/*`.
 #      - Environment secrets: add NPM_TOKEN (a granular token that can
-#        publish @formwright/*, with the shortest expiry npm
+#        publish @ember-formwright/*, with the shortest expiry npm
 #        allows).
 #   2. Remove any repository-level copy, so the token exists only behind the
 #      environment's reviewers and branch rule:
@@ -34,7 +34,7 @@
 #     --ref changeset-release/main -f confirm=publish
 #
 # There every package is already at the release version (1.0.0), so each new
-# name's first published version is 1.0.0 and peers on @formwright/ember@^1.0.0.
+# name's first published version is 1.0.0 and peers on @ember-formwright/ember@^1.0.0.
 # Dispatched from `main` instead, it would publish them at the old version
 # (0.0.0), with `workspace:^` resolved to 0.0.0 -- a version that can
 # never be reused. scripts/publish.mjs publishes everything missing, so this

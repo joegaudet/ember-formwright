@@ -1,5 +1,5 @@
 {
-  "name": "@formwright/test-support",
+  "name": "@ember-formwright/test-support",
   "version": "0.0.0",
   "description": "Form harnesses and normalized data-test selectors for testing Formwright forms.",
   "keywords": [

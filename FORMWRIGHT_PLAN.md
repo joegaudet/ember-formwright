@@ -9,7 +9,7 @@ Deviations from the plan, and why:
 - Ember versions: latest is 7.3, previous LTS is 6.12. CI tests both.
 - The classic-build example runs on the workspace's Ember (7.3). In the monorepo a different
   version only for one app loads two copies of Ember; the 6.12 job overrides it workspace-wide.
-- `@formwright/real-enums` reads real-enums duck-typed: real-enums 2 isn't on npm yet (1.1.0 ships
+- `@ember-formwright/real-enums` reads real-enums duck-typed: real-enums 2 isn't on npm yet (1.1.0 ships
   no JavaScript), so it's an optional peer.
 - Dropped and documented in MIGRATION.md rather than ported: composite fields, the form-for
   service (notifications, navigation guard, class config), the destroy button, submit queueing.
@@ -19,7 +19,7 @@ Deviations from the plan, and why:
 | Area | Decision |
 |---|---|
 | Name | **Formwright** |
-| npm | Scoped family: `@formwright/ember`, `@formwright/warp-drive`, `@formwright/real-enums`, `@formwright/maskito`, `@formwright/test-support` |
+| npm | Scoped family: `@ember-formwright/ember`, `@ember-formwright/warp-drive`, `@ember-formwright/real-enums`, `@ember-formwright/maskito`, `@ember-formwright/test-support` |
 | Repo | Move to `joegaudet/formwright`, **keep git history** |
 | Old package | `ember-foxy-forms` left untouched (no deprecate, no shim) |
 | Ember | Latest stable + previous LTS |
@@ -31,7 +31,7 @@ Deviations from the plan, and why:
 | Data layer | Agnostic core (tracked POJOs) + optional adapter packages, the same way real-enums is set up |
 | Validation | Pluggable validator interface (Standard Schema: zod/valibot/etc.) |
 | Popovers | Native Popover API + CSS anchor positioning; `ember-attacher` dropped |
-| Masks | `Intl.NumberFormat` in core; masking via optional `@formwright/maskito` |
+| Masks | `Intl.NumberFormat` in core; masking via optional `@ember-formwright/maskito` |
 | Dep purge | Drop composable-helpers, event-helpers, element-helper, render-modifiers, macro-decorators, prop-types, ember-arg-types |
 | Styling | Unstyled with stable class/`data-*` hooks + optional CSS-variables theme |
 | PM / layout | pnpm, mirror real-enums (`packages/`, `examples/`, `docs/site/`, `scripts/`) |
@@ -43,7 +43,7 @@ Deviations from the plan, and why:
 | Site | Hand-written HTML in `docs/site/` (like real-enums) + one embedded live Ember demo |
 | Hosting | GitHub Pages at `joegaudet.github.io/formwright`, no custom domain |
 | Brand | Sibling of real-enums: same layout and type system, own accent and logo |
-| real-enums | Use the adapter (`@formwright/real-enums`) and cross-link the sites |
+| real-enums | Use the adapter (`@ember-formwright/real-enums`) and cross-link the sites |
 | **New scope** | **Form harness system** (see Phase 6) |
 | Sequencing | Phased PRs |
 
@@ -52,11 +52,11 @@ Deviations from the plan, and why:
 ```
 formwright/
   packages/
-    ember/           @formwright/ember          v2 addon: Form, Field, controls, validator contract
-    test-support/    @formwright/test-support   form harnesses + normalized selectors
-    warp-drive/      @formwright/warp-drive     WarpDrive / ember-data model adapter
-    real-enums/      @formwright/real-enums     enum-backed Select/Radio options
-    maskito/         @formwright/maskito        optional masked inputs
+    ember/           @ember-formwright/ember          v2 addon: Form, Field, controls, validator contract
+    test-support/    @ember-formwright/test-support   form harnesses + normalized selectors
+    warp-drive/      @ember-formwright/warp-drive     WarpDrive / ember-data model adapter
+    real-enums/      @ember-formwright/real-enums     enum-backed Select/Radio options
+    maskito/         @ember-formwright/maskito        optional masked inputs
   test-app/          Vite Ember app, ember-qunit (+ classic-build smoke app in CI)
   examples/          ember-vite-basic, ember-warp-drive, ember-real-enums, ember-classic
   docs/site/         hand-written marketing page + built demo under docs/site/demo/
@@ -68,7 +68,7 @@ formwright/
 
 ### Phase 0 — Repo move and rename
 - Transfer/push to `joegaudet/formwright` with history; `master` → `main` to match real-enums.
-- Check that `@formwright` is free on npm and claim the org first. **Blocker if taken.**
+- Check that `@ember-formwright` is free on npm and claim the org first. **Blocker if taken.**
 - README/LICENSE/CONTRIBUTING renamed; CLAUDE.md with "keep the website in sync" rule copied from real-enums.
 
 ### Phase 1 — Monorepo and tooling skeleton
@@ -102,16 +102,16 @@ Illustrative shape, to finalize in the PR:
 - Model contract: a plain object with tracked props. The core writes through a small `FormwrightModelAdapter` interface (get/set/rollback/save/errors).
 - Validator contract: Standard Schema `~standard.validate`, async-safe, mapped to per-field errors.
 - a11y: label `for`/`id`, `aria-invalid`, `aria-describedby` → error/hint ids, focus first invalid field on submit, and axe checks in every integration test.
-- Theme: `@formwright/ember/theme.css` with `--fw-*` custom properties.
+- Theme: `@ember-formwright/ember/theme.css` with `--fw-*` custom properties.
 - `MIGRATION.md`: an old → new table for every component and arg.
 
 ### Phase 5 — Adapter packages
-- `@formwright/warp-drive`: adapter for WarpDrive/ember-data records (dirty tracking, rollback, server errors → field errors).
-- `@formwright/real-enums`: enum → `@options` for Select/Radio/CheckboxSelect, labels from the enum.
-- `@formwright/maskito`: a `control="masked"` registration.
+- `@ember-formwright/warp-drive`: adapter for WarpDrive/ember-data records (dirty tracking, rollback, server errors → field errors).
+- `@ember-formwright/real-enums`: enum → `@options` for Select/Radio/CheckboxSelect, labels from the enum.
+- `@ember-formwright/maskito`: a `control="masked"` registration.
 - Each package gets an example app in `examples/` that runs in CI (`test:examples`, like real-enums).
 
-### Phase 6 — Form harness system (`@formwright/test-support`)
+### Phase 6 — Form harness system (`@ember-formwright/test-support`)
 - **Normalized selectors**, emitted by every control and documented as public API:
   `data-test-fw-form="<name>"`, `data-test-fw-field="<path>"`, `data-test-fw-control="<type>"`, `data-test-fw-label`, `data-test-fw-error`, `data-test-fw-hint`, `data-test-fw-submit`, `data-test-fw-cancel`.
   Paths normalized (`user.address.city`), so nested/child forms get stable, collision-free selectors.
@@ -145,7 +145,7 @@ Illustrative shape, to finalize in the PR:
 - Add the CONTRIBUTING "website" checklist + PR template box.
 
 ### Phase 8 — 1.0 release
-- Changesets major → publish all `@formwright/*` packages; GitHub release notes link MIGRATION.md.
+- Changesets major → publish all `@ember-formwright/*` packages; GitHub release notes link MIGRATION.md.
 - `ember-foxy-forms` stays as it is (per decision).
 
 ### Phase 9 — Usage documentation with styled, live examples (done)
@@ -206,7 +206,7 @@ runs axe. Docs can't drift from code that is tested.
   `keepNames` in the production build (TypeDoc's renderer looks up classes by name).
 - Callouts are plain `<div class="callout">` blocks: markdown inside a component tag doesn't
   survive Kolay's markdown step.
-- `@formwright/test-support` is one TypeDoc module, which `<APIDocs>` can't address; its API
+- `@ember-formwright/test-support` is one TypeDoc module, which `<APIDocs>` can't address; its API
   lives in the Testing page's tables.
 - The guide uses real URLs. GitHub Pages serves deep links through `docs/site/404.html`, a copy
   of the guide's `index.html` written by the build.
@@ -220,7 +220,7 @@ runs axe. Docs can't drift from code that is tested.
 - The guide works at 375px in light and dark, and is deployed at `/formwright/guide/`.
 
 ## Risks / open items
-- `@formwright` npm scope availability: not checked yet. It blocks Phase 0.
+- `@ember-formwright` npm scope availability: not checked yet. It blocks Phase 0.
 - CSS anchor positioning support is still uneven across browsers, so a fallback is required (see Phase 3).
 - The classic ember-cli consumer path for a `.gts` v2 addon needs ember-auto-import ≥2 in that app; the classic smoke test in CI proves it.
 - The existing tests depend on the dummy app's ember-data 3.22 and faker. Port the fixtures to tracked POJOs in Phase 1 or 2.

@@ -1,6 +1,6 @@
 import { tracked } from '@glimmer/tracking'
 import type { TOC } from '@ember/component/template-only'
-import { Form } from '@formwright/ember'
+import { Form } from '@ember-formwright/ember'
 
 const SPEEDS = [
   { id: 'standard', label: 'Standard (5–7 days)' },

@@ -2,7 +2,7 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'docs-app/tests/helpers'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { render, fillIn } from '@ember/test-helpers'
-import { FormHarness, FieldHarness, field } from '@formwright/test-support'
+import { FormHarness, FieldHarness, field } from '@ember-formwright/test-support'
 import SearchForm, { createModel } from 'docs-app/examples/custom-price-range'
 
 class PriceRangeHarness extends FieldHarness {

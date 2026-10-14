@@ -11,7 +11,7 @@ export default defineConfig({
     ember(),
     kolay({
       // TypeDoc renders <APIDocs> from these packages' type declarations.
-      packages: ['@formwright/ember'],
+      packages: ['@ember-formwright/ember'],
     }),
     babel({ babelHelpers: 'runtime', extensions }),
   ],

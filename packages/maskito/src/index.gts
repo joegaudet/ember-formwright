@@ -2,7 +2,7 @@ import Component from '@glimmer/component'
 import { on } from '@ember/modifier'
 import { modifier } from 'ember-modifier'
 import { Maskito, type MaskitoOptions } from '@maskito/core'
-import { registerControl, type ControlSignature } from '@formwright/ember'
+import { registerControl, type ControlSignature } from '@ember-formwright/ember'
 
 interface MaskedSignature {
   Element: HTMLInputElement

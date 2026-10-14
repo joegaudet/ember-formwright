@@ -1,16 +1,16 @@
-# @formwright/real-enums
+# @ember-formwright/real-enums
 
 Use [real-enums](https://joegaudet.com/real-enums/) classes as Formwright options.
 
 ```bash
-npm install @formwright/ember @formwright/real-enums real-enums
+npm install @ember-formwright/ember @ember-formwright/real-enums real-enums
 ```
 
 Formwright's controls already understand enum members as options (key `value`, text `label`).
 This package adds:
 
 ```gts
-import { enumOptions, enumValue, enumLabel } from '@formwright/real-enums'
+import { enumOptions, enumValue, enumLabel } from '@ember-formwright/real-enums'
 
 {{! every member, or a filtered list }}
 <f.Field @for="state" @control="select" @options={{enumOptions OrderState}} />

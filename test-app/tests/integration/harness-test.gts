@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'test-app/tests/helpers'
 import { render, click } from '@ember/test-helpers'
 import Component from '@glimmer/component'
 import { on } from '@ember/modifier'
-import { Form, type ControlSignature } from '@formwright/ember'
+import { Form, type ControlSignature } from '@ember-formwright/ember'
 import {
   FormHarness,
   FieldHarness,
@@ -13,7 +13,7 @@ import {
   field,
   form,
   selectors,
-} from '@formwright/test-support'
+} from '@ember-formwright/test-support'
 
 class Stepper extends Component<ControlSignature<number>> {
   inc = () => this.args.onChange((this.args.value ?? 0) + 1)

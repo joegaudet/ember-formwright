@@ -1,6 +1,6 @@
 import Component from '@glimmer/component'
 import { tracked } from '@glimmer/tracking'
-import { Form } from '@formwright/ember'
+import { Form } from '@ember-formwright/ember'
 
 export class Profile {
   @tracked displayName = 'Ada Lovelace'

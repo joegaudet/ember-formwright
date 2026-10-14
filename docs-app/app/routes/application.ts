@@ -13,8 +13,8 @@ export default class ApplicationRoute extends Route {
       // Usable in any page without an import.
       topLevelScope: { Example },
       modules: {
-        '@formwright/ember': () => import('@formwright/ember'),
-        '@formwright/test-support': () => import('@formwright/test-support'),
+        '@ember-formwright/ember': () => import('@ember-formwright/ember'),
+        '@ember-formwright/test-support': () => import('@ember-formwright/test-support'),
       },
       rehypePlugins: [
         [

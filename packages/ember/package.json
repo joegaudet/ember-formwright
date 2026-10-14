@@ -1,5 +1,5 @@
 {
-  "name": "@formwright/ember",
+  "name": "@ember-formwright/ember",
   "version": "0.0.0",
   "description": "Declarative, accessible forms for Ember: one Form, one Field, any data layer, any validator.",
   "keywords": [

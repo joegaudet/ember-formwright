@@ -7,7 +7,7 @@ options, and its place in the form's dirty state, validation and reset.
 ## The contract
 
 ```ts
-import type { ControlSignature } from '@formwright/ember'
+import type { ControlSignature } from '@ember-formwright/ember'
 
 // Args a control receives (all from its field):
 //   id          put it on the focusable element; the label points at it
@@ -28,7 +28,7 @@ its field then renders a `<fieldset>` whose `<legend>` is the label.
 <Example @name="custom-rating" @title="A star rating" />
 
 ```ts
-import { registerControl } from '@formwright/ember'
+import { registerControl } from '@ember-formwright/ember'
 
 registerControl('rating', StarRating, { group: true }) // then @control="rating"
 ```

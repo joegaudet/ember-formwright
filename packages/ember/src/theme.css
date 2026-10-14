@@ -1,5 +1,5 @@
 /*
- * Formwright's optional theme. Import it with `import '@formwright/ember/theme.css'`, then
+ * Formwright's optional theme. Import it with `import '@ember-formwright/ember/theme.css'`, then
  * restyle through the custom properties below. Without it, Formwright renders unstyled
  * markup with stable classes (.fw-*) and state attributes (data-invalid, data-dirty, ...).
  *

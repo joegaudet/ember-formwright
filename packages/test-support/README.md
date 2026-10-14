@@ -1,9 +1,9 @@
-# @formwright/test-support
+# @ember-formwright/test-support
 
 Harness classes for testing Formwright forms the way a user uses them.
 
 ```bash
-npm install --save-dev @formwright/test-support
+npm install --save-dev @ember-formwright/test-support
 ```
 
 ## Describe a form once
@@ -20,7 +20,7 @@ import {
   CheckboxHarness,
   field,
   form,
-} from '@formwright/test-support'
+} from '@ember-formwright/test-support'
 
 export class AddressForm extends FormHarness {
   @field(InputHarness) declare city: InputHarness

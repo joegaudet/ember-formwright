@@ -1,15 +1,15 @@
-# @formwright/warp-drive
+# @ember-formwright/warp-drive
 
 Lets Formwright forms edit WarpDrive and ember-data records.
 
 ```bash
-npm install @formwright/ember @formwright/warp-drive
+npm install @ember-formwright/ember @ember-formwright/warp-drive
 ```
 
 ```ts
 // app/app.ts: every form
-import { setDefaultAdapter } from '@formwright/ember'
-import { warpDriveAdapter } from '@formwright/warp-drive'
+import { setDefaultAdapter } from '@ember-formwright/ember'
+import { warpDriveAdapter } from '@ember-formwright/warp-drive'
 
 setDefaultAdapter(warpDriveAdapter)
 ```

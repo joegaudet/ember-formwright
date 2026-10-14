@@ -99,10 +99,11 @@
           </div>
           <div class="install">
             <span class="prompt" aria-hidden="true">$</span>
-            <code>npm i @formwright/ember</code>
+            <code>npm i @ember-formwright/ember</code>
           </div>
           <p class="install-note">
-            Add <code>@formwright/test-support</code> for harnesses, and an adapter if you use one.
+            Add <code>@ember-formwright/test-support</code> for harnesses, and an adapter if you use
+            one.
           </p>
         </div>
 
@@ -212,8 +213,8 @@
           Import <code>Form</code> into a <code>.gts</code> template. Fields, nested forms and
           buttons come from the form itself, already bound to it.
         </p>
-        <pre><code class="language-typescript">import { Form } from '@formwright/ember'
-import '@formwright/ember/theme.css' // optional
+        <pre><code class="language-typescript">import { Form } from '@ember-formwright/ember'
+import '@ember-formwright/ember/theme.css' // optional
 
 &lt;template&gt;
   &lt;Form @model={{@order}} @name="checkout" @onSubmit={{@save}} as |f|&gt;
@@ -286,7 +287,7 @@ const validator = (user: User) =&gt; ({
           <pre><code class="language-typescript">import {
   FormHarness, InputHarness, SelectHarness,
   CheckboxGroupHarness, CheckboxHarness, field, form,
-} from '@formwright/test-support'
+} from '@ember-formwright/test-support'
 
 export class AddressForm extends FormHarness {
   @field(InputHarness) declare city: InputHarness
@@ -377,7 +378,7 @@ export class SignupForm extends FormHarness {
             </thead>
             <tbody>
               <tr>
-                <th scope="row"><code>@formwright/warp-drive</code></th>
+                <th scope="row"><code>@ember-formwright/warp-drive</code></th>
                 <td>
                   WarpDrive and ember-data records: <code>save()</code> on submit,
                   <code>rollbackAttributes()</code> on reset, server errors on their fields, new
@@ -385,7 +386,7 @@ export class SignupForm extends FormHarness {
                 </td>
               </tr>
               <tr>
-                <th scope="row"><code>@formwright/real-enums</code></th>
+                <th scope="row"><code>@ember-formwright/real-enums</code></th>
                 <td>
                   <a href="https://joegaudet.com/real-enums/">real-enums</a> classes as
                   <code>@options</code>, filtered with <code>enumOptions</code>, stored as members
@@ -393,11 +394,11 @@ export class SignupForm extends FormHarness {
                 </td>
               </tr>
               <tr>
-                <th scope="row"><code>@formwright/maskito</code></th>
+                <th scope="row"><code>@ember-formwright/maskito</code></th>
                 <td>A <code>masked</code> control powered by Maskito: phones, cards, dates.</td>
               </tr>
               <tr>
-                <th scope="row"><code>@formwright/test-support</code></th>
+                <th scope="row"><code>@ember-formwright/test-support</code></th>
                 <td>The form harnesses above, with drivers you can extend for custom controls.</td>
               </tr>
             </tbody>
@@ -405,8 +406,8 @@ export class SignupForm extends FormHarness {
         </div>
         <div class="install-block">
           <pre><code class="language-typescript">// app/app.ts: every form edits WarpDrive records
-import { setDefaultAdapter } from '@formwright/ember'
-import { warpDriveAdapter } from '@formwright/warp-drive'
+import { setDefaultAdapter } from '@ember-formwright/ember'
+import { warpDriveAdapter } from '@ember-formwright/warp-drive'
 
 setDefaultAdapter(warpDriveAdapter)</code></pre>
         </div>

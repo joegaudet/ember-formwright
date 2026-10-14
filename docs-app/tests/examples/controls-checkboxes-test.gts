@@ -2,7 +2,12 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'docs-app/tests/helpers'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { render } from '@ember/test-helpers'
-import { FormHarness, CheckboxHarness, CheckboxGroupHarness, field } from '@formwright/test-support'
+import {
+  FormHarness,
+  CheckboxHarness,
+  CheckboxGroupHarness,
+  field,
+} from '@ember-formwright/test-support'
 import PizzaForm, { createModel } from 'docs-app/examples/controls-checkboxes'
 
 class PizzaHarness extends FormHarness {

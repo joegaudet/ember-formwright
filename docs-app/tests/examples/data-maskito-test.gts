@@ -2,7 +2,7 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'docs-app/tests/helpers'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { render, settled } from '@ember/test-helpers'
-import { FormHarness, InputHarness, field } from '@formwright/test-support'
+import { FormHarness, InputHarness, field } from '@ember-formwright/test-support'
 import AddressForm, { createModel } from 'docs-app/examples/data-maskito'
 
 class AddressHarness extends FormHarness {

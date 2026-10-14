@@ -1,7 +1,7 @@
 import Component from '@glimmer/component'
 import { tracked } from '@glimmer/tracking'
-import { Form } from '@formwright/ember'
-import { enumOptions } from '@formwright/real-enums'
+import { Form } from '@ember-formwright/ember'
+import { enumOptions } from '@ember-formwright/real-enums'
 import {
   Account,
   accountSchema,
