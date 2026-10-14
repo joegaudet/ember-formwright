@@ -7,3 +7,5 @@ coverage/
 docs/site/demo/
 FORMWRIGHT_PLAN.md
 examples/*/dist/
+docs/site/guide/
+docs/site/404.html

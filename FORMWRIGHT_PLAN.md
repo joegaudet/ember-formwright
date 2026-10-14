@@ -148,101 +148,76 @@ Illustrative shape, to finalize in the PR:
 - Changesets major → publish all `@formwright/*` packages; GitHub release notes link MIGRATION.md.
 - `ember-foxy-forms` stays as it is (per decision).
 
-### Phase 9 — Usage documentation with styled, live examples (planned, not started)
+### Phase 9 — Usage documentation with styled, live examples (done)
 
-**Why.** The usage docs today are one README example with argument tables, a single static
-snippet on the site, and the demo. Nothing shows a rendered result next to the code that made
-it, and most features (each control, validation styles, nested forms, inline editing, custom
-controls, adapters, theming, testing) have no example at all.
+**Why.** ember-foxy-forms had six docs pages (Introduction, Usage, Forms, Fields, Controls,
+Advanced; about 1,060 lines in `tests/dummy/app/templates/docs/` on `master`) rendered by
+ember-cli-addon-docs. They were dropped with the dummy app. Formwright's docs today are one
+README example with argument tables, one static site snippet and the demo: the control surface
+isn't enumerated, extending controls is one paragraph, and nothing shows rendered output next to
+the code that made it.
 
-**Principle: one source per example.** Each example is a real `.gts` file. The same file is
-rendered live, displayed as highlighted source, and covered by a test, so the docs can't drift
-from the code.
+**Mounted with Kolay.** The guide is a separate Vite Ember app, `docs-app/` (private workspace
+package), built with [Kolay](https://github.com/universal-ember/kolay) 5.4: markdown pages,
+`<APIDocs>` rendered from the packages' TypeScript declarations by TypeDoc, and Shiki
+highlighting. It's built into `docs/site/guide/` → `joegaudet.com/formwright/guide/`, next to the
+marketing page and the demo. (A separate app, not `test-app`, because Kolay's routes own the
+app root.)
 
-**Where it lives.** A guide at `joegaudet.com/formwright/guide/`, built from the `test-app`
-Ember app (the same build that produces the demo) into `docs/site/guide/`. The marketing page
-stays hand-written and links into the guide.
-
-**Layout of the work**
-
-```
-test-app/app/
-  examples/<slug>.gts          one example: a component plus `meta = { title, summary, section }`
-  routes/guide.ts, guide/      a sidebar index of the examples, and one page per section
-  components/example-frame.gts the styled frame: Preview | Template | Test tabs
-test-app/tests/examples/<slug>-test.gts   harness test + axe audit for each example
-scripts/check-doc-snippets.mjs           README/site snippets must match their example file
-```
+**One source per example.** Each example is a `.gts` file in `docs-app/app/examples/`. A guide
+page renders it with `<Example @name="…" />`, the styled frame that shows the live preview, the
+example's exact source and its harness test (both imported with Vite `?raw`). The same file is
+imported by `docs-app/tests/examples/<name>-test.gts`, which drives it with a harness class and
+runs axe. Docs can't drift from code that is tested.
 
 **The example frame (what "well styled" means here)**
-- **Preview:** the live example on a card, with a light/dark toggle and a theme-preset switcher
-  (default, compact, rounded, brand). The presets are only `--fw-*` overrides, which also
-  documents theming.
-- **Template:** the example's source, imported with Vite `?raw` and highlighted at build time
-  with Shiki (a dev dependency of test-app only), using the same editor palette as the site.
-  It gets a copy button and line highlights for the lines that matter.
-- **Test:** the matching harness test, so every example also shows how to test it.
-- **Side panel:** the live model as JSON (like the demo), so readers see what each control
-  writes.
-- **Fit:** the site's typography (Inter, indigo/coral accents) and the 16px phone gutter.
-  Checked at 375px and 1440px.
+- **Preview:** a card in the site's style (Inter, indigo/coral). It has a theme-preset switcher
+  (default, compact, rounded, brand), and the presets are only `--fw-*` overrides. A live model
+  panel shows the JSON each control writes.
+- **Template** and **Test** tabs: the source, highlighted with Shiki, with a copy button.
+- **Fit:** works at 375px and 1440px, in light and dark.
 
-**Examples (sections, in order)**
-1. **Getting started:** a minimal form with a POJO model; a `@tracked` class model; submit and
-   reset.
-2. **Controls gallery:** every built-in control, one card each, with its options (`@options`,
-   `@optionKey`, `@storeKey`, `@min`/`@max`, `@maxLength`/`@showCount`, `@currency`/`@locale`).
-3. **Layout:** the block form (`field.Control`) for custom layouts; grids, inline rows and
-   checkbox styling.
-4. **Validation:** a zod schema, valibot, a function validator, form-level errors through
-   `<f.Errors />`, async validation, and errors clearing once fixed.
-5. **Nested forms:** a fieldset with a legend, a per-form validator, and save order.
-6. **Editing modes:** `@inline`, `@callout` (popover), `@requireConfirm` and `@autoSubmit`.
-7. **Custom controls:** a component as `@control`, `registerControl`, and a test-support driver.
-8. **Data layers:** WarpDrive or ember-data through `@formwright/warp-drive` (an in-memory
-   store), real-enums options, and Maskito masks.
-9. **Theming:** the `--fw-*` property reference, each preset side by side, and going unstyled
-   with the `.fw-*` classes and `data-*` states.
-10. **Testing:** the harness API and selector reference, with examples for every control type.
-11. **API reference:** the Form and Field argument tables and the `FormState`, `ModelAdapter`
-    and `ControlSignature` types.
+**Pages: the original six, ported and rewritten for the new API, plus what's new**
 
-**Wiring the rest of the docs to the examples**
-- **README:** shrinks to install, one hero example and links into the guide. Each README
-  snippet carries a marker (`<!-- example: getting-started -->`), and
-  `scripts/check-doc-snippets.mjs` (run in CI) fails if a snippet differs from its file.
-- **Site "Usage" section:** becomes a tabbed preview of three key examples (basic form,
-  validation, testing), each an iframe of its guide page.
-- **Package READMEs:** keep one example each, under the same snippet check.
-- **API tables:** `scripts/check-arg-docs.mjs` uses the TypeScript compiler API to read the
-  `FormSignature`, `FieldSignature` and `ControlSignature` args, and fails CI if the API page
-  misses one.
+| Guide page | From foxy-forms | Covers |
+| --- | --- | --- |
+| Introduction | index.md | What Formwright is; install; a first form; how it relates to ember-foxy-forms |
+| Usage | usage.md | Models (POJO, `@tracked` class), submit, reset, state, `f.Errors` |
+| Forms | forms.md | Every Form argument and lifecycle hook, disabled/readonly, auto-submit, inline editing, confirm mode; how to do notifications, navigation guards and class config now |
+| Fields | fields.md | Labels, hints, placeholders, required, values and options, `@format`, the block form (`field.Control`), callouts |
+| Controls | controls.md | Every built-in control with its arguments and a live example each; the `ControlSignature` contract |
+| Custom controls | controls.md ("Custom Controls") | Writing a control, `registerControl`, its harness subclass; ports of the old walkthroughs (price range, rating, JSON editor) |
+| Validation | (new) | Standard Schema (zod, valibot), function validators, form-level errors, async validation |
+| Nested forms | advanced.md | Child forms, legends, per-form validators, save order (the product-onboarding example) |
+| Data layers | (new) | `ModelAdapter`, WarpDrive / ember-data, real-enums, Maskito |
+| Theming | forms.md (BEM / grid) | `--fw-*` properties, presets, going unstyled with `.fw-*` and `data-*` |
+| Testing | forms.md (testing selectors) | Harness classes, decorators, custom harnesses, the selector reference |
+| API reference | (new) | `<APIDocs>` for `Form`, `Field`, `ControlSignature`, `ModelAdapter`, `FormState`, the harness classes |
+
+**Wiring the rest of the docs to the guide**
+- **README:** keeps install, one example, and links into the guide.
+- **Marketing site:** its nav and Usage section link into the guide.
+- **`pages.yml`:** builds the demo and the guide, then deploys `docs/site`.
+- **CI:** runs the docs-app suite, which covers every example.
+
+**Notes from building it**
+- Kolay 5.4 needed three workarounds: a pnpm patch giving `ember-repl` an `addon-main.cjs` (the
+  classic-compat build requires one), a workspace override unifying `@glint/template`, and
+  `keepNames` in the production build (TypeDoc's renderer looks up classes by name).
+- Callouts are plain `<div class="callout">` blocks: markdown inside a component tag doesn't
+  survive Kolay's markdown step.
+- `@formwright/test-support` is one TypeDoc module, which `<APIDocs>` can't address; its API
+  lives in the Testing page's tables.
+- The guide uses real URLs. GitHub Pages serves deep links through `docs/site/404.html`, a copy
+  of the guide's `index.html` written by the build.
 
 **Acceptance criteria**
-- Every example renders live in the guide, shows its exact source, and has a passing harness
-  test with an axe audit.
-- Every README and site snippet that is tagged with an example matches its source file (CI
-  checks this).
-- Every public argument appears in the API reference (CI checks this).
-- The guide works at 375px with no horizontal scroll, and in light and dark.
-- `pages.yml` builds and deploys the guide with the demo; the marketing nav gains a "Guide"
-  link.
-
-**Sequencing (one PR each)**
-1. The example frame, the guide route and Pages wiring, with *Getting started* as the first
-   example.
-2. Controls gallery and Layout.
-3. Validation, Nested forms and Editing modes.
-4. Custom controls, Data layers and Theming (adds the preset switcher).
-5. Testing and the API reference, plus both check scripts in CI. Shrink the README and wire the
-   site's Usage tabs.
-
-**Open questions**
-- Should the guide live inside the Ember app (live by default, as planned) or as hand-written
-  HTML pages that embed example iframes?
-- Should Shiki run at build time, as planned, or should the guide reuse Prism from the site?
-- Should theme presets ship as importable CSS files (`@formwright/ember/themes/compact.css`), or
-  stay as docs only?
+- Every page of the original six has a counterpart, and every feature they described is either
+  documented or listed in `MIGRATION.md` as removed.
+- Every example renders live in the guide, shows its exact source and test, and has a passing
+  harness test with an axe audit.
+- Every built-in control has its own example and argument list.
+- The guide works at 375px in light and dark, and is deployed at `/formwright/guide/`.
 
 ## Risks / open items
 - `@formwright` npm scope availability: not checked yet. It blocks Phase 0.

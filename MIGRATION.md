@@ -37,27 +37,31 @@ import { Form } from '@formwright/ember'
 
 ## Arguments
 
-| ember-foxy-forms                              | Formwright                                                                                              |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `@inlineEditing`                              | `@inline`                                                                                               |
-| `@hasControlCallout` (ember-attacher popover) | `@callout` (native `popover`, CSS anchor positioning)                                                   |
-| `@requireConfirm`                             | `@requireConfirm` (same)                                                                                |
-| `@autoSubmit`                                 | `@autoSubmit` (same)                                                                                    |
-| `@disabled`, `@readonly`                      | Same                                                                                                    |
-| `@infoText`                                   | `@hint`                                                                                                 |
-| `@formatValue`                                | `@format`                                                                                               |
-| `@displayValueComponent`                      | Use the field's block form, or `@format`.                                                               |
-| `@labelKey` / `@idKey` on selects             | `@optionLabel` / `@optionKey`                                                                           |
-| `@storeAsPrimitive`                           | `@storeKey`                                                                                             |
-| `@selectionMax` (checkbox select)             | `@max`                                                                                                  |
-| `@using="checkbox-select"`                    | `@control="checkbox-group"`                                                                             |
-| `@using="currency"` (ember-inputmask)         | `@control="currency"` (`Intl.NumberFormat`; `@currency`, `@locale`), or `@formwright/maskito` for masks |
-| `@using="multiple-input"`                     | Removed (see composite fields above).                                                                   |
-| `@enforceRequiredFields`                      | Removed. Validate with `@validator`; `@required` marks a field.                                         |
-| `@resetOnDestroy`, `@resetIfDirtyOnly`        | `@resetOnDestroy` (resets only when dirty)                                                              |
-| `@allowSubmitQueue`                           | Removed: a submit while submitting is ignored.                                                          |
-| `@scrollToFirstVisibleError`                  | Always on, as focus: the first invalid control is focused.                                              |
-| `@useEmberDataDirtyTracking`                  | Use `@formwright/warp-drive`.                                                                           |
+| ember-foxy-forms                                  | Formwright                                                                                              |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `@inlineEditing`                                  | `@inline`                                                                                               |
+| `@hasControlCallout` (ember-attacher popover)     | `@callout` (native `popover`, CSS anchor positioning)                                                   |
+| `@requireConfirm`                                 | `@requireConfirm` (same)                                                                                |
+| `@autoSubmit`                                     | `@autoSubmit` (same)                                                                                    |
+| `@disabled`, `@readonly`                          | Same                                                                                                    |
+| `@infoText`                                       | `@hint`                                                                                                 |
+| `@formatValue`                                    | `@format`                                                                                               |
+| `@displayValueComponent`                          | Use the field's block form, or `@format`.                                                               |
+| `@labelKey` / `@idKey` on selects                 | `@optionLabel` / `@optionKey`                                                                           |
+| `@storeAsPrimitive`                               | `@storeKey`                                                                                             |
+| `@selectionMax` (checkbox select)                 | `@max`                                                                                                  |
+| `@using="checkbox-select"`                        | `@control="checkbox-group"`                                                                             |
+| `@using="currency"` (ember-inputmask)             | `@control="currency"` (`Intl.NumberFormat`; `@currency`, `@locale`), or `@formwright/maskito` for masks |
+| `@using="multiple-input"`                         | Removed (see composite fields above).                                                                   |
+| `@enforceRequiredFields`                          | Removed. Validate with `@validator`; `@required` marks a field.                                         |
+| `@resetOnDestroy`, `@resetIfDirtyOnly`            | `@resetOnDestroy` (resets only when dirty)                                                              |
+| `@allowSubmitQueue`                               | Removed: a submit while submitting is ignored.                                                          |
+| `@scrollToFirstVisibleError`                      | Always on, as focus: the first invalid control is focused.                                              |
+| `@useEmberDataDirtyTracking`                      | Use `@formwright/warp-drive`.                                                                           |
+| `@valueTooltip`, `@editText` (inline editing)     | Removed. Put the text in your own markup, or in `@hint`.                                                |
+| `showRequiredIndicator`, `requiredText` (config)  | `@required` always shows `*` (`.fw-required`); hide or restyle it with CSS.                             |
+| `@tagName` (form), `@fieldTagName`                | Removed. A form is a `<form>` (a nested one a `<fieldset>`), and a field a `<div>`.                     |
+| `@infoText` component (`customInfoTextComponent`) | `@hint`, or the field's block form.                                                                     |
 
 ## Hooks
 

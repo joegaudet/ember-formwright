@@ -7,6 +7,8 @@ ember-data, plain objects), and test it with harnesses that read the way your us
 
 Site and live demo: **https://joegaudet.com/formwright/**
 
+Guide, with a live example of every feature: **https://joegaudet.com/formwright/guide/**
+
 Formwright is the successor to `ember-foxy-forms`. Coming from there? See [MIGRATION.md](MIGRATION.md).
 
 ## Install

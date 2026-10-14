@@ -14,6 +14,7 @@ export default tseslint.config(
       'docs/**',
       'examples/**',
       'test-app/config/**',
+      'docs-app/config/**',
       '**/*.cjs',
     ],
   },

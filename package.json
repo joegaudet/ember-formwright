@@ -18,6 +18,8 @@
     "test": "pnpm --filter test-app test",
     "test:examples": "pnpm --filter './examples/*' run test",
     "demo:build": "pnpm --filter test-app run build:demo",
+    "guide:build": "pnpm --filter docs-app run build",
+    "guide:start": "pnpm --filter docs-app start",
     "start": "pnpm --filter test-app start",
     "release": "pnpm build && node scripts/publish.mjs"
   },

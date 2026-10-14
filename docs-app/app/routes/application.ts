@@ -1,0 +1,30 @@
+import Route from '@ember/routing/route'
+import rehypeShikiFromHighlighter from '@shikijs/rehype/core'
+import { setupKolay } from 'kolay/setup'
+import type { Manifest } from 'kolay'
+import { highlighter } from '../highlight.ts'
+import { Example } from '../components/example.gts'
+
+export default class ApplicationRoute extends Route {
+  async model(): Promise<{ manifest: Manifest }> {
+    const shiki = await highlighter()
+
+    const manifest = await setupKolay(this, {
+      // Usable in any page without an import.
+      topLevelScope: { Example },
+      modules: {
+        '@formwright/ember': () => import('@formwright/ember'),
+        '@formwright/test-support': () => import('@formwright/test-support'),
+      },
+      rehypePlugins: [
+        [
+          rehypeShikiFromHighlighter,
+          shiki,
+          { themes: { light: 'github-light', dark: 'github-dark' }, defaultColor: 'light-dark()' },
+        ],
+      ],
+    })
+
+    return { manifest }
+  }
+}

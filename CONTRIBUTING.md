@@ -22,6 +22,7 @@ pnpm lint
 pnpm typecheck
 node --test scripts/*.test.mjs
 pnpm test                               # test-app, Ember 7.3
+pnpm --filter docs-app test             # every guide example and page
 pnpm --filter ember-classic test        # the classic ember-cli example
 ```
 
@@ -40,6 +41,20 @@ over raw selectors. A new control gets a `FieldHarness` subclass.
 
 Every change to a published package needs a changeset (`pnpm changeset`). The packages version
 together.
+
+## The guide
+
+`docs-app/` is the guide at `/formwright/guide/`, built with [Kolay](https://github.com/universal-ember/kolay).
+`pnpm guide:start` serves it locally.
+
+- Pages are markdown in `docs-app/app/templates/<section>/<page>.md`; `meta.json` files set the
+  order. Add a new page to `PAGES` in `docs-app/tests/acceptance/pages-test.ts`.
+- Examples are `.gts` files in `docs-app/app/examples/`. Each exports a default component taking
+  `@model`, and a `createModel()` function. Show one in a page with `<Example @name="…" />`.
+- Every example has a test, `docs-app/tests/examples/<name>-test.gts`, written with harness
+  classes and ending in an axe audit. The guide shows it in the example's Test tab, so write it
+  as you'd want a reader to write theirs.
+- Callouts are `<div class="callout">` blocks with a blank line inside, so markdown still works.
 
 ## The website
 
