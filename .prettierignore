@@ -1,0 +1,8 @@
+dist/
+declarations/
+pnpm-lock.yaml
+.changeset/*.md
+coverage/
+.claude/
+docs/site/demo/
+FORMWRIGHT_PLAN.md

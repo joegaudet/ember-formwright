@@ -1,0 +1,22 @@
+packages:
+  - 'packages/*'
+  - 'test-app'
+  - 'examples/*'
+
+allowBuilds:
+  esbuild: true
+  core-js: false
+
+overrides:
+  # Examples ask for the published ranges; inside the workspace they get the local packages.
+  '@formwright/ember': 'workspace:*'
+  '@formwright/test-support': 'workspace:*'
+  '@formwright/warp-drive': 'workspace:*'
+  '@formwright/real-enums': 'workspace:*'
+  '@formwright/maskito': 'workspace:*'
+
+# real-enums 2 is an optional peer that is not on npm yet.
+autoInstallPeers: false
+
+# ember-eslint-parser hits a require(esm) cycle error on Node 22.14; run scripts on 24.
+useNodeVersion: 24.11.1
