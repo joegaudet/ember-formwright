@@ -104,8 +104,14 @@ export default class Form<M extends object = object>
   @tracked isSubmitting = false
   /** After a failed submit, every change revalidates so errors clear as they're fixed. */
   @tracked hasFailedSubmit = false
-  @tracked fields: Field[] = []
-  @tracked children: Form<any>[] = []
+  /**
+   * Not tracked: fields and nested forms register while the form renders, and writing
+   * tracked state there trips Ember's backtracking assertion. `version` is bumped instead:
+   * right after a render that registered something, on removal, and on save.
+   */
+  fields: Field[] = []
+  children: Form<any>[] = []
+  @tracked version = 0
   /** The values fields started with (or were last saved with), by path. */
   baseline = new Map<string, unknown>()
   element?: HTMLElement
@@ -159,10 +165,12 @@ export default class Form<M extends object = object>
   }
 
   get isDirty(): boolean {
+    void this.version
     return this.fields.some(f => this.isFieldDirty(f.path)) || this.children.some(c => c.isDirty)
   }
 
   get isValid(): boolean {
+    void this.version
     return !hasErrors(this.errors) && this.children.every(c => c.isValid)
   }
 
@@ -181,25 +189,44 @@ export default class Form<M extends object = object>
   }
 
   isFieldDirty(path: string): boolean {
+    void this.version
     return this.baseline.has(path) && !same(this.baseline.get(path), this.read(path))
   }
 
   register(field: Field): void {
     if (!this.baseline.has(field.path))
       this.baseline.set(field.path, snapshotOf(this.read(field.path)))
-    this.fields = [...this.fields, field]
+    this.fields.push(field)
+    this.invalidateSoon()
   }
 
   unregister(field: Field): void {
     this.fields = this.fields.filter(f => f !== field)
+    this.version++
   }
 
   adopt(child: Form<any>): void {
-    this.children = [...this.children, child]
+    this.children.push(child)
+    this.invalidateSoon()
+  }
+
+  pendingInvalidation = false
+
+  /** Re-runs anything that read the field list before this render registered more fields. */
+  invalidateSoon(): void {
+    if (this.pendingInvalidation) return
+    this.pendingInvalidation = true
+    void waitForPromise(
+      Promise.resolve().then(() => {
+        this.pendingInvalidation = false
+        if (!this.isDestroying) this.version++
+      }),
+    )
   }
 
   disown(child: Form<any>): void {
     this.children = this.children.filter(c => c !== child)
+    this.version++
   }
 
   /** Writes a value to the model: the one way every control changes data. */
@@ -275,7 +302,7 @@ export default class Form<M extends object = object>
   markSaved(): void {
     for (const field of this.fields)
       this.baseline.set(field.path, snapshotOf(this.read(field.path)))
-    this.fields = [...this.fields] // the baseline isn't tracked; re-render dirty state
+    this.version++ // the baseline isn't tracked
     this.hasFailedSubmit = false
     this.children.forEach(c => c.markSaved())
   }

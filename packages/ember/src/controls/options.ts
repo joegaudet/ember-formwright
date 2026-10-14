@@ -25,7 +25,9 @@ export function labelOf(option: unknown, accessor?: OptionAccessor): string {
 /** Compares a stored value (an option, or just its key) with an option. */
 export function matches(value: unknown, option: unknown, accessor?: OptionAccessor): boolean {
   if (value === null || value === undefined) return false
-  return String(keyOf(value, accessor)) === String(keyOf(option, accessor))
+  // A stored primitive is already a key (see storeKey); only options go through the accessor.
+  const valueKey = isObject(value) ? keyOf(value, accessor) : value
+  return String(valueKey) === String(keyOf(option, accessor))
 }
 
 export function toStored(
