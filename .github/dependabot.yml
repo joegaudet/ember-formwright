@@ -1,6 +1,36 @@
 version: 2
 updates:
+  # The npm ecosystem covers pnpm workspaces; it updates the root pnpm-lock.yaml.
+  # Every workspace package is listed so its own package.json is kept current too.
   - package-ecosystem: 'npm'
+    directories:
+      - '/'
+      - '/packages/*'
+      - '/test-app'
+      - '/docs-app'
+      - '/examples/*'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5
+    groups:
+      # One PR a week for everything that shouldn't break anything.
+      minor-and-patch:
+        update-types: ['minor', 'patch']
+      # Ember's packages move together; review their majors together.
+      ember:
+        patterns: ['ember-*', '@ember/*', '@embroider/*', '@glimmer/*', '@glint/*']
+        update-types: ['major']
+    ignore:
+      # Kolay 5.4 needs typedoc's TypeScript range and a patched ember-repl@8.2.3
+      # (see patchedDependencies in pnpm-workspace.yaml); upgrade those by hand.
+      - dependency-name: 'kolay'
+        update-types: ['version-update:semver-major', 'version-update:semver-minor']
+      - dependency-name: 'ember-repl'
+
+  - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
+    groups:
+      actions:
+        patterns: ['*']
