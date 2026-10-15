@@ -49,7 +49,8 @@ code: `Path<Model>`, the union of paths, and `PathValue<Model, Path>`, the type 
 
 Paths go five levels deep, and stop at `Date`, `Map`, `Set` and other built-ins. A model typed
 loosely (`any`, `object`, or with an index signature such as `Record<string, unknown>`)
-accepts any string and gives `unknown` values, as do loose-mode `.hbs` templates. Controls
+accepts any string and gives `unknown` values, as do loose-mode `.hbs` templates. A nested
+form over one of those `unknown` values, like a changeset's `cs.address`, is loose too. Controls
 aren't typed against values: whether a control suits the value at its path is still up to
 you.
 

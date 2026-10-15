@@ -72,6 +72,10 @@ export const LoosePaths: TOC<{
   <Form @model={{@any}} as |f|><f.Field @for="any.thing" /></Form>
   <Form @model={{@object}} as |f|><f.Field @for="any.thing" /></Form>
   <Form @model={{@record}} as |f|><f.Field @for="any.thing" /></Form>
+  {{! a part of a loose model, e.g. a changeset's cs.address, is unknown }}
+  <Form @model={{@record}} as |f|>
+    <f.Form @model={{@record.address}} as |a|><a.Field @for="any.thing" /></f.Form>
+  </Form>
 </template>
 
 // ---- values follow the path -------------------------------------------------------------
