@@ -42,6 +42,36 @@ over raw selectors. A new control gets a `FieldHarness` subclass.
 Every change to a published package needs a changeset (`pnpm changeset`). The packages version
 together.
 
+## Releasing
+
+A release is cut by pushing a tag. Nothing publishes on merge.
+
+1. PRs that change a published package carry a changeset (`pnpm changeset`). While any are
+   pending on `main`, CI keeps a "chore: version packages" PR open with the next version and
+   the changelogs.
+2. Merge that PR.
+3. Tag the merge commit with the new version and push the tag:
+
+   ```bash
+   git switch main && git pull
+   git tag -a v1.2.3 -m v1.2.3
+   git push origin v1.2.3
+   ```
+
+`release.yml` checks that the tag is on `main` and matches every public package's version,
+publishes whatever is not already on npm through `scripts/publish.mjs` (OIDC trusted publishing
+with provenance; there is no `NPM_TOKEN`), then creates the GitHub release. If a run fails, re-run
+it: it skips what is already published.
+
+**A brand-new package** cannot publish through OIDC: npm only configures a trusted publisher for
+a name that already exists. Its first release goes out once through `bootstrap-publish.yml` with
+a short-lived token (restore that file from git history if it has been deleted; its header has
+the steps). After that, set `joegaudet/ember-formwright` / `release.yml` as the package's trusted
+publisher on npmjs.com.
+
+Actions must be allowed to create pull requests (Settings → Actions → General), or the version
+PR cannot open.
+
 ## The guide
 
 `docs-app/` is the guide at `/ember-formwright/guide/`, built with [Kolay](https://github.com/universal-ember/kolay).
