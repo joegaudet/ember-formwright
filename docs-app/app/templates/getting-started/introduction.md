@@ -46,7 +46,7 @@ The form reads values from the model, writes changes back, validates, and saves.
 Formwright is its successor. The ideas carry over, but it uses named arguments only
 (`@for="name"`, not positional params), `.gts` imports instead of globally resolved
 components, and any Standard Schema validator. The
-[migration guide](https://github.com/joegaudet/formwright/blob/main/MIGRATION.md) maps every
+[migration guide](https://github.com/joegaudet/ember-formwright/blob/main/MIGRATION.md) maps every
 old component and argument to its replacement.
 
 </div>

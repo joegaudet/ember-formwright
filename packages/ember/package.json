@@ -14,11 +14,11 @@
   "author": "Joe Gaudet <joe@joegaudet.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joegaudet/formwright.git",
+    "url": "git+https://github.com/joegaudet/ember-formwright.git",
     "directory": "packages/ember"
   },
-  "homepage": "https://joegaudet.com/formwright/",
-  "bugs": "https://github.com/joegaudet/formwright/issues",
+  "homepage": "https://joegaudet.com/ember-formwright/",
+  "bugs": "https://github.com/joegaudet/ember-formwright/issues",
   "exports": {
     ".": {
       "types": "./declarations/index.d.ts",

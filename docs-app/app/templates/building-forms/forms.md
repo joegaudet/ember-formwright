@@ -75,7 +75,7 @@ guard, a destroy button, BEM and CSS-grid class options, testing classes and glo
 in `config/environment.js`. Formwright leaves those to your app: notify from `@didSubmit` and
 `@failedSubmit`, guard routes with `f.state.isDirty`, style with the stable `.fw-*` classes
 and `data-*` states, and test with the `data-test-fw-*` selectors. The
-[migration guide](https://github.com/joegaudet/formwright/blob/main/MIGRATION.md) has a recipe
+[migration guide](https://github.com/joegaudet/ember-formwright/blob/main/MIGRATION.md) has a recipe
 for each.
 
 </div>

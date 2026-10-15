@@ -5,9 +5,9 @@ Declarative, accessible forms for Ember. One `<Form>`, one `<f.Field>`: labels, 
 valibot, any [Standard Schema](https://standardschema.dev)) and any data layer (WarpDrive,
 ember-data, plain objects), and test it with harnesses that read the way your users do.
 
-Site and live demo: **https://joegaudet.com/formwright/**
+Site and live demo: **https://joegaudet.com/ember-formwright/**
 
-Guide, with a live example of every feature: **https://joegaudet.com/formwright/guide/**
+Guide, with a live example of every feature: **https://joegaudet.com/ember-formwright/guide/**
 
 Formwright is the successor to `ember-foxy-forms`. Coming from there? See [MIGRATION.md](MIGRATION.md).
 

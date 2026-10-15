@@ -4,8 +4,8 @@ import { babel } from '@rollup/plugin-babel'
 import { kolay } from 'kolay/vite'
 
 export default defineConfig({
-  // The guide is served from joegaudet.com/formwright/guide/.
-  base: process.env.FW_GUIDE ? '/formwright/guide/' : '/',
+  // The guide is served from joegaudet.com/ember-formwright/guide/.
+  base: process.env.FW_GUIDE ? '/ember-formwright/guide/' : '/',
   plugins: [
     classicEmberSupport(),
     ember(),

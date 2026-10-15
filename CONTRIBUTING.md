@@ -44,7 +44,7 @@ together.
 
 ## The guide
 
-`docs-app/` is the guide at `/formwright/guide/`, built with [Kolay](https://github.com/universal-ember/kolay).
+`docs-app/` is the guide at `/ember-formwright/guide/`, built with [Kolay](https://github.com/universal-ember/kolay).
 `pnpm guide:start` serves it locally.
 
 - Pages are markdown in `docs-app/app/templates/<section>/<page>.md`; `meta.json` files set the

@@ -19,5 +19,5 @@ import '@ember-formwright/ember/theme.css' // optional
 </template>
 ```
 
-Full documentation: the [repository README](https://github.com/joegaudet/formwright#readme) and
-the site, with a live demo, at **https://joegaudet.com/formwright/**.
+Full documentation: the [repository README](https://github.com/joegaudet/ember-formwright#readme) and
+the site, with a live demo, at **https://joegaudet.com/ember-formwright/**.

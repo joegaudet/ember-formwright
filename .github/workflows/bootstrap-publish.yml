@@ -25,12 +25,12 @@
 #        allows).
 #   2. Remove any repository-level copy, so the token exists only behind the
 #      environment's reviewers and branch rule:
-#        gh secret delete NPM_TOKEN --repo joegaudet/formwright
+#        gh secret delete NPM_TOKEN --repo joegaudet/ember-formwright
 #
 # Dispatch it on the Version Packages branch, `changeset-release/main`, after
 # the version PR exists and before merging it:
 #
-#   gh workflow run bootstrap-publish.yml --repo joegaudet/formwright \
+#   gh workflow run bootstrap-publish.yml --repo joegaudet/ember-formwright \
 #     --ref changeset-release/main -f confirm=publish
 #
 # There every package is already at the release version (1.0.0), so each new
@@ -44,9 +44,9 @@
 #
 # Afterwards:
 #   1. npmjs.com, per package: Settings > Trusted publisher >
-#      repository joegaudet/formwright, workflow release.yml
+#      repository joegaudet/ember-formwright, workflow release.yml
 #   2. Revoke the token on npmjs.com, then delete it from the environment:
-#        gh secret delete NPM_TOKEN --env npm-bootstrap --repo joegaudet/formwright
+#        gh secret delete NPM_TOKEN --env npm-bootstrap --repo joegaudet/ember-formwright
 #   3. Delete this file (and the environment). release.yml handles every
 #      release from then on.
 name: bootstrap publish (one-shot)

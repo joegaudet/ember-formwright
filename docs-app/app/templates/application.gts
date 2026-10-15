@@ -20,14 +20,14 @@ function title(name: string): string {
 
 <template>
   <header class="guide-header">
-    <a class="guide-brand" href="https://joegaudet.com/formwright/">
+    <a class="guide-brand" href="https://joegaudet.com/ember-formwright/">
       <img src={{LOGO}} alt="" width="26" height="26" />
       <strong>Formwright</strong>
       <span class="guide-tag">Guide</span>
     </a>
     <nav aria-label="Site">
-      <a href="https://joegaudet.com/formwright/demo/">Demo</a>
-      <a href="https://github.com/joegaudet/formwright">GitHub</a>
+      <a href="https://joegaudet.com/ember-formwright/demo/">Demo</a>
+      <a href="https://github.com/joegaudet/ember-formwright">GitHub</a>
     </nav>
   </header>
 
