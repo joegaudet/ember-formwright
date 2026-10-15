@@ -207,6 +207,9 @@ importers:
       valibot:
         specifier: ^1.5.0
         version: 1.5.0(typescript@6.0.3)
+      validated-changeset:
+        specifier: ~1.4.1
+        version: 1.4.1
       vite:
         specifier: ^8.3.0
         version: 8.3.4(@types/node@26.6.5)(terser@5.51.2)(yaml@2.9.1)
@@ -643,6 +646,9 @@ importers:
       valibot:
         specifier: ^1.5.0
         version: 1.5.0(typescript@6.0.3)
+      validated-changeset:
+        specifier: ~1.4.1
+        version: 1.4.1
       vite:
         specifier: ^8.3.0
         version: 8.3.4(@types/node@26.6.5)(terser@5.51.2)(yaml@2.9.1)

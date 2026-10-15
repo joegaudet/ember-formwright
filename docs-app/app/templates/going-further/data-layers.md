@@ -54,18 +54,28 @@ changes only when a valid submit applies them.
 
 | The form does      | The changeset gets                                                       |
 | ------------------ | ------------------------------------------------------------------------ |
-| read / write       | `changeset.get(path)` / `changeset.set(path, value)`                     |
+| read / write       | through the changeset, never the model                                   |
 | validate           | `changeset.validate()`, with `@validator={{changesetValidator}}`         |
 | submit             | `changeset.save()`: applies the changes, then calls the model's `save()` |
 | reset              | `changeset.rollback()`                                                   |
-| save a nested form | when `isDirty`                                                           |
+| save a nested form | when its own changeset `isDirty`                                         |
 
 Use `changesetValidator` whenever the changeset has validations. An invalid changeset's own
 `save()` skips the changes but still saves the model, so `changesetAdapter` refuses to save
 one. The validator stops the submit first and shows each message on its field.
-Validations from `ember-changeset-validations` work the same way.
 
-The changeset can wrap a WarpDrive record: `changeset.save()` calls `record.save()`.
+Build the changeset with a validation map: `{{changeset @user UserValidations}}` with
+`ember-changeset-validations`, or `Changeset(model, lookupValidator(map), map)`. A changeset
+built from a single validator function only checks the fields that changed, so an empty
+field nobody touched passes.
+
+If the model's `save()` fails (a WarpDrive record and a 422, say), the adapter puts the
+model's values back and the edits stay in the changeset, ready to retry or reset.
+
+A nested form's `@model` is either its own changeset, saved with the root when dirty, or part
+of the parent's (`@model={{@model.address}}`). Edits to a part land in the parent changeset,
+which saves and rolls them back with everything else. For a nested object outside the
+changeset, give that form its own `@adapter`.
 
 ## Rolling back
 
@@ -99,7 +109,9 @@ which drops the pending changes and their validation errors at once. Nothing els
 the model ever sees a half-edited value. Use a changeset when an edit should stay
 private until it is saved, such as a modal over a list that shows the same record.
 
-Both kinds run `@willReset` and `@didReset`, and both reset nested forms with their parent.
+Either way, `<f.Reset>` and `f.state.reset()` run `@willReset` and `@didReset` on the form
+that was reset, and nested forms reset with their parent. A torn-down form rolls back
+without running the hooks.
 
 ## real-enums
 

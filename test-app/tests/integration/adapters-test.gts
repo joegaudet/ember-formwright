@@ -8,6 +8,7 @@ import { TestForm } from 'test-app/tests/helpers/test-form'
 import { warpDriveAdapter } from '@ember-formwright/warp-drive'
 import { changesetAdapter, changesetValidator } from '@ember-formwright/changeset'
 import { Changeset } from 'ember-changeset'
+import { lookupValidator } from 'validated-changeset'
 import { enumOptions, enumValue, enumLabel } from '@ember-formwright/real-enums'
 import { registerMaskedControl } from '@ember-formwright/maskito'
 
@@ -72,6 +73,17 @@ class FakeRecord {
 /** A model a changeset wraps: counts saves so tests can see when the buffer is applied. */
 class Person {
   @tracked name = 'Ada'
+  saves = 0
+
+  save() {
+    this.saves++
+    return Promise.resolve(this)
+  }
+}
+
+class Company {
+  @tracked name = 'Acme'
+  address = { city: 'Rotterdam' }
   saves = 0
 
   save() {
@@ -219,6 +231,77 @@ module('Integration | adapters', function (hooks) {
 
     await assert.rejects(Promise.resolve().then(() => changesetAdapter.save!(cs)))
     assert.strictEqual(person.saves, 0, 'the stale model is not saved')
+  })
+
+  test('changeset: a failed save leaves the model as it was', async function (assert) {
+    const person = new Person()
+    person.save = () => Promise.reject(new Error('422'))
+    const cs = Changeset(person)
+    const failed: unknown[] = []
+    const failedSubmit = (error: unknown) => failed.push(error)
+
+    await render(
+      <template>
+        <Form @model={{cs}} @adapter={{changesetAdapter}} @failedSubmit={{failedSubmit}} as |f|>
+          <f.Field @for="name" @label="Name" />
+          <f.Reset />
+        </Form>
+      </template>,
+    )
+
+    await ui.name.fillIn('Grace')
+    await ui.submit()
+    assert.strictEqual(failed.length, 1)
+    assert.strictEqual(person.name, 'Ada', 'the unsaved edit is taken back off the model')
+    assert.strictEqual(ui.name.value, 'Grace', 'and stays in the changeset to retry')
+
+    await ui.reset()
+    assert.strictEqual(ui.name.value, 'Ada')
+    assert.strictEqual(person.name, 'Ada')
+  })
+
+  test('changeset: a validation map checks fields nobody touched', async function (assert) {
+    const person = new Person()
+    person.name = ''
+    const validations = { name: (_key: string, value: unknown) => Boolean(value) || 'is required' }
+    const cs = Changeset(person, lookupValidator(validations), validations)
+
+    await render(
+      <template>
+        <Form @model={{cs}} @adapter={{changesetAdapter}} @validator={{changesetValidator}} as |f|>
+          <f.Field @for="name" @label="Name" />
+        </Form>
+      </template>,
+    )
+
+    await ui.submit()
+    assert.strictEqual(person.saves, 0)
+    assert.deepEqual(ui.name.errors, ['is required'])
+  })
+
+  test('changeset: a nested form over part of the changeset edits through it', async function (assert) {
+    const company = new Company()
+    const cs = Changeset(company)
+
+    await render(
+      <template>
+        <Form @model={{cs}} @adapter={{changesetAdapter}} as |f|>
+          <f.Field @for="name" @label="Name" />
+          <f.Form @model={{cs.address}} @name="address" as |a|>
+            <a.Field @for="city" @label="City" />
+          </f.Form>
+          <f.Reset />
+        </Form>
+      </template>,
+    )
+
+    assert.strictEqual(ui.address.city.value, 'Rotterdam', 'reads the model through the changeset')
+    await ui.address.city.fillIn('Delft')
+    assert.strictEqual(company.address.city, 'Rotterdam', 'the model is untouched while editing')
+
+    await ui.submit()
+    assert.strictEqual(company.address.city, 'Delft', 'the parent changeset saves the nested edit')
+    assert.strictEqual(company.saves, 1)
   })
 
   test('changeset: a nested form saves its dirty changeset with the parent', async function (assert) {

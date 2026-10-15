@@ -3,6 +3,7 @@ import type { TOC } from '@ember/component/template-only'
 import { Form } from '@ember-formwright/ember'
 import { changesetAdapter, changesetValidator } from '@ember-formwright/changeset'
 import { Changeset, type EmberChangeset } from 'ember-changeset'
+import { lookupValidator } from 'validated-changeset'
 
 export class Account {
   @tracked username = 'ada'
@@ -14,17 +15,22 @@ export class Account {
   }
 }
 
-// An ember-changeset validator: true when valid, otherwise the message.
-const validate = ({ key, newValue }: { key: string; newValue: unknown }) => {
-  if (key === 'username' && !newValue) return 'Pick a username'
-  if (key === 'email' && !String(newValue).includes('@')) return 'Enter an email address'
-  return true
+// A validation map: each validator returns true, or the message. A map (rather than one
+// function) lets validate() check every field, including ones nobody has touched.
+const AccountValidations = {
+  username: (_key: string, value: unknown) => Boolean(value) || 'Pick a username',
+  email: (_key: string, value: unknown) => String(value).includes('@') || 'Enter an email address',
 }
 
 /** ember-changeset types `data` as `object`; this one wraps an Account. */
 export type AccountChangeset = EmberChangeset & { data: Account }
 
-export const createModel = () => Changeset(new Account(), validate) as AccountChangeset
+export const createModel = () =>
+  Changeset(
+    new Account(),
+    lookupValidator(AccountValidations),
+    AccountValidations,
+  ) as AccountChangeset
 
 const AccountForm: TOC<{ Args: { model: AccountChangeset } }> = <template>
   <Form
