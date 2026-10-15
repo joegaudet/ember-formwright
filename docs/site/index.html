@@ -6,7 +6,7 @@
     <title>Formwright</title>
     <meta
       name="description"
-      content="Declarative, accessible forms for Ember. One Form, one Field, any validator (zod, valibot, any Standard Schema), any data layer (WarpDrive, ember-data, plain objects), and test harnesses that read like your users."
+      content="Declarative, accessible forms for Ember. One Form, one Field, any validator (zod, valibot, any Standard Schema), any data layer (WarpDrive, ember-data, ember-changeset, plain objects), and test harnesses that read like your users."
     />
     <link rel="canonical" href="https://joegaudet.com/ember-formwright/" />
     <!-- Link previews (Slack, X, LinkedIn, iMessage). The card's source is docs/social-card.html. -->
@@ -79,7 +79,8 @@
             One <code>&lt;Form&gt;</code>, one <code>&lt;f.Field&gt;</code>. Labels, ids, errors,
             <code>aria-invalid</code>, dirty state, reset and nested saves are handled. Bring any
             validator (zod, valibot, any Standard Schema) and any data layer (WarpDrive, ember-data,
-            plain objects). Then test it with harnesses that read the way your users do.
+            ember-changeset, plain objects). Then test it with harnesses that read the way your
+            users do.
           </p>
           <div class="hero-actions">
             <a href="#demo" role="button">Try the demo</a>
@@ -178,8 +179,9 @@
             </svg>
             <h3>Any data layer</h3>
             <p>
-              Plain objects and <code>@tracked</code> classes work out of the box. An adapter
-              teaches it WarpDrive and ember-data: save, rollback, server errors.
+              Plain objects and <code>@tracked</code> classes work out of the box, with reset built
+              in. Adapters teach it WarpDrive and ember-data (save, rollback, server errors) and
+              ember-changeset (edits buffered until a valid submit).
             </p>
           </article>
           <article>
@@ -443,6 +445,14 @@ export class SignupForm extends FormHarness {
                 </td>
               </tr>
               <tr>
+                <th scope="row"><code>@ember-formwright/changeset</code></th>
+                <td>
+                  ember-changeset: edits stay in the changeset until a valid submit applies and
+                  saves them, changeset validations show on their fields, and reset is
+                  <code>changeset.rollback()</code>, so the model never sees a half-made edit.
+                </td>
+              </tr>
+              <tr>
                 <th scope="row"><code>@ember-formwright/real-enums</code></th>
                 <td>
                   <a href="https://joegaudet.com/real-enums/">real-enums</a> classes as
@@ -468,6 +478,11 @@ import { warpDriveAdapter } from '@ember-formwright/warp-drive'
 
 setDefaultAdapter(warpDriveAdapter)</code></pre>
         </div>
+        <pre><code class="language-handlebars">{{! edit through a changeset; the model changes on submit }}
+&lt;Form @model={{changeset @user UserValidations}}
+  @adapter={{changesetAdapter}} @validator={{changesetValidator}} as |f|&gt;
+  &lt;f.Field @for="email" @label="Email" /&gt;
+&lt;/Form&gt;</code></pre>
         <pre><code class="language-handlebars">{{! options straight from a real-enums class }}
 &lt;f.Field @for="state" @control="radio" @label="State"
   @options={{enumOptions OrderState except=(array OrderState.Cancelled)}} /&gt;</code></pre>

@@ -14,6 +14,8 @@ A form owns a model, saves it on submit, and can reset it to the values it last 
   objects stay reactive too.
 - **A WarpDrive / ember-data record**, with `@ember-formwright/warp-drive`. Submit calls
   `record.save()`, and reset calls `rollbackAttributes()`. See [Data layers](../going-further/data-layers.md).
+- **An ember-changeset changeset**, with `@ember-formwright/changeset`. Edits stay in the
+  changeset until a valid submit applies and saves them. Reset calls `changeset.rollback()`.
 
 ## Submitting
 
@@ -29,8 +31,9 @@ the one in flight instead of saving twice.
 ## Resetting
 
 `<f.Reset>` (or `f.state.reset()`) puts every field back to the value it had when the form
-rendered or last saved. With an adapter that can roll back (WarpDrive), the adapter does it
-instead.
+rendered or last saved. With an adapter that can roll back, the adapter does it instead:
+WarpDrive calls `rollbackAttributes()`, and a changeset drops its pending changes. See
+[Rolling back](../going-further/data-layers.md#rolling-back) for how they differ.
 
 A form also resets unsaved changes when it is torn down, so leaving a page never leaves a
 half-edited model behind. Pass `@resetOnDestroy={{false}}` to keep them.

@@ -3,7 +3,7 @@
 Declarative, accessible forms for Ember. One `<Form>`, one `<f.Field>`: labels, ids, errors,
 `aria-invalid`, dirty state, reset and nested saves are handled. Bring any validator (zod,
 valibot, any [Standard Schema](https://standardschema.dev)) and any data layer (WarpDrive,
-ember-data, plain objects), and test it with harnesses that read the way your users do.
+ember-data, ember-changeset, plain objects), and test it with harnesses that read the way your users do.
 
 Site and live demo: **https://joegaudet.com/ember-formwright/**
 
@@ -120,11 +120,13 @@ registerControl('stepper', Stepper) // then @control="stepper", or pass @control
 
 The core edits any object through a `ModelAdapter` (`get`, `set`, and optionally `save`,
 `rollback`, `errorsFor`, `needsSave`). Set one per form with `@adapter`, or for every form with
-`setDefaultAdapter()`.
+`setDefaultAdapter()`. Without `rollback`, reset restores the values the form's fields had when
+they rendered or last saved.
 
 | Package                                                   |                                                                                    |
 | --------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | [`@ember-formwright/warp-drive`](packages/warp-drive)     | WarpDrive / ember-data records: save, rollback, server errors, nested new records. |
+| [`@ember-formwright/changeset`](packages/changeset)       | ember-changeset: edits buffered until a valid submit, validations, rollback.       |
 | [`@ember-formwright/real-enums`](packages/real-enums)     | [real-enums](https://joegaudet.com/real-enums/) classes as options.                |
 | [`@ember-formwright/maskito`](packages/maskito)           | A `masked` control powered by Maskito.                                             |
 | [`@ember-formwright/test-support`](packages/test-support) | Form harnesses for tests.                                                          |
