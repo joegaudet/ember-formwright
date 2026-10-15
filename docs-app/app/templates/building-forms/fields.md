@@ -22,6 +22,37 @@ an optional hint, the control, and its errors. Each part is wired for assistive 
 | `@disabled`, `@readonly`, `@requireConfirm`           | Override the form's setting for this field.                                                                     |
 | `@format`                                             | Formats the value shown in inline mode.                                                                         |
 
+## Typed paths and values
+
+In a `.gts` template checked by Glint, a field is typed by the form's `@model`. `@for` must
+be one of the model's paths, so a typo, a nested key that doesn't exist or a method name
+fails `ember-tsc`. The path then types what the field hands back: its block's `value` and the
+value `@format` receives.
+
+```
+<Form @model={{this.account}} as |f|>
+  <f.Field @for="email" />                        {{! ok }}
+  <f.Field @for="address.city" />                 {{! ok }}
+  <f.Field @for="items.0.name" />                 {{! ok, so is items[0].name }}
+  <f.Field @for="emial" />                        {{! type error }}
+  <f.Field @for="seats" @format={{formatSeats}} /> {{! formatSeats gets a number }}
+  <f.Field @for="name" as |field|>
+    {{field.value}}                               {{! a string }}
+  </f.Field>
+</Form>
+```
+
+The same types reach the rest of the form. `f.state.model` is the model, and
+`f.state.errors` and `@didNotSubmit` get an `ErrorMap<Model>`, keyed by the model's paths.
+`@onChange(path, value, model)` types `value` by `path`. Two types are exported for your own
+code: `Path<Model>`, the union of paths, and `PathValue<Model, Path>`, the type at a path.
+
+Paths go five levels deep, and stop at `Date`, `Map`, `Set` and other built-ins. A model typed
+loosely (`any`, `object`, or with an index signature such as `Record<string, unknown>`)
+accepts any string and gives `unknown` values, as do loose-mode `.hbs` templates. Controls
+aren't typed against values: whether a control suits the value at its path is still up to
+you.
+
 ## What a field renders
 
 ```html

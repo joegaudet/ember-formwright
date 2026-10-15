@@ -24,7 +24,9 @@ const schema = v.object({
 ## A function
 
 A validator can also be a function, sync or async, that returns messages by path. Use the
-empty path `''` for errors that belong to the whole form; `<f.Errors />` shows them.
+empty path `''` for errors that belong to the whole form; `<f.Errors />` shows them. Give
+it the return type `ErrorMap<Model>` and its keys are checked against the model's paths, so a
+misspelled key is a type error.
 
 <Example @name="validation-function" @title="Async checks and form-level errors" />
 

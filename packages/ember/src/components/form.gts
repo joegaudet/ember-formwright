@@ -7,8 +7,16 @@ import { waitForPromise } from '@ember/test-waiters'
 import { modifier } from 'ember-modifier'
 import type { ComponentLike, WithBoundArgs } from '@glint/template'
 import { getDefaultAdapter, type ModelAdapter } from '../adapter.ts'
-import { runValidator, hasErrors, type ErrorMap, type Validator } from '../validation.ts'
-import Field from './field.gts'
+import {
+  runValidator,
+  hasErrors,
+  noErrors,
+  type AnyErrorMap,
+  type ErrorMap,
+  type Validator,
+} from '../validation.ts'
+import type { Path, PathValue } from '../path.ts'
+import Field, { type FieldSignature } from './field.gts'
 import Button from './button.gts'
 import Errors from './errors.gts'
 
@@ -18,7 +26,7 @@ export interface FormState<M extends object = object> {
   readonly isDirty: boolean
   readonly isSubmitting: boolean
   readonly isValid: boolean
-  readonly errors: ErrorMap
+  readonly errors: ErrorMap<M>
   submit(): Promise<void>
   reset(): Promise<void>
   validate(): Promise<boolean>
@@ -30,7 +38,8 @@ export interface FormSignature<M extends object = object> {
     model: M
     /** Names the form for selectors and harnesses: data-test-fw-form="<name>". Default "form". */
     name?: string
-    adapter?: ModelAdapter<M>
+    /** Typed against @model; M is inferred from @model alone. */
+    adapter?: ModelAdapter<NoInfer<M>>
     validator?: Validator<M>
     /** Persists the model. Default: the adapter's save (POJOs: `model.save()` if present). */
     onSubmit?: (model: M) => unknown
@@ -40,11 +49,11 @@ export interface FormSignature<M extends object = object> {
     /** Called when saving throws. Without it the error is rethrown. */
     failedSubmit?: (error: unknown) => void
     /** Called when validation stops a submit. */
-    didNotSubmit?: (errors: ErrorMap) => void
+    didNotSubmit?: (errors: ErrorMap<M>) => void
     willReset?: (model: M) => boolean | Promise<boolean>
     didReset?: (model: M) => void
     /** Called after each value is written to the model. */
-    onChange?: (path: string, value: unknown, model: M) => void
+    onChange?: <P extends Path<M>>(path: P, value: PathValue<M, P>, model: M) => void
     disabled?: boolean
     readonly?: boolean
     /** Fields show their value and switch to the control when clicked. */
@@ -65,7 +74,7 @@ export interface FormSignature<M extends object = object> {
   Blocks: {
     default: [
       {
-        Field: WithBoundArgs<typeof Field, 'form'>
+        Field: BoundField<M>
         Form: NestedForm
         Submit: WithBoundArgs<typeof Button, 'kind' | 'busy' | 'text'>
         Reset: WithBoundArgs<typeof Button, 'kind' | 'onClick' | 'text'>
@@ -77,12 +86,39 @@ export interface FormSignature<M extends object = object> {
   }
 }
 
-/** `f.Form`: a Form bound to its parent. */
-export type NestedForm = ComponentLike<{
-  Element: HTMLFormElement | HTMLFieldSetElement
-  Args: Omit<FormSignature<any>['Args'], 'parent'>
-  Blocks: FormSignature<any>['Blocks']
-}>
+/**
+ * `f.Form`: a Form bound to its parent. Generic like Form itself, so each nested form infers
+ * its own model from `@model` and its fields are checked against it.
+ */
+export type NestedForm = abstract new <N extends object>(
+  ...args: any
+) => InstanceType<
+  ComponentLike<{
+    Element: FormSignature<N>['Element']
+    Args: Omit<FormSignature<N>['Args'], 'parent'>
+    Blocks: FormSignature<N>['Blocks']
+  }>
+>
+
+/**
+ * `f.Field`: a Field bound to its form. Generic over the path, so each field's value,
+ * `@format` and block `value` take the type at its `@for`.
+ */
+export type BoundField<M extends object> = abstract new <P extends Path<M>>(
+  ...args: any
+) => InstanceType<
+  ComponentLike<{
+    Element: FieldSignature<M, P>['Element']
+    Args: Omit<FieldSignature<M, P>['Args'], 'form'>
+    Blocks: FieldSignature<M, P>['Blocks']
+  }>
+>
+
+/**
+ * `{{component}}` drops a component's type parameters, so the bound nested form is restated
+ * as the generic `NestedForm` it is at runtime.
+ */
+const asNestedForm = (form: unknown) => form as NestedForm
 
 function same(a: unknown, b: unknown): boolean {
   if (Array.isArray(a) && Array.isArray(b)) {
@@ -100,7 +136,7 @@ export default class Form<M extends object = object>
   extends Component<FormSignature<M>>
   implements FormState<M>
 {
-  @tracked errors: ErrorMap = {}
+  @tracked errors: ErrorMap<M> = noErrors()
   @tracked isSubmitting = false
   /** After a failed submit, every change revalidates so errors clear as they're fixed. */
   @tracked hasFailedSubmit = false
@@ -109,7 +145,7 @@ export default class Form<M extends object = object>
    * tracked state there trips Ember's backtracking assertion. `version` is bumped instead:
    * right after a render that registered something, on removal, and on save.
    */
-  fields: Field[] = []
+  fields: Field<M, any>[] = []
   children: Form<any>[] = []
   @tracked version = 0
   /**
@@ -193,20 +229,29 @@ export default class Form<M extends object = object>
   get formErrors(): string[] {
     void this.version
     const shown = new Set(this.fields.map(f => f.path))
-    const orphans = Object.entries(this.errors)
+    const orphans = Object.entries(this.errors as AnyErrorMap)
       .filter(([path]) => path !== '' && !shown.has(path))
-      .flatMap(([, messages]) => messages)
+      .flatMap(([, messages]) => messages ?? [])
     return [...this.errorsFor(''), ...orphans]
   }
 
   // ---- fields --------------------------------------------------------------------------
 
-  read(path: string): unknown {
+  /** The value at a path, typed by the model. */
+  read<P extends Path<M>>(path: P): PathValue<M, P> {
+    // Adapters read any string path; the path's type is what the model says is there.
+    return this.readAt(path) as PathValue<M, P>
+  }
+
+  /** Untyped read, for paths the form tracks internally (baselines). */
+  readAt(path: string): unknown {
     return this.adapter.get(this.model, path)
   }
 
-  errorsFor(path: string): string[] {
-    return [...(this.errors[path] ?? []), ...(this.adapter.errorsFor?.(this.model, path) ?? [])]
+  /** `''` for form-level errors. */
+  errorsFor(path: Path<M> | ''): string[] {
+    const own = (this.errors as AnyErrorMap)[path] ?? []
+    return [...own, ...(this.adapter.errorsFor?.(this.model, path) ?? [])]
   }
 
   isFieldDirty(path: string): boolean {
@@ -214,20 +259,20 @@ export default class Form<M extends object = object>
     const baseline = this.baselineOf()
     if (!baseline.has(path)) {
       // First read for this model (e.g. @model just changed): what it holds now is clean.
-      baseline.set(path, snapshotOf(this.read(path)))
+      baseline.set(path, snapshotOf(this.readAt(path)))
       return false
     }
-    return !same(baseline.get(path), this.read(path))
+    return !same(baseline.get(path), this.readAt(path))
   }
 
-  register(field: Field): void {
+  register(field: Field<M, any>): void {
     if (!this.baselineOf().has(field.path))
-      this.baselineOf().set(field.path, snapshotOf(this.read(field.path)))
+      this.baselineOf().set(field.path, snapshotOf(this.readAt(field.path)))
     this.fields.push(field)
     this.invalidateSoon()
   }
 
-  unregister(field: Field): void {
+  unregister(field: Field<M, any>): void {
     this.fields = this.fields.filter(f => f !== field)
     this.version++
   }
@@ -257,7 +302,7 @@ export default class Form<M extends object = object>
   }
 
   /** Writes a value to the model: the one way every control changes data. */
-  commit(path: string, value: unknown): void {
+  commit<P extends Path<M>>(path: P, value: PathValue<M, P>): void {
     this.adapter.set(this.model, path, value)
     this.args.onChange?.(path, value, this.model)
     if (this.root.hasFailedSubmit) void waitForPromise(this.root.validate())
@@ -354,7 +399,7 @@ export default class Form<M extends object = object>
   markSaved(): void {
     // Every path seen, not just rendered fields: a hidden field's saved value is clean too.
     const baseline = this.baselineOf()
-    for (const path of baseline.keys()) baseline.set(path, snapshotOf(this.read(path)))
+    for (const path of baseline.keys()) baseline.set(path, snapshotOf(this.readAt(path)))
     this.version++ // the baseline isn't tracked
     this.hasFailedSubmit = false
     this.children.forEach(c => c.markSaved())
@@ -371,11 +416,11 @@ export default class Form<M extends object = object>
       this.adapter.rollback(this.model)
     } else {
       for (const [path, value] of this.baselineOf()) {
-        if (!same(value, this.read(path))) this.adapter.set(this.model, path, snapshotOf(value))
+        if (!same(value, this.readAt(path))) this.adapter.set(this.model, path, snapshotOf(value))
       }
     }
     for (const field of this.fields) field.discard()
-    this.errors = {}
+    this.errors = noErrors()
     this.hasFailedSubmit = false
     this.children.forEach(c => c.rollback())
   }
@@ -387,6 +432,9 @@ export default class Form<M extends object = object>
   }
 
   // ---- template ------------------------------------------------------------------------
+
+  /** Restates the bound Field as generic over its path; `{{component}}` drops that. */
+  bindField = (field: unknown) => field as BoundField<M>
 
   capture = modifier((element: HTMLElement) => {
     this.element = element
@@ -410,8 +458,8 @@ export default class Form<M extends object = object>
         {{#if @legend}}<legend class="fw-legend">{{@legend}}</legend>{{/if}}
         {{yield
           (hash
-            Field=(component Field form=this)
-            Form=(component Form parent=this)
+            Field=(this.bindField (component Field form=this))
+            Form=(asNestedForm (component Form parent=this))
             Submit=(component Button kind="submit" busy=this.root.isSubmitting text="Submit")
             Reset=(component Button kind="reset" onClick=this.reset text="Reset")
             Button=Button
@@ -433,8 +481,8 @@ export default class Form<M extends object = object>
       >
         {{yield
           (hash
-            Field=(component Field form=this)
-            Form=(component Form parent=this)
+            Field=(this.bindField (component Field form=this))
+            Form=(asNestedForm (component Form parent=this))
             Submit=(component Button kind="submit" busy=this.isSubmitting text="Submit")
             Reset=(component Button kind="reset" onClick=this.reset text="Reset")
             Button=Button

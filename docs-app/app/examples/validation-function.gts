@@ -13,10 +13,11 @@ export const createModel = () => new Handle()
 
 /**
  * A validator can be a (possibly async) function returning messages by path.
- * The empty path '' holds form-level errors, shown by <f.Errors />.
+ * The empty path '' holds form-level errors, shown by <f.Errors />. ErrorMap<Handle> only
+ * accepts Handle's paths, so a misspelled key is a type error.
  */
-async function validate(handle: Handle): Promise<ErrorMap> {
-  const errors: ErrorMap = {}
+async function validate(handle: Handle): Promise<ErrorMap<Handle>> {
+  const errors: ErrorMap<Handle> = {}
   if (!handle.username) errors['username'] = ['Pick a username']
   // Pretend this asks the server.
   await new Promise(resolve => setTimeout(resolve, 150))
