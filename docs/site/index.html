@@ -211,9 +211,10 @@
         <h2>Strict mode, named args, nothing to register</h2>
         <p>
           Import <code>Form</code> into a <code>.gts</code> template. Fields, nested forms and
-          buttons come from the form itself, already bound to it. With Glint, each
-          <code>@for</code> is checked against the form's model, so a typo or a wrong nested path
-          fails the typecheck.
+          buttons come from the form itself, already bound to it. With Glint, the whole form is
+          typed by its model: each <code>@for</code> must be a real path (a typo or a wrong nested
+          path fails the typecheck), and field values, <code>@format</code>, errors and hooks take
+          the type at that path.
         </p>
         <pre><code class="language-typescript">import { Form } from '@ember-formwright/ember'
 import '@ember-formwright/ember/theme.css' // optional

@@ -13,7 +13,7 @@ export default class InviteForm extends Component<{ Args: { model: Invite } }> {
 
   record = (entry: string) => (this.log = [...this.log, entry])
 
-  validator = (invite: Invite): ErrorMap =>
+  validator = (invite: Invite): ErrorMap<Invite> =>
     invite.email.includes('@') ? {} : { email: ['Enter an email address'] }
 
   willSubmit = () => (this.record('willSubmit → true'), true)
@@ -22,7 +22,7 @@ export default class InviteForm extends Component<{ Args: { model: Invite } }> {
     await new Promise(resolve => setTimeout(resolve, 200))
   }
   didSubmit = () => this.record('didSubmit')
-  didNotSubmit = (errors: ErrorMap) =>
+  didNotSubmit = (errors: ErrorMap<Invite>) =>
     this.record(`didNotSubmit(${Object.keys(errors).join(', ')})`)
   onChange = (path: string, value: unknown) =>
     this.record(`onChange(${path}, ${JSON.stringify(value)})`)

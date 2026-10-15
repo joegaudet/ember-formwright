@@ -6,9 +6,10 @@ its legend.
 
 <Example @name="nested-forms" @title="A product and its warehouse" />
 
-A nested form infers its own model from `@model`, so its fields are
-[typed](./fields.md) against that model: above, `w.Field @for="city"` is checked
-against `Warehouse`, and `w.Field @for="sku"` would be a type error.
+A nested form infers its own model from `@model`, so its fields, values and errors are
+[typed](./fields.md) against that model: above, `w.Field @for="city"` is checked against
+`Warehouse`, `w.Field @for="sku"` would be a type error, and the warehouse's validator
+returns an `ErrorMap<Warehouse>`.
 
 ## How they behave
 

@@ -23,8 +23,9 @@ export class Product extends Saves {
 
 export const createModel = () => new Product()
 
-const productRules = (p: Product): ErrorMap => (p.name ? {} : { name: ['Name the product'] })
-const warehouseRules = (w: Warehouse): ErrorMap =>
+const productRules = (p: Product): ErrorMap<Product> =>
+  p.name ? {} : { name: ['Name the product'] }
+const warehouseRules = (w: Warehouse): ErrorMap<Warehouse> =>
   w.city ? {} : { city: ['Where is it stocked?'] }
 
 export default class ProductForm extends Component<{ Args: { model: Product } }> {

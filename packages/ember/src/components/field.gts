@@ -2,7 +2,6 @@ import Component from '@glimmer/component'
 import type Owner from '@ember/owner'
 import { tracked } from '@glimmer/tracking'
 import { hash } from '@ember/helper'
-import type { TOC } from '@ember/component/template-only'
 import { on } from '@ember/modifier'
 import { guidFor } from '@ember/object/internals'
 import { htmlSafe } from '@ember/template'
@@ -10,7 +9,7 @@ import { modifier } from 'ember-modifier'
 import type { ComponentLike } from '@glint/template'
 import type Form from './form.gts'
 import Errors from './errors.gts'
-import { normalizePath, type Path } from '../path.ts'
+import { normalizePath, type Path, type PathValue } from '../path.ts'
 import { lookupControl, isGroupControl, type ControlComponent } from '../registry.ts'
 import type { ControlSignature, OptionAccessor } from '../controls/signature.ts'
 import { labelOf, matches } from '../controls/options.ts'
@@ -25,13 +24,13 @@ type BoundControl = ComponentLike<{
   Args: Partial<ControlSignature['Args']> & Record<string, unknown>
 }>
 
-export interface FieldSignature<M extends object = object> {
+export interface FieldSignature<M extends object = object, P extends Path<M> = Path<M>> {
   Element: HTMLDivElement
   Args: {
     /** Set by `f.Field`; don't pass it yourself. */
-    form: Form<any>
+    form: Form<M>
     /** The model path this field edits, e.g. "email" or "address.city"; checked against the form's model. */
-    for: Path<M>
+    for: P
     label?: string
     hint?: string
     /** A built-in or registered control name (default "input"), or a component. */
@@ -57,12 +56,18 @@ export interface FieldSignature<M extends object = object> {
     currency?: string
     locale?: string
     /** Formats the value when shown (inline editing). */
-    format?: (value: unknown) => string
+    format?: (value: PathValue<M, P>) => string
   }
   Blocks: {
     /** Replaces just the control; label, hint and errors still render around it. */
     default: [
-      { Control: BoundControl; id: string; value: unknown; errors: string[]; isInvalid: boolean },
+      {
+        Control: BoundControl
+        id: string
+        value: PathValue<M, P>
+        errors: string[]
+        isInvalid: boolean
+      },
     ]
   }
 }
@@ -70,16 +75,20 @@ export interface FieldSignature<M extends object = object> {
 const isEmpty = (v: unknown) =>
   v === null || v === undefined || v === '' || (Array.isArray(v) && !v.length)
 
-export default class Field<M extends object = object> extends Component<FieldSignature<M>> {
+export default class Field<
+  M extends object = object,
+  P extends Path<M> = Path<M>,
+> extends Component<FieldSignature<M, P>> {
   /** A value the user chose but hasn't committed yet (confirm or inline mode). */
-  @tracked buffer: { value: unknown } | null = null
+  @tracked buffer: { value: PathValue<M, P> } | null = null
   @tracked isEditing = false
   /** Read once: a field's path is its identity in the form's baseline. */
-  readonly path: string
+  readonly path: P
 
-  constructor(owner: Owner, args: FieldSignature<M>['Args']) {
+  constructor(owner: Owner, args: FieldSignature<M, P>['Args']) {
     super(owner, args)
-    this.path = normalizePath(args.for)
+    // Normalizing only rewrites `items[0]` as `items.0`, which addresses the same value.
+    this.path = normalizePath(args.for) as P
     args.form.register(this)
   }
 
@@ -122,11 +131,11 @@ export default class Field<M extends object = object> extends Component<FieldSig
     return isGroupControl(this.controlName)
   }
 
-  get value() {
+  get value(): PathValue<M, P> {
     return this.form.read(this.path)
   }
 
-  get controlValue() {
+  get controlValue(): PathValue<M, P> {
     return this.buffer ? this.buffer.value : this.value
   }
 
@@ -198,7 +207,9 @@ export default class Field<M extends object = object> extends Component<FieldSig
 
   // ---- actions -------------------------------------------------------------------------
 
-  onChange = (value: unknown) => {
+  /** Controls aren't typed against values, so what they send is taken as the path's type. */
+  onChange = (sent: unknown) => {
+    const value = sent as PathValue<M, P>
     if (this.requiresConfirm) this.buffer = { value }
     else this.form.commit(this.path, value)
   }
@@ -291,113 +302,115 @@ export default class Field<M extends object = object> extends Component<FieldSig
   </template>
 }
 
-type FieldApi = FieldSignature['Blocks']['default'][0]
-
-interface ControlAreaSignature {
-  Args: { field: Field<any>; hasBlock: boolean }
-  Blocks: { default: [FieldApi] }
+interface ControlAreaSignature<M extends object, P extends Path<M>> {
+  Args: { field: Field<M, P>; hasBlock: boolean }
+  Blocks: { default: FieldSignature<M, P>['Blocks']['default'] }
 }
 
 /** Hint, inline value, control (optionally in a popover), confirm buttons and errors. */
-const ControlArea: TOC<ControlAreaSignature> = <template>
-  {{#let @field as |field|}}
-    {{#if field.args.hint}}
-      <p id={{field.hintId}} class="fw-hint" data-test-fw-hint>{{field.args.hint}}</p>
-    {{/if}}
+class ControlArea<M extends object, P extends Path<M>> extends Component<
+  ControlAreaSignature<M, P>
+> {
+  <template>
+    {{#let @field as |field|}}
+      {{#if field.args.hint}}
+        <p id={{field.hintId}} class="fw-hint" data-test-fw-hint>{{field.args.hint}}</p>
+      {{/if}}
 
-    {{#if field.showDisplay}}
-      <button
-        type="button"
-        class="fw-display"
-        style={{field.anchorStyle}}
-        disabled={{field.disabled}}
-        aria-expanded={{if field.isEditing "true" "false"}}
-        data-fw-anchor={{field.id}}
-        data-test-fw-display
-        {{on "click" field.edit}}
-      >
-        {{#if field.displayValue}}
-          {{field.displayValue}}
-        {{else}}
-          <span class="fw-placeholder">{{field.args.placeholder}}</span>
-        {{/if}}
-      </button>
-    {{/if}}
-
-    {{#if field.showControl}}
-      <div
-        class="fw-control-area{{if field.useCallout ' fw-callout'}}"
-        popover={{if field.useCallout "auto"}}
-        style={{if field.useCallout field.calloutStyle}}
-        {{field.openPopover field.useCallout}}
-        {{field.focusControl field.isEditing}}
-        {{on "toggle" field.onCalloutToggle}}
-      >
-        {{#let
-          (component
-            field.control
-            id=field.id
-            name=field.fullPath
-            type=field.controlName
-            value=field.controlValue
-            onChange=field.onChange
-            disabled=field.disabled
-            readonly=field.readonly
-            required=field.args.required
-            invalid=field.isInvalid
-            describedBy=(if field.isGroup undefined field.describedBy)
-            placeholder=field.args.placeholder
-            label=field.args.label
-            options=field.args.options
-            optionKey=field.args.optionKey
-            optionLabel=field.args.optionLabel
-            storeKey=field.args.storeKey
-            min=field.args.min
-            max=field.args.max
-            step=field.args.step
-            maxLength=field.args.maxLength
-            showCount=field.args.showCount
-            currency=field.args.currency
-            locale=field.args.locale
-          )
-          as |Control|
-        }}
-          {{#if @hasBlock}}
-            {{yield
-              (hash
-                Control=Control
-                id=field.id
-                value=field.controlValue
-                errors=field.errors
-                isInvalid=field.isInvalid
-              )
-            }}
+      {{#if field.showDisplay}}
+        <button
+          type="button"
+          class="fw-display"
+          style={{field.anchorStyle}}
+          disabled={{field.disabled}}
+          aria-expanded={{if field.isEditing "true" "false"}}
+          data-fw-anchor={{field.id}}
+          data-test-fw-display
+          {{on "click" field.edit}}
+        >
+          {{#if field.displayValue}}
+            {{field.displayValue}}
           {{else}}
-            <Control />
+            <span class="fw-placeholder">{{field.args.placeholder}}</span>
           {{/if}}
-        {{/let}}
+        </button>
+      {{/if}}
 
-        {{#if field.showConfirm}}
-          <span class="fw-confirm">
-            <button
-              type="button"
-              class="fw-commit"
-              aria-label="Apply"
-              data-test-fw-commit
-              {{on "click" field.commit}}
-            >✔</button>
-            <button
-              type="button"
-              class="fw-cancel"
-              aria-label="Cancel"
-              data-test-fw-cancel
-              {{on "click" field.cancel}}
-            >✘</button>
-          </span>
-        {{/if}}
-      </div>
-    {{/if}}
+      {{#if field.showControl}}
+        <div
+          class="fw-control-area{{if field.useCallout ' fw-callout'}}"
+          popover={{if field.useCallout "auto"}}
+          style={{if field.useCallout field.calloutStyle}}
+          {{field.openPopover field.useCallout}}
+          {{field.focusControl field.isEditing}}
+          {{on "toggle" field.onCalloutToggle}}
+        >
+          {{#let
+            (component
+              field.control
+              id=field.id
+              name=field.fullPath
+              type=field.controlName
+              value=field.controlValue
+              onChange=field.onChange
+              disabled=field.disabled
+              readonly=field.readonly
+              required=field.args.required
+              invalid=field.isInvalid
+              describedBy=(if field.isGroup undefined field.describedBy)
+              placeholder=field.args.placeholder
+              label=field.args.label
+              options=field.args.options
+              optionKey=field.args.optionKey
+              optionLabel=field.args.optionLabel
+              storeKey=field.args.storeKey
+              min=field.args.min
+              max=field.args.max
+              step=field.args.step
+              maxLength=field.args.maxLength
+              showCount=field.args.showCount
+              currency=field.args.currency
+              locale=field.args.locale
+            )
+            as |Control|
+          }}
+            {{#if @hasBlock}}
+              {{yield
+                (hash
+                  Control=Control
+                  id=field.id
+                  value=field.controlValue
+                  errors=field.errors
+                  isInvalid=field.isInvalid
+                )
+              }}
+            {{else}}
+              <Control />
+            {{/if}}
+          {{/let}}
 
-    <Errors @id={{field.errorsId}} @errors={{field.errors}} />
-  {{/let}}
-</template>
+          {{#if field.showConfirm}}
+            <span class="fw-confirm">
+              <button
+                type="button"
+                class="fw-commit"
+                aria-label="Apply"
+                data-test-fw-commit
+                {{on "click" field.commit}}
+              >✔</button>
+              <button
+                type="button"
+                class="fw-cancel"
+                aria-label="Cancel"
+                data-test-fw-cancel
+                {{on "click" field.cancel}}
+              >✘</button>
+            </span>
+          {{/if}}
+        </div>
+      {{/if}}
+
+      <Errors @id={{field.errorsId}} @errors={{field.errors}} />
+    {{/let}}
+  </template>
+}

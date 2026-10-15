@@ -66,3 +66,33 @@ export type Path<M> = 0 extends 1 & M
     : string extends keyof M
       ? string
       : PathsOf<M, 5>
+
+/** `items[0].name` → `items.0.name`, as `normalizePath` does at runtime. */
+type Dotted<P extends string> = P extends `${infer Head}[${infer Index}]${infer Rest}`
+  ? Dotted<`${Head}.${Index}${Rest}`>
+  : P
+
+/** One step down: a key of an object or an index of an array. Missing parents read as undefined. */
+type Step<T, K extends string> = T extends null | undefined
+  ? undefined
+  : T extends readonly (infer E)[]
+    ? K extends `${number}`
+      ? E
+      : never
+    : K extends keyof T
+      ? T[K]
+      : never
+
+type ValueAt<T, P extends string> = P extends `${infer K}.${infer Rest}`
+  ? ValueAt<Step<T, K>, Rest>
+  : Step<T, P>
+
+/**
+ * The type of the value at `path` in `M`: `PathValue<Account, 'address.city'>` is `string`.
+ * Loose models (where `Path<M>` is `string`) give `unknown`.
+ */
+export type PathValue<M, P extends string> = 0 extends 1 & M
+  ? any
+  : string extends P
+    ? unknown
+    : ValueAt<M, Dotted<P>>

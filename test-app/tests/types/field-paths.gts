@@ -1,9 +1,17 @@
 /**
- * Type-only fixture: `pnpm typecheck` checks that `@for` is typed against the form's model.
- * Each `@glint-expect-error` asserts that the path below it is rejected. Nothing here renders.
+ * Type-only fixture: `pnpm typecheck` checks that the form's interface is typed against its
+ * model: `@for` paths, field values, `@format`, errors, validators and `@onChange`. Each
+ * `@glint-expect-error` / `@ts-expect-error` asserts that the line below it is rejected.
+ * Nothing here renders.
  */
 import type { TOC } from '@ember/component/template-only'
-import { Form } from '@ember-formwright/ember'
+import {
+  Form,
+  type ErrorMap,
+  type Path,
+  type PathValue,
+  type ValidatorFn,
+} from '@ember-formwright/ember'
 import type { Account } from 'test-app/demo/account'
 
 interface Line {
@@ -64,4 +72,68 @@ export const LoosePaths: TOC<{
   <Form @model={{@any}} as |f|><f.Field @for="any.thing" /></Form>
   <Form @model={{@object}} as |f|><f.Field @for="any.thing" /></Form>
   <Form @model={{@record}} as |f|><f.Field @for="any.thing" /></Form>
+</template>
+
+// ---- values follow the path -------------------------------------------------------------
+
+const text = (value: string) => value
+const count = (value: number | null) => String(value)
+const formatCity = (city: string) => city.toUpperCase()
+
+/** A field's value, its @format and its block's `value` are typed by `@for`. */
+export const Values: TOC<{ Args: { account: Account; order: Order } }> = <template>
+  <Form @model={{@account}} as |f|>
+    <f.Field @for="name" as |field|>{{text field.value}}</f.Field>
+    <f.Field @for="seats" as |field|>{{count field.value}}</f.Field>
+    {{! @glint-expect-error: seats is a number, not a string }}
+    <f.Field @for="seats" as |field|>{{text field.value}}</f.Field>
+    <f.Field @for="address.city" @format={{formatCity}} />
+    {{! @glint-expect-error: @format gets the seat count, not a string }}
+    <f.Field @for="seats" @format={{formatCity}} />
+    {{text f.state.model.name}}
+  </Form>
+  <Form @model={{@order}} as |f|>
+    <f.Field @for="lines[0].name" as |field|>{{text field.value}}</f.Field>
+    <f.Field @for="lines.0.qty" as |field|>{{count field.value}}</f.Field>
+  </Form>
+  <Form @model={{@account}} as |f|>
+    <f.Form @model={{@account.address}} as |a|>
+      <a.Field @for="city" as |field|>{{text field.value}}</a.Field>
+    </f.Form>
+  </Form>
+</template>
+
+// ---- types in TypeScript ----------------------------------------------------------------
+
+export const city: PathValue<Account, 'address.city'> = 'Porto'
+// @ts-expect-error: seats holds a number
+export const seats: PathValue<Account, 'seats'> = 'three'
+export const line: PathValue<Order, 'lines[0].qty'> = 2
+export const path: Path<Account> = 'address.country'
+
+/** Error keys are model paths (or '' for form-level errors). */
+export const rules: ValidatorFn<Account> = account =>
+  account.name ? {} : { name: ['Name it'], 'address.city': ['Where?'], '': ['Fix the form'] }
+/** Key typos are caught where the return type says ErrorMap<Model>. */
+// @ts-expect-error: no such path
+export const typo = (): ErrorMap<Account> => ({ nmae: ['Name it'] })
+export const loose: ErrorMap = { anything: ['goes'] }
+
+/** @onChange's value is typed by its path; @didNotSubmit gets the model's ErrorMap. */
+export const onChange = <P extends Path<Account>>(path: P, value: PathValue<Account, P>) =>
+  String(value)
+export const onInvalid = (errors: ErrorMap<Account>) => errors.name
+// @ts-expect-error: not a path of Account
+export const badKey = (errors: ErrorMap<Account>) => errors.nmae
+
+export const Hooks: TOC<{ Args: { account: Account } }> = <template>
+  <Form
+    @model={{@account}}
+    @validator={{rules}}
+    @onChange={{onChange}}
+    @didNotSubmit={{onInvalid}}
+    as |f|
+  >
+    <f.Field @for="name" />
+  </Form>
 </template>
