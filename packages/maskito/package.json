@@ -1,6 +1,6 @@
 {
   "name": "@ember-formwright/maskito",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Masked inputs for Formwright, powered by Maskito.",
   "keywords": [
     "ember-addon",
