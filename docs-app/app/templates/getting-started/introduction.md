@@ -32,7 +32,7 @@ import '@ember-formwright/ember/theme.css'
 Using Formwright takes three steps, the same three as ember-foxy-forms:
 
 1. **Give the form a model.** It can be a plain object, a class with `@tracked` fields, or a
-   WarpDrive / ember-data record.
+   WarpDrive / ember-data record, or an ember-changeset changeset.
 2. **Tell each field which value it edits**, with `@for="email"` or a nested path such as
    `@for="address.city"`.
 3. **Pick a control** with `@control`: `email`, `select`, `checkbox`, … or your own component.

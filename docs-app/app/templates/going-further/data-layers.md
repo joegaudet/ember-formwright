@@ -15,6 +15,8 @@ interface ModelAdapter<M> {
 }
 ```
 
+Without `rollback`, a reset uses Formwright's own baseline. See [Rolling back](#rolling-back).
+
 Use one per form with `@adapter`, or for every form with `setDefaultAdapter()` at boot.
 
 ## WarpDrive and ember-data
@@ -38,6 +40,66 @@ setDefaultAdapter(warpDriveAdapter)
 | show field errors  | `record.errors.errorsFor(path)`, so server-side validation errors appear on their fields |
 | show form errors   | `record.errors.errorsFor('base')` in `<f.Errors />`                                      |
 | save a nested form | when `hasDirtyAttributes`, `isNew` or `isDeleted`                                        |
+
+## Changesets (ember-changeset)
+
+```bash
+npm install @ember-formwright/changeset ember-changeset
+```
+
+Pass a changeset as the model. Edits stay in the changeset, and the object underneath
+changes only when a valid submit applies them.
+
+<Example @name="data-changeset" @title="Editing through a changeset" />
+
+| The form does      | The changeset gets                                                       |
+| ------------------ | ------------------------------------------------------------------------ |
+| read / write       | `changeset.get(path)` / `changeset.set(path, value)`                     |
+| validate           | `changeset.validate()`, with `@validator={{changesetValidator}}`         |
+| submit             | `changeset.save()`: applies the changes, then calls the model's `save()` |
+| reset              | `changeset.rollback()`                                                   |
+| save a nested form | when `isDirty`                                                           |
+
+Use `changesetValidator` whenever the changeset has validations. An invalid changeset's own
+`save()` skips the changes but still saves the model, so `changesetAdapter` refuses to save
+one. The validator stops the submit first and shows each message on its field.
+Validations from `ember-changeset-validations` work the same way.
+
+The changeset can wrap a WarpDrive record: `changeset.save()` calls `record.save()`.
+
+## Rolling back
+
+A reset (`<f.Reset>`, `f.state.reset()`, or a form torn down with unsaved changes) undoes
+edits in one of three ways, depending on the adapter.
+
+| Rollback                 | Who undoes it                 | While editing, the model | Reset puts back                                     |
+| ------------------------ | ----------------------------- | ------------------------ | --------------------------------------------------- |
+| Native (default adapter) | Formwright                    | changes as you type      | the fields' values from first render or last save   |
+| WarpDrive                | `record.rollbackAttributes()` | changes as you type      | every attribute's last saved value                  |
+| Changeset                | `changeset.rollback()`        | stays as it was          | nothing to put back: the buffered edits are dropped |
+
+### Native rollback
+
+With no rollback in the adapter, Formwright keeps its own baseline. Each field records its
+value when it first renders, and every successful submit records the saved values again.
+Reset writes each changed value back through the adapter.
+
+- It only covers paths a field of the form has bound. Something else changing the model
+  directly is not undone.
+- The baseline is shallow: arrays are copied, objects are kept by reference. A field bound to
+  `address.city` restores the city. A custom control that mutates an object in place cannot
+  be undone. Bind the nested paths, or use a nested form.
+- Anything else reading the model sees edits as they are typed. If it shouldn't, edit
+  through a changeset.
+
+### Changeset rollback
+
+A changeset holds the edits and the model never sees them. Reset is `changeset.rollback()`,
+which drops the pending changes and their validation errors at once. Nothing else reading
+the model ever sees a half-edited value. Use a changeset when an edit should stay
+private until it is saved, such as a modal over a list that shows the same record.
+
+Both kinds run `@willReset` and `@didReset`, and both reset nested forms with their parent.
 
 ## real-enums
 

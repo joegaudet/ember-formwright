@@ -1,0 +1,62 @@
+{
+  "name": "@ember-formwright/changeset",
+  "version": "1.0.0",
+  "description": "Formwright model adapter for ember-changeset: edits buffer in the changeset until submit, with changeset validations, save and rollback.",
+  "keywords": [
+    "ember-addon",
+    "ember",
+    "forms",
+    "formwright"
+  ],
+  "license": "MIT",
+  "author": "Joe Gaudet <joe@joegaudet.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joegaudet/ember-formwright.git",
+    "directory": "packages/changeset"
+  },
+  "homepage": "https://joegaudet.com/ember-formwright/",
+  "bugs": "https://github.com/joegaudet/ember-formwright/issues",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./addon-main.js": "./addon-main.cjs"
+  },
+  "files": [
+    "addon-main.cjs",
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@embroider/addon-shim": "^1.10.3"
+  },
+  "peerDependencies": {
+    "@ember-formwright/ember": "workspace:^"
+  },
+  "devDependencies": {
+    "@ember/library-tsconfig": "^3.0.0",
+    "@ember-formwright/ember": "workspace:*",
+    "ember-source": "~7.3.0",
+    "typescript": "~6.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "ember-addon": {
+    "version": 2,
+    "type": "addon",
+    "main": "addon-main.cjs"
+  }
+}
