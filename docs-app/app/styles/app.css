@@ -586,3 +586,375 @@ a {
 .example-preview .composer-help {
   color: var(--fw-muted);
 }
+
+/* ---- commit / rollback flow ---------------------------------------------------------- */
+
+.flow {
+  margin: 1.75rem 0;
+  padding: 1rem;
+  border: 1px solid var(--g-border);
+  border-radius: 16px;
+  background: var(--g-surface);
+  display: grid;
+  gap: 1rem;
+}
+
+.flow-controls,
+.flow-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.flow-toggle {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border-radius: 10px;
+  background: var(--g-bg);
+  border: 1px solid var(--g-border);
+}
+
+.flow-toggle button,
+.flow-steps button {
+  font: 500 0.82rem var(--g-font);
+  color: var(--g-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+
+.flow-toggle [aria-pressed='true'] {
+  background: var(--g-accent-soft);
+  color: var(--g-fg);
+}
+
+.flow-steps button {
+  border: 1px solid var(--g-border);
+  background: var(--g-bg);
+  color: var(--g-fg);
+}
+
+.flow-steps button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.flow-ui {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--g-border);
+  border-radius: 12px;
+  background: var(--g-bg);
+  font-size: 0.92rem;
+}
+
+.flow-ui-label {
+  font-weight: 600;
+}
+
+.flow-ui-input {
+  display: inline-flex;
+  align-items: center;
+  min-width: 8rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--g-accent);
+  border-radius: 8px;
+  box-shadow: 0 0 0 3px var(--g-accent-soft);
+}
+
+/* The caret after the text. */
+.flow-ui-input::after {
+  content: '';
+  width: 1px;
+  height: 1.1em;
+  margin-left: 1px;
+  background: var(--g-fg);
+  animation: flow-blink 1s steps(1) infinite;
+}
+
+/* Typed text appears a letter at a time. */
+.flow-typed {
+  display: inline-block;
+  animation: flow-type 0.8s steps(5, end);
+}
+
+.flow-ui-display {
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed var(--g-muted);
+}
+
+.flow-ui-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-left: auto;
+}
+
+.flow-ui-button {
+  padding: 0.25rem 0.65rem;
+  border: 1px solid var(--g-border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--g-surface);
+}
+
+.flow-ui-button.is-primary {
+  background: var(--g-accent);
+  border-color: var(--g-accent);
+  color: var(--g-bg);
+}
+
+.flow-ui-button.is-pressed {
+  animation: flow-press 0.9s ease-out;
+  box-shadow: 0 0 0 3px var(--g-accent-soft);
+}
+
+.flow-lanes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.flow-lane {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 0.4rem;
+  border: 1px solid var(--g-border);
+  border-radius: 12px;
+  background: var(--g-bg);
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.flow-lane.is-active {
+  border-color: var(--g-accent);
+  box-shadow: 0 0 0 3px var(--g-accent-soft);
+}
+
+.flow-lane-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--g-muted);
+  text-align: center;
+}
+
+.flow-chip {
+  font: 600 0.9rem var(--g-mono);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--g-accent-soft);
+  color: var(--g-fg);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: flow-arrive 0.5s ease-out;
+}
+
+.flow-empty {
+  font-size: 0.8rem;
+  color: var(--g-muted);
+}
+
+.flow-arrow {
+  --flow-color: color-mix(in srgb, var(--g-muted) 55%, transparent);
+  flex: 0 0 2rem;
+  align-self: center;
+  height: 2px;
+  margin: 0 0.25rem;
+  background: var(--flow-color);
+  position: relative;
+}
+
+/* The arrowhead: forward points right, back points left. */
+.flow-arrow::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  border-block: 5px solid transparent;
+  border-left: 7px solid var(--flow-color);
+}
+
+.flow-arrow.is-back::after {
+  right: auto;
+  left: -2px;
+  border-left: 0;
+  border-right: 7px solid var(--flow-color);
+}
+
+.flow-arrow.is-forward,
+.flow-arrow.is-back {
+  background: repeating-linear-gradient(90deg, var(--flow-color) 0 6px, transparent 6px 10px);
+  background-size: 20px 2px;
+  animation: flow-march 0.6s linear infinite;
+}
+
+.flow-arrow.is-forward {
+  --flow-color: var(--g-accent);
+}
+
+.flow-arrow.is-back {
+  --flow-color: var(--g-coral);
+  animation-direction: reverse;
+}
+
+.flow-caption {
+  min-height: 3.2em;
+  font-size: 0.92rem;
+}
+
+@keyframes flow-type {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes flow-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes flow-press {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--g-accent);
+  }
+  25% {
+    transform: scale(0.9);
+  }
+  60% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+@keyframes flow-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.9);
+  }
+}
+
+@keyframes flow-march {
+  to {
+    background-position: 20px 0;
+  }
+}
+
+/* Phones: the lanes stack top to bottom, and the arrows point down (or up, for a rollback). */
+@media (max-width: 560px) {
+  .flow {
+    padding: 0.75rem;
+  }
+
+  .flow-controls {
+    display: grid;
+  }
+
+  .flow-toggle {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+
+  .flow-ui-actions {
+    width: 100%;
+  }
+
+  .flow-ui-actions .flow-ui-button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .flow-ui-input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .flow-steps button {
+    flex: 1;
+    padding-block: 0.5rem;
+  }
+
+  .flow-lanes {
+    flex-direction: column;
+  }
+
+  .flow-lane {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.55rem 0.8rem;
+  }
+
+  .flow-lane-label {
+    font-size: 0.82rem;
+    text-align: left;
+  }
+
+  .flow-arrow {
+    flex: 0 0 1.4rem;
+    width: 2px;
+    height: auto;
+    margin: 0.2rem 0;
+  }
+
+  .flow-arrow::after {
+    top: auto;
+    right: auto;
+    bottom: -2px;
+    left: -4px;
+    border-block: 0;
+    border-inline: 5px solid transparent;
+    border-top: 7px solid var(--flow-color);
+  }
+
+  .flow-arrow.is-back::after {
+    top: -2px;
+    bottom: auto;
+    left: -4px;
+    border-right: 5px solid transparent;
+    border-top: 0;
+    border-bottom: 7px solid var(--flow-color);
+  }
+
+  .flow-arrow.is-forward,
+  .flow-arrow.is-back {
+    background: repeating-linear-gradient(180deg, var(--flow-color) 0 6px, transparent 6px 10px);
+    background-size: 2px 20px;
+    animation-name: flow-march-down;
+  }
+}
+
+@keyframes flow-march-down {
+  to {
+    background-position: 0 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-chip,
+  .flow-arrow,
+  .flow-typed,
+  .flow-ui-input::after,
+  .flow-ui-button.is-pressed {
+    animation: none;
+  }
+}

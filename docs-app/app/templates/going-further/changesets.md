@@ -4,7 +4,7 @@ With [ember-changeset](https://github.com/adopted-ember-addons/ember-changeset),
 changeset instead of the model. Edits stay in the changeset until a valid submit applies
 and saves them. Reset drops them, and the model never sees a half-made edit.
 
-<Example @name="data-changeset" @title="Editing through a changeset" />
+<Example @name="data-changeset" @title="Editing through a changeset" @noModel={{true}} />
 
 ## Setup
 
@@ -50,6 +50,28 @@ and saves them. Reset drops them, and the model never sees a half-made edit.
 | submit             | `changeset.save()`: applies the changes, then calls the model's `save()` |
 | reset              | `changeset.rollback()`                                                   |
 | save a nested form | when its own changeset `isDirty`                                         |
+
+## How commit and rollback flow
+
+A value takes the same path whichever data layer holds the pending changes. In a form, every
+change writes through the adapter at once. Inline, the field keeps a draft until you commit it
+with ✓ or Enter, and ✕ or Esc drops it. Submit saves the pending changes, and Reset rolls them
+back.
+
+The data layer decides where pending changes live. A WarpDrive record tracks its own dirty
+attributes, so anything else showing the record sees an edit straight away. A changeset holds
+the edits itself, and the model sees nothing until it saves. Pick a mode and a data layer, then
+press **Play** or step through.
+
+<CommitFlow />
+
+| What you do         | Form                           | Inline                                       |
+| ------------------- | ------------------------------ | -------------------------------------------- |
+| Change a value      | written through the adapter    | kept as the field's draft                    |
+| Commit (✓ or Enter) | (no draft)                     | the draft is written through the adapter     |
+| Cancel (✕ or Esc)   | (no draft)                     | the draft is dropped; nothing was written    |
+| Submit              | saves the pending changes      | saves the pending changes (or `@autoSubmit`) |
+| Reset               | rolls the pending changes back | rolls committed changes back                 |
 
 ## Validation
 
