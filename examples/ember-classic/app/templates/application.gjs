@@ -1,4 +1,4 @@
-import { Form } from '@formwright/ember'
+import { Form } from '@ember-formwright/ember'
 
 const user = { name: '', email: '' }
 const requireEmail = m => (m.email ? {} : { email: ['Email is required'] })

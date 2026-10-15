@@ -2,7 +2,7 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'docs-app/tests/helpers'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { render } from '@ember/test-helpers'
-import { FormHarness, InputHarness, NumberHarness, field } from '@formwright/test-support'
+import { FormHarness, InputHarness, NumberHarness, field } from '@ember-formwright/test-support'
 import ListingForm, { createModel } from 'docs-app/examples/field-anatomy'
 
 class ListingHarness extends FormHarness {

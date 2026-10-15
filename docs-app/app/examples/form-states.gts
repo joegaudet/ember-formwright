@@ -1,7 +1,7 @@
 import Component from '@glimmer/component'
 import { tracked } from '@glimmer/tracking'
 import { on } from '@ember/modifier'
-import { Form } from '@formwright/ember'
+import { Form } from '@ember-formwright/ember'
 
 export class Shipment {
   @tracked carrier = 'Canada Post'

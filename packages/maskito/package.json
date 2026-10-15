@@ -1,5 +1,5 @@
 {
-  "name": "@formwright/maskito",
+  "name": "@ember-formwright/maskito",
   "version": "0.0.0",
   "description": "Masked inputs for Formwright, powered by Maskito.",
   "keywords": [
@@ -14,11 +14,11 @@
   "author": "Joe Gaudet <joe@joegaudet.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joegaudet/formwright.git",
+    "url": "git+https://github.com/joegaudet/ember-formwright.git",
     "directory": "packages/maskito"
   },
-  "homepage": "https://joegaudet.com/formwright/",
-  "bugs": "https://github.com/joegaudet/formwright/issues",
+  "homepage": "https://joegaudet.com/ember-formwright/",
+  "bugs": "https://github.com/joegaudet/ember-formwright/issues",
   "exports": {
     ".": {
       "types": "./declarations/index.d.ts",
@@ -52,7 +52,7 @@
     "ember-modifier": "^4.3.0"
   },
   "peerDependencies": {
-    "@formwright/ember": "workspace:^",
+    "@ember-formwright/ember": "workspace:^",
     "@maskito/core": ">= 5.0.0",
     "ember-source": ">= 6.12.0"
   },
@@ -71,7 +71,7 @@
     "ember-source": "~7.3.0",
     "rollup": "^4.64.6",
     "typescript": "~6.0.3",
-    "@formwright/ember": "workspace:*",
+    "@ember-formwright/ember": "workspace:*",
     "@maskito/core": "^5.6.0"
   },
   "publishConfig": {

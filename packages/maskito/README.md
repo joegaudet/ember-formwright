@@ -1,14 +1,14 @@
-# @formwright/maskito
+# @ember-formwright/maskito
 
 A masked text control for Formwright, powered by [Maskito](https://maskito.dev).
 
 ```bash
-npm install @formwright/ember @formwright/maskito @maskito/core
+npm install @ember-formwright/ember @ember-formwright/maskito @maskito/core
 ```
 
 ```ts
 // app/app.ts
-import { registerMaskedControl } from '@formwright/maskito'
+import { registerMaskedControl } from '@ember-formwright/maskito'
 registerMaskedControl() // @control="masked"
 ```
 

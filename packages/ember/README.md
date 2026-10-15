@@ -1,15 +1,15 @@
-# @formwright/ember
+# @ember-formwright/ember
 
 Declarative, accessible forms for Ember: one `<Form>`, one `<f.Field>`, any validator, any data
 layer.
 
 ```bash
-npm install @formwright/ember
+npm install @ember-formwright/ember
 ```
 
 ```gts
-import { Form } from '@formwright/ember'
-import '@formwright/ember/theme.css' // optional
+import { Form } from '@ember-formwright/ember'
+import '@ember-formwright/ember/theme.css' // optional
 
 <template>
   <Form @model={{@user}} @validator={{userSchema}} as |f|>
@@ -19,5 +19,5 @@ import '@formwright/ember/theme.css' // optional
 </template>
 ```
 
-Full documentation: the [repository README](https://github.com/joegaudet/formwright#readme) and
-the site, with a live demo, at **https://joegaudet.com/formwright/**.
+Full documentation: the [repository README](https://github.com/joegaudet/ember-formwright#readme) and
+the site, with a live demo, at **https://joegaudet.com/ember-formwright/**.

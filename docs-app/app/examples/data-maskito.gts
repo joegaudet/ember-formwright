@@ -1,7 +1,7 @@
 import { tracked } from '@glimmer/tracking'
 import type { TOC } from '@ember/component/template-only'
-import { Form } from '@formwright/ember'
-import { registerMaskedControl } from '@formwright/maskito'
+import { Form } from '@ember-formwright/ember'
+import { registerMaskedControl } from '@ember-formwright/maskito'
 
 // Once, at boot (e.g. app/app.ts): makes @control="masked" available.
 registerMaskedControl()

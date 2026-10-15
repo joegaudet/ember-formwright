@@ -13,18 +13,18 @@ Every example in this guide is live. Type into it and watch **The model, live** 
 ## Install
 
 ```bash
-npm install @formwright/ember
-npm install --save-dev @formwright/test-support
+npm install @ember-formwright/ember
+npm install --save-dev @ember-formwright/test-support
 ```
 
 Formwright works with Ember 6.12 LTS and 7, in Vite (Embroider) apps and classic ember-cli
 apps. It is a v2 addon: import what you use into `.gjs`/`.gts` files.
 
 ```ts
-import { Form } from '@formwright/ember'
+import { Form } from '@ember-formwright/ember'
 
 // Optional: a theme driven by --fw-* custom properties. See "Theming".
-import '@formwright/ember/theme.css'
+import '@ember-formwright/ember/theme.css'
 ```
 
 ## How it works
@@ -46,7 +46,7 @@ The form reads values from the model, writes changes back, validates, and saves.
 Formwright is its successor. The ideas carry over, but it uses named arguments only
 (`@for="name"`, not positional params), `.gts` imports instead of globally resolved
 components, and any Standard Schema validator. The
-[migration guide](https://github.com/joegaudet/formwright/blob/main/MIGRATION.md) maps every
+[migration guide](https://github.com/joegaudet/ember-formwright/blob/main/MIGRATION.md) maps every
 old component and argument to its replacement.
 
 </div>

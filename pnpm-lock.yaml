@@ -5,12 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@formwright/ember': workspace:*
-  '@formwright/maskito': workspace:*
+  '@ember-formwright/ember': workspace:*
+  '@ember-formwright/maskito': workspace:*
   '@glint/template': ^1.9.0
-  '@formwright/real-enums': workspace:*
-  '@formwright/test-support': workspace:*
-  '@formwright/warp-drive': workspace:*
+  '@ember-formwright/real-enums': workspace:*
+  '@ember-formwright/test-support': workspace:*
+  '@ember-formwright/warp-drive': workspace:*
 
 packageExtensionsChecksum: sha256-ar1TdysYi81PR7Qh/mHUMz/2UK11qCSawCkwnx+GO88=
 
@@ -68,6 +68,21 @@ importers:
       '@babel/runtime':
         specifier: ^7.29.7
         version: 7.29.10
+      '@ember-formwright/ember':
+        specifier: workspace:*
+        version: link:../packages/ember
+      '@ember-formwright/maskito':
+        specifier: workspace:*
+        version: link:../packages/maskito
+      '@ember-formwright/real-enums':
+        specifier: workspace:*
+        version: link:../packages/real-enums
+      '@ember-formwright/test-support':
+        specifier: workspace:*
+        version: link:../packages/test-support
+      '@ember-formwright/warp-drive':
+        specifier: workspace:*
+        version: link:../packages/warp-drive
       '@ember/app-tsconfig':
         specifier: ^2.0.0
         version: 2.1.0
@@ -101,21 +116,6 @@ importers:
       '@embroider/vite':
         specifier: ^1.7.13
         version: 1.7.15(@babel/core@7.29.7)(@embroider/core@4.6.9(@glint/template@1.9.0))(@glint/template@1.9.0)(vite@8.3.4(@types/node@26.6.5)(terser@5.51.2)(yaml@2.9.1))
-      '@formwright/ember':
-        specifier: workspace:*
-        version: link:../packages/ember
-      '@formwright/maskito':
-        specifier: workspace:*
-        version: link:../packages/maskito
-      '@formwright/real-enums':
-        specifier: workspace:*
-        version: link:../packages/real-enums
-      '@formwright/test-support':
-        specifier: workspace:*
-        version: link:../packages/test-support
-      '@formwright/warp-drive':
-        specifier: workspace:*
-        version: link:../packages/warp-drive
       '@glimmer/component':
         specifier: ^2.1.1
         version: 2.1.1
@@ -209,10 +209,10 @@ importers:
 
   examples/ember-classic:
     dependencies:
-      '@formwright/ember':
+      '@ember-formwright/ember':
         specifier: workspace:*
         version: link:../../packages/ember
-      '@formwright/test-support':
+      '@ember-formwright/test-support':
         specifier: workspace:*
         version: link:../../packages/test-support
     devDependencies:
@@ -386,15 +386,15 @@ importers:
       '@babel/runtime':
         specifier: ^7.29.7
         version: 7.29.10
+      '@ember-formwright/ember':
+        specifier: workspace:*
+        version: link:../ember
       '@ember/library-tsconfig':
         specifier: ^3.0.0
         version: 3.0.0
       '@embroider/addon-dev':
         specifier: ^8.4.2
         version: 8.4.2(@glint/template@1.9.0)(rollup@4.64.6)
-      '@formwright/ember':
-        specifier: workspace:*
-        version: link:../ember
       '@glimmer/component':
         specifier: ^2.1.1
         version: 2.1.1
@@ -467,12 +467,12 @@ importers:
         specifier: ^1.10.3
         version: 1.10.3
     devDependencies:
+      '@ember-formwright/ember':
+        specifier: workspace:*
+        version: link:../ember
       '@ember/library-tsconfig':
         specifier: ^3.0.0
         version: 3.0.0
-      '@formwright/ember':
-        specifier: workspace:*
-        version: link:../ember
       ember-source:
         specifier: ~7.3.0
         version: 7.3.1(@glimmer/component@2.1.1)
@@ -494,6 +494,21 @@ importers:
       '@babel/runtime':
         specifier: ^7.29.7
         version: 7.29.10
+      '@ember-formwright/ember':
+        specifier: workspace:*
+        version: link:../packages/ember
+      '@ember-formwright/maskito':
+        specifier: workspace:*
+        version: link:../packages/maskito
+      '@ember-formwright/real-enums':
+        specifier: workspace:*
+        version: link:../packages/real-enums
+      '@ember-formwright/test-support':
+        specifier: workspace:*
+        version: link:../packages/test-support
+      '@ember-formwright/warp-drive':
+        specifier: workspace:*
+        version: link:../packages/warp-drive
       '@ember/app-tsconfig':
         specifier: ^2.0.0
         version: 2.1.0
@@ -527,21 +542,6 @@ importers:
       '@embroider/vite':
         specifier: ^1.7.13
         version: 1.7.15(@babel/core@7.29.7)(@embroider/core@4.6.9(@glint/template@1.9.0))(@glint/template@1.9.0)(vite@8.3.4(@types/node@26.6.5)(terser@5.51.2)(yaml@2.9.1))
-      '@formwright/ember':
-        specifier: workspace:*
-        version: link:../packages/ember
-      '@formwright/maskito':
-        specifier: workspace:*
-        version: link:../packages/maskito
-      '@formwright/real-enums':
-        specifier: workspace:*
-        version: link:../packages/real-enums
-      '@formwright/test-support':
-        specifier: workspace:*
-        version: link:../packages/test-support
-      '@formwright/warp-drive':
-        specifier: workspace:*
-        version: link:../packages/warp-drive
       '@glimmer/component':
         specifier: ^2.1.1
         version: 2.1.1

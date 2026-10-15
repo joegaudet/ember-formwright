@@ -2,7 +2,7 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'docs-app/tests/helpers'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { render, click } from '@ember/test-helpers'
-import { FormHarness, FieldHarness, field } from '@formwright/test-support'
+import { FormHarness, FieldHarness, field } from '@ember-formwright/test-support'
 import FeedbackForm, { createModel } from 'docs-app/examples/custom-rating'
 
 /** A custom control gets its own harness: subclass FieldHarness. */

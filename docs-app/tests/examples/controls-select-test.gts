@@ -2,7 +2,7 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'docs-app/tests/helpers'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { render } from '@ember/test-helpers'
-import { FormHarness, SelectHarness, field } from '@formwright/test-support'
+import { FormHarness, SelectHarness, field } from '@ember-formwright/test-support'
 import SelectControls, { createModel } from 'docs-app/examples/controls-select'
 
 class CheckoutHarness extends FormHarness {

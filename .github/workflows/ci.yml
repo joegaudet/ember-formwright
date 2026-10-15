@@ -50,7 +50,7 @@ jobs:
       - name: Pin ember-source ${{ matrix.ember }}
         if: matrix.ember != '7.3'
         run: |
-          sed -i "s/^  '@formwright\/maskito': 'workspace:\*'$/&\n  ember-source: ~${{ matrix.ember }}.0/" pnpm-workspace.yaml
+          sed -i "s/^  '@ember-formwright\/maskito': 'workspace:\*'$/&\n  ember-source: ~${{ matrix.ember }}.0/" pnpm-workspace.yaml
           grep -n ember-source pnpm-workspace.yaml
           pnpm install --no-frozen-lockfile
       - run: pnpm install --frozen-lockfile

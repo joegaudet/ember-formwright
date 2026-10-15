@@ -1,6 +1,6 @@
 import Component from '@glimmer/component'
 import { tracked } from '@glimmer/tracking'
-import { Form, type ErrorMap } from '@formwright/ember'
+import { Form, type ErrorMap } from '@ember-formwright/ember'
 
 export class Invite {
   @tracked email = ''

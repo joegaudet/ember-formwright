@@ -1,4 +1,4 @@
-import { pojoAdapter, type ModelAdapter } from '@formwright/ember'
+import { pojoAdapter, type ModelAdapter } from '@ember-formwright/ember'
 
 /** The parts of a WarpDrive / ember-data record this adapter uses. All optional. */
 interface RecordLike {

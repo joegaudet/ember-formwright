@@ -4,7 +4,7 @@ module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'test-app',
     environment,
-    rootURL: process.env.FW_DEMO ? '/formwright/demo/' : '/',
+    rootURL: process.env.FW_DEMO ? '/ember-formwright/demo/' : '/',
     // Pages has no SPA fallback, so the demo uses hash URLs.
     locationType: process.env.FW_DEMO ? 'hash' : 'history',
     EmberENV: {

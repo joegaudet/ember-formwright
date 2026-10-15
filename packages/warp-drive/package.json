@@ -1,5 +1,5 @@
 {
-  "name": "@formwright/warp-drive",
+  "name": "@ember-formwright/warp-drive",
   "version": "0.0.0",
   "description": "Formwright model adapter for WarpDrive / ember-data records: save, rollback, dirty state and server errors.",
   "keywords": [
@@ -12,11 +12,11 @@
   "author": "Joe Gaudet <joe@joegaudet.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joegaudet/formwright.git",
+    "url": "git+https://github.com/joegaudet/ember-formwright.git",
     "directory": "packages/warp-drive"
   },
-  "homepage": "https://joegaudet.com/formwright/",
-  "bugs": "https://github.com/joegaudet/formwright/issues",
+  "homepage": "https://joegaudet.com/ember-formwright/",
+  "bugs": "https://github.com/joegaudet/ember-formwright/issues",
   "type": "module",
   "exports": {
     ".": {
@@ -40,11 +40,11 @@
     "@embroider/addon-shim": "^1.10.3"
   },
   "peerDependencies": {
-    "@formwright/ember": "workspace:^"
+    "@ember-formwright/ember": "workspace:^"
   },
   "devDependencies": {
     "@ember/library-tsconfig": "^3.0.0",
-    "@formwright/ember": "workspace:*",
+    "@ember-formwright/ember": "workspace:*",
     "ember-source": "~7.3.0",
     "typescript": "~6.0.3"
   },

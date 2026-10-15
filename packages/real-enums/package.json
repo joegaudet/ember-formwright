@@ -1,5 +1,5 @@
 {
-  "name": "@formwright/real-enums",
+  "name": "@ember-formwright/real-enums",
   "version": "0.0.0",
   "description": "Use real-enums classes as Formwright select, radio and checkbox options.",
   "keywords": [
@@ -12,11 +12,11 @@
   "author": "Joe Gaudet <joe@joegaudet.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joegaudet/formwright.git",
+    "url": "git+https://github.com/joegaudet/ember-formwright.git",
     "directory": "packages/real-enums"
   },
-  "homepage": "https://joegaudet.com/formwright/",
-  "bugs": "https://github.com/joegaudet/formwright/issues",
+  "homepage": "https://joegaudet.com/ember-formwright/",
+  "bugs": "https://github.com/joegaudet/ember-formwright/issues",
   "type": "module",
   "exports": {
     ".": {

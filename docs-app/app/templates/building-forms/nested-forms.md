@@ -13,7 +13,7 @@ its legend.
 - **Parents save first.** The root saves its model, then each nested form that needs saving,
   level by level. A child can rely on its parent already having an id.
 - **Only what changed.** A nested form saves when one of its fields changed or, with
-  `@formwright/warp-drive`, when its record is new or deleted.
+  `@ember-formwright/warp-drive`, when its record is new or deleted.
 - **Shared settings.** `@disabled`, `@readonly`, `@inline`, `@requireConfirm` and `@adapter`
   pass down, and a nested form can override them.
 - **Own hooks.** A nested form's `@didSubmit` and `@failedSubmit` hear about its own save.

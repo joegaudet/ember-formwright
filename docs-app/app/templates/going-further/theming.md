@@ -3,7 +3,7 @@
 Formwright renders plain, semantic markup with stable class names and state attributes. You
 choose how much of the look you want:
 
-- **The theme:** `import '@formwright/ember/theme.css'`, then adjust it with custom properties.
+- **The theme:** `import '@ember-formwright/ember/theme.css'`, then adjust it with custom properties.
 - **Your own CSS:** skip the theme and style the `.fw-*` classes and `data-*` states.
 
 ## Custom properties

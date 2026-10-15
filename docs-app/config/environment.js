@@ -4,7 +4,7 @@ module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'docs-app',
     environment,
-    rootURL: process.env.FW_GUIDE ? '/formwright/guide/' : '/',
+    rootURL: process.env.FW_GUIDE ? '/ember-formwright/guide/' : '/',
     // Real URLs: pages link to each other relatively. On GitHub Pages, deep links are served by
     // the 404.html fallback the build writes.
     locationType: 'history',

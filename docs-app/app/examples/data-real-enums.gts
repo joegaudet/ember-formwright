@@ -1,8 +1,8 @@
 import { tracked } from '@glimmer/tracking'
 import type { TOC } from '@ember/component/template-only'
 import { array } from '@ember/helper'
-import { Form } from '@formwright/ember'
-import { enumOptions, enumValue } from '@formwright/real-enums'
+import { Form } from '@ember-formwright/ember'
+import { enumOptions, enumValue } from '@ember-formwright/real-enums'
 
 // Stands in for `import { Enum } from 'real-enums'` until real-enums 2 is on npm:
 // the same shape, a String subclass with `values`, `value` and `label`.

@@ -1,11 +1,11 @@
 # Testing
 
-`@formwright/test-support` drives forms the way a user does, through selectors every
+`@ember-formwright/test-support` drives forms the way a user does, through selectors every
 Formwright form renders. Describe each form once as a harness class, then use it in any test.
 Every example in this guide has a **Test** tab with the test that covers it.
 
 ```bash
-npm install --save-dev @formwright/test-support
+npm install --save-dev @ember-formwright/test-support
 ```
 
 ## A form is a class
@@ -18,7 +18,7 @@ import {
   CheckboxHarness,
   field,
   form,
-} from '@formwright/test-support'
+} from '@ember-formwright/test-support'
 
 export class AddressForm extends FormHarness {
   @field(InputHarness) declare city: InputHarness

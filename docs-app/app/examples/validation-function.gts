@@ -1,6 +1,6 @@
 import { tracked } from '@glimmer/tracking'
 import type { TOC } from '@ember/component/template-only'
-import { Form, type ErrorMap } from '@formwright/ember'
+import { Form, type ErrorMap } from '@ember-formwright/ember'
 
 const TAKEN = ['ada', 'grace', 'admin']
 

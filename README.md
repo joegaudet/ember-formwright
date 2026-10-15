@@ -5,17 +5,17 @@ Declarative, accessible forms for Ember. One `<Form>`, one `<f.Field>`: labels, 
 valibot, any [Standard Schema](https://standardschema.dev)) and any data layer (WarpDrive,
 ember-data, plain objects), and test it with harnesses that read the way your users do.
 
-Site and live demo: **https://joegaudet.com/formwright/**
+Site and live demo: **https://joegaudet.com/ember-formwright/**
 
-Guide, with a live example of every feature: **https://joegaudet.com/formwright/guide/**
+Guide, with a live example of every feature: **https://joegaudet.com/ember-formwright/guide/**
 
 Formwright is the successor to `ember-foxy-forms`. Coming from there? See [MIGRATION.md](MIGRATION.md).
 
 ## Install
 
 ```bash
-npm install @formwright/ember
-npm install --save-dev @formwright/test-support
+npm install @ember-formwright/ember
+npm install --save-dev @ember-formwright/test-support
 ```
 
 Works with Ember 6.12 LTS and 7.x, in Vite (Embroider) apps and classic ember-cli apps.
@@ -23,8 +23,8 @@ Works with Ember 6.12 LTS and 7.x, in Vite (Embroider) apps and classic ember-cl
 ## Use
 
 ```gts
-import { Form } from '@formwright/ember'
-import '@formwright/ember/theme.css' // optional: a theme driven by --fw-* custom properties
+import { Form } from '@ember-formwright/ember'
+import '@ember-formwright/ember/theme.css' // optional: a theme driven by --fw-* custom properties
 import { z } from 'zod'
 
 const userSchema = z.object({ email: z.string().email('That email looks off') })
@@ -104,7 +104,7 @@ Any component with `ControlSignature` works: put `@id` on the focusable element 
 `@onChange(value)`.
 
 ```gts
-import { registerControl, type ControlSignature } from '@formwright/ember'
+import { registerControl, type ControlSignature } from '@ember-formwright/ember'
 
 class Stepper extends Component<ControlSignature<number>> {
   inc = () => this.args.onChange((this.args.value ?? 0) + 1)
@@ -122,12 +122,12 @@ The core edits any object through a `ModelAdapter` (`get`, `set`, and optionally
 `rollback`, `errorsFor`, `needsSave`). Set one per form with `@adapter`, or for every form with
 `setDefaultAdapter()`.
 
-| Package                                             |                                                                                    |
-| --------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| [`@formwright/warp-drive`](packages/warp-drive)     | WarpDrive / ember-data records: save, rollback, server errors, nested new records. |
-| [`@formwright/real-enums`](packages/real-enums)     | [real-enums](https://joegaudet.com/real-enums/) classes as options.                |
-| [`@formwright/maskito`](packages/maskito)           | A `masked` control powered by Maskito.                                             |
-| [`@formwright/test-support`](packages/test-support) | Form harnesses for tests.                                                          |
+| Package                                                   |                                                                                    |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [`@ember-formwright/warp-drive`](packages/warp-drive)     | WarpDrive / ember-data records: save, rollback, server errors, nested new records. |
+| [`@ember-formwright/real-enums`](packages/real-enums)     | [real-enums](https://joegaudet.com/real-enums/) classes as options.                |
+| [`@ember-formwright/maskito`](packages/maskito)           | A `masked` control powered by Maskito.                                             |
+| [`@ember-formwright/test-support`](packages/test-support) | Form harnesses for tests.                                                          |
 
 ## Testing
 
@@ -135,7 +135,13 @@ Describe each form once as a harness class. Decorators declare its fields (with 
 for their control) and nested forms; each is created once, on first use.
 
 ```ts
-import { FormHarness, InputHarness, SelectHarness, field, form } from '@formwright/test-support'
+import {
+  FormHarness,
+  InputHarness,
+  SelectHarness,
+  field,
+  form,
+} from '@ember-formwright/test-support'
 
 class AddressForm extends FormHarness {
   @field(InputHarness) declare city: InputHarness

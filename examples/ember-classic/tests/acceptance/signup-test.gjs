@@ -1,7 +1,7 @@
 import { module, test } from 'qunit'
 import { visit } from '@ember/test-helpers'
 import { setupApplicationTest } from 'ember-qunit'
-import { FormHarness, InputHarness, field } from '@formwright/test-support'
+import { FormHarness, InputHarness, field } from '@ember-formwright/test-support'
 
 class SignupForm extends FormHarness {
   static formName = 'signup'

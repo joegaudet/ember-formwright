@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking'
 import { on } from '@ember/modifier'
 import { fn } from '@ember/helper'
 import type { TOC } from '@ember/component/template-only'
-import { Form, registerControl, type ControlSignature } from '@formwright/ember'
+import { Form, registerControl, type ControlSignature } from '@ember-formwright/ember'
 
 /**
  * A control is any component with ControlSignature: render @value, call @onChange.

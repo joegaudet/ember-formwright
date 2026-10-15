@@ -20,13 +20,13 @@ Use one per form with `@adapter`, or for every form with `setDefaultAdapter()` a
 ## WarpDrive and ember-data
 
 ```bash
-npm install @formwright/warp-drive
+npm install @ember-formwright/warp-drive
 ```
 
 ```ts
 // app/app.ts
-import { setDefaultAdapter } from '@formwright/ember'
-import { warpDriveAdapter } from '@formwright/warp-drive'
+import { setDefaultAdapter } from '@ember-formwright/ember'
+import { warpDriveAdapter } from '@ember-formwright/warp-drive'
 
 setDefaultAdapter(warpDriveAdapter)
 ```
@@ -42,7 +42,7 @@ setDefaultAdapter(warpDriveAdapter)
 ## real-enums
 
 [real-enums](https://joegaudet.com/real-enums/) classes work as options as they are: each
-member has a `value` (the key) and a `label`. `@formwright/real-enums` adds filtering, storing
+member has a `value` (the key) and a `label`. `@ember-formwright/real-enums` adds filtering, storing
 the raw string, and labels for inline display.
 
 <Example @name="data-real-enums" @title="Options from an enum class" />
@@ -56,7 +56,7 @@ the raw string, and labels for inline display.
 ## Masked input (Maskito)
 
 ```bash
-npm install @formwright/maskito @maskito/core
+npm install @ember-formwright/maskito @maskito/core
 ```
 
 <Example @name="data-maskito" @title="Phone and postal code masks" />

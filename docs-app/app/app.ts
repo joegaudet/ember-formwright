@@ -3,7 +3,7 @@ import compatModules from '@embroider/virtual/compat-modules'
 import Resolver from 'ember-resolver'
 import loadInitializers from 'ember-load-initializers'
 import config from 'docs-app/config/environment'
-import '@formwright/ember/theme.css'
+import '@ember-formwright/ember/theme.css'
 import './styles/app.css'
 
 export default class App extends Application {

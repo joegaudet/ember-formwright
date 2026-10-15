@@ -3,11 +3,11 @@ import { setupRenderingTest } from 'test-app/tests/helpers'
 import { render } from '@ember/test-helpers'
 import { tracked } from '@glimmer/tracking'
 import { array } from '@ember/helper'
-import { Form } from '@formwright/ember'
+import { Form } from '@ember-formwright/ember'
 import { TestForm } from 'test-app/tests/helpers/test-form'
-import { warpDriveAdapter } from '@formwright/warp-drive'
-import { enumOptions, enumValue, enumLabel } from '@formwright/real-enums'
-import { registerMaskedControl } from '@formwright/maskito'
+import { warpDriveAdapter } from '@ember-formwright/warp-drive'
+import { enumOptions, enumValue, enumLabel } from '@ember-formwright/real-enums'
+import { registerMaskedControl } from '@ember-formwright/maskito'
 
 /** Mirrors real-enums 2's Enum: a String subclass with `values`, `value` and `label`. */
 class Enum extends String {

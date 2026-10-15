@@ -2,7 +2,7 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'test-app/tests/helpers'
 import { render, settled, click } from '@ember/test-helpers'
 import { tracked } from '@glimmer/tracking'
-import { Form, type ErrorMap } from '@formwright/ember'
+import { Form, type ErrorMap } from '@ember-formwright/ember'
 import { TestForm } from 'test-app/tests/helpers/test-form'
 
 class User {

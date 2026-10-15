@@ -12,7 +12,7 @@ A form owns a model, saves it on submit, and can reset it to the values it last 
   reads them.
 - **A plain object.** Formwright reads and writes it through Ember's `get` and `set`, so plain
   objects stay reactive too.
-- **A WarpDrive / ember-data record**, with `@formwright/warp-drive`. Submit calls
+- **A WarpDrive / ember-data record**, with `@ember-formwright/warp-drive`. Submit calls
   `record.save()`, and reset calls `rollbackAttributes()`. See [Data layers](../going-further/data-layers.md).
 
 ## Submitting

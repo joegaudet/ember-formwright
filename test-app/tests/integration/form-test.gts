@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { z } from 'zod'
 import * as v from 'valibot'
-import { Form, type ErrorMap } from '@formwright/ember'
+import { Form, type ErrorMap } from '@ember-formwright/ember'
 import { TestForm } from 'test-app/tests/helpers/test-form'
 
 class User {

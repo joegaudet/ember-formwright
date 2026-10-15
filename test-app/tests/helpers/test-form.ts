@@ -9,7 +9,7 @@ import {
   CheckboxGroupHarness,
   field,
   form,
-} from '@formwright/test-support'
+} from '@ember-formwright/test-support'
 
 export class AddressForm extends FormHarness {
   @field(InputHarness) declare city: InputHarness

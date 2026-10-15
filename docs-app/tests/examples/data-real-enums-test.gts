@@ -2,7 +2,7 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'docs-app/tests/helpers'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
 import { render } from '@ember/test-helpers'
-import { FormHarness, SelectHarness, RadioHarness, field } from '@formwright/test-support'
+import { FormHarness, SelectHarness, RadioHarness, field } from '@ember-formwright/test-support'
 import OrderForm, { createModel, OrderState } from 'docs-app/examples/data-real-enums'
 
 class OrderHarness extends FormHarness {
