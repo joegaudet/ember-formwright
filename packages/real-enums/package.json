@@ -1,6 +1,6 @@
 {
   "name": "@ember-formwright/real-enums",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Use real-enums classes as Formwright select, radio and checkbox options.",
   "keywords": [
     "ember-addon",
