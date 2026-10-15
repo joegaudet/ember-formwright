@@ -1,6 +1,6 @@
 {
   "name": "@ember-formwright/changeset",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Formwright model adapter for ember-changeset: edits buffer in the changeset until submit, with changeset validations, save and rollback.",
   "keywords": [
     "ember-addon",
