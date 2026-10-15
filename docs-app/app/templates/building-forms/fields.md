@@ -22,6 +22,26 @@ an optional hint, the control, and its errors. Each part is wired for assistive 
 | `@disabled`, `@readonly`, `@requireConfirm`           | Override the form's setting for this field.                                                                     |
 | `@format`                                             | Formats the value shown in inline mode.                                                                         |
 
+## Typed paths
+
+In a `.gts` template checked by Glint, `@for` is typed against the form's `@model`. A typo, a
+path into a nested object that doesn't exist, or a method name fails `ember-tsc`:
+
+```
+<Form @model={{this.account}} as |f|>
+  <f.Field @for="email" />          {{! ok }}
+  <f.Field @for="address.city" />   {{! ok }}
+  <f.Field @for="items.0.name" />   {{! ok, so is items[0].name }}
+  <f.Field @for="emial" />          {{! type error }}
+</Form>
+```
+
+Paths go five levels deep, and stop at `Date`, `Map`, `Set` and other built-ins. A model typed
+loosely (`any`, `object`, or with an index signature such as `Record<string, unknown>`)
+accepts any string, as do loose-mode `.hbs` templates. `Path<Model>` is exported if you need
+the same union in your own code. Only the path is checked: whether the control suits the
+value's type is still up to you.
+
 ## What a field renders
 
 ```html

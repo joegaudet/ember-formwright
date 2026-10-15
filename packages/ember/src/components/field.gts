@@ -10,7 +10,7 @@ import { modifier } from 'ember-modifier'
 import type { ComponentLike } from '@glint/template'
 import type Form from './form.gts'
 import Errors from './errors.gts'
-import { normalizePath } from '../path.ts'
+import { normalizePath, type Path } from '../path.ts'
 import { lookupControl, isGroupControl, type ControlComponent } from '../registry.ts'
 import type { ControlSignature, OptionAccessor } from '../controls/signature.ts'
 import { labelOf, matches } from '../controls/options.ts'
@@ -25,13 +25,13 @@ type BoundControl = ComponentLike<{
   Args: Partial<ControlSignature['Args']> & Record<string, unknown>
 }>
 
-export interface FieldSignature {
+export interface FieldSignature<M extends object = object> {
   Element: HTMLDivElement
   Args: {
     /** Set by `f.Field`; don't pass it yourself. */
     form: Form<any>
-    /** The model path this field edits, e.g. "email" or "address.city". */
-    for: string
+    /** The model path this field edits, e.g. "email" or "address.city"; checked against the form's model. */
+    for: Path<M>
     label?: string
     hint?: string
     /** A built-in or registered control name (default "input"), or a component. */
@@ -70,14 +70,14 @@ export interface FieldSignature {
 const isEmpty = (v: unknown) =>
   v === null || v === undefined || v === '' || (Array.isArray(v) && !v.length)
 
-export default class Field extends Component<FieldSignature> {
+export default class Field<M extends object = object> extends Component<FieldSignature<M>> {
   /** A value the user chose but hasn't committed yet (confirm or inline mode). */
   @tracked buffer: { value: unknown } | null = null
   @tracked isEditing = false
   /** Read once: a field's path is its identity in the form's baseline. */
   readonly path: string
 
-  constructor(owner: Owner, args: FieldSignature['Args']) {
+  constructor(owner: Owner, args: FieldSignature<M>['Args']) {
     super(owner, args)
     this.path = normalizePath(args.for)
     args.form.register(this)
@@ -294,7 +294,7 @@ export default class Field extends Component<FieldSignature> {
 type FieldApi = FieldSignature['Blocks']['default'][0]
 
 interface ControlAreaSignature {
-  Args: { field: Field; hasBlock: boolean }
+  Args: { field: Field<any>; hasBlock: boolean }
   Blocks: { default: [FieldApi] }
 }
 

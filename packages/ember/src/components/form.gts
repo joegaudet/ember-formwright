@@ -30,7 +30,8 @@ export interface FormSignature<M extends object = object> {
     model: M
     /** Names the form for selectors and harnesses: data-test-fw-form="<name>". Default "form". */
     name?: string
-    adapter?: ModelAdapter<M>
+    /** Typed against @model; M is inferred from @model alone. */
+    adapter?: ModelAdapter<NoInfer<M>>
     validator?: Validator<M>
     /** Persists the model. Default: the adapter's save (POJOs: `model.save()` if present). */
     onSubmit?: (model: M) => unknown
@@ -65,7 +66,7 @@ export interface FormSignature<M extends object = object> {
   Blocks: {
     default: [
       {
-        Field: WithBoundArgs<typeof Field, 'form'>
+        Field: WithBoundArgs<typeof Field<M>, 'form'>
         Form: NestedForm
         Submit: WithBoundArgs<typeof Button, 'kind' | 'busy' | 'text'>
         Reset: WithBoundArgs<typeof Button, 'kind' | 'onClick' | 'text'>
@@ -77,12 +78,25 @@ export interface FormSignature<M extends object = object> {
   }
 }
 
-/** `f.Form`: a Form bound to its parent. */
-export type NestedForm = ComponentLike<{
-  Element: HTMLFormElement | HTMLFieldSetElement
-  Args: Omit<FormSignature<any>['Args'], 'parent'>
-  Blocks: FormSignature<any>['Blocks']
-}>
+/**
+ * `f.Form`: a Form bound to its parent. Generic like Form itself, so each nested form infers
+ * its own model from `@model` and its fields are checked against it.
+ */
+export type NestedForm = abstract new <N extends object>(
+  ...args: any
+) => InstanceType<
+  ComponentLike<{
+    Element: FormSignature<N>['Element']
+    Args: Omit<FormSignature<N>['Args'], 'parent'>
+    Blocks: FormSignature<N>['Blocks']
+  }>
+>
+
+/**
+ * `{{component}}` drops a component's type parameters, so the bound nested form is restated
+ * as the generic `NestedForm` it is at runtime.
+ */
+const asNestedForm = (form: unknown) => form as NestedForm
 
 function same(a: unknown, b: unknown): boolean {
   if (Array.isArray(a) && Array.isArray(b)) {
@@ -109,7 +123,7 @@ export default class Form<M extends object = object>
    * tracked state there trips Ember's backtracking assertion. `version` is bumped instead:
    * right after a render that registered something, on removal, and on save.
    */
-  fields: Field[] = []
+  fields: Field<any>[] = []
   children: Form<any>[] = []
   @tracked version = 0
   /**
@@ -220,14 +234,14 @@ export default class Form<M extends object = object>
     return !same(baseline.get(path), this.read(path))
   }
 
-  register(field: Field): void {
+  register(field: Field<any>): void {
     if (!this.baselineOf().has(field.path))
       this.baselineOf().set(field.path, snapshotOf(this.read(field.path)))
     this.fields.push(field)
     this.invalidateSoon()
   }
 
-  unregister(field: Field): void {
+  unregister(field: Field<any>): void {
     this.fields = this.fields.filter(f => f !== field)
     this.version++
   }
@@ -411,7 +425,7 @@ export default class Form<M extends object = object>
         {{yield
           (hash
             Field=(component Field form=this)
-            Form=(component Form parent=this)
+            Form=(asNestedForm (component Form parent=this))
             Submit=(component Button kind="submit" busy=this.root.isSubmitting text="Submit")
             Reset=(component Button kind="reset" onClick=this.reset text="Reset")
             Button=Button
@@ -434,7 +448,7 @@ export default class Form<M extends object = object>
         {{yield
           (hash
             Field=(component Field form=this)
-            Form=(component Form parent=this)
+            Form=(asNestedForm (component Form parent=this))
             Submit=(component Button kind="submit" busy=this.isSubmitting text="Submit")
             Reset=(component Button kind="reset" onClick=this.reset text="Reset")
             Button=Button
