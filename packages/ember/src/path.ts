@@ -30,22 +30,26 @@ type Leaf =
   | WeakMap<object, unknown>
   | WeakSet<object>
 
-/** `prefix`, plus every path inside `T` under it. */
-type Under<Prefix extends string, T, D extends number> = Prefix | `${Prefix}.${PathsOf<T, D>}`
-
-/** The paths a key `K` holding `V` contributes; arrays are indexed as `k.0` or `k[0]`. */
+/**
+ * The paths a key `K` holding `V` contributes; arrays are indexed as `k.0` or `k[0]`. Written
+ * out rather than through a helper alias, so type errors list the paths themselves.
+ */
 type KeyPaths<K extends string, V, D extends number> = 0 extends 1 & V
   ? K | `${K}.${string}`
   : V extends readonly (infer E)[]
-    ? K | Under<`${K}.${number}` | `${K}[${number}]`, E, Depth[D]>
-    : Under<K, V, Depth[D]>
+    ? | K
+      | `${K}.${number}`
+      | `${K}[${number}]`
+      | `${K}.${number}.${PathsOf<E, Depth[D]>}`
+      | `${K}[${number}].${PathsOf<E, Depth[D]>}`
+    : K | `${K}.${PathsOf<V, Depth[D]>}`
 
 type PathsOf<T, D extends number> = [D] extends [never]
   ? never
   : T extends Leaf
     ? never
     : T extends readonly (infer E)[]
-      ? Under<`${number}`, E, Depth[D]>
+      ? `${number}` | `${number}.${PathsOf<E, Depth[D]>}`
       : T extends object
         ? {
             [K in keyof T & string]-?: NonNullable<T[K]> extends (...args: never[]) => unknown

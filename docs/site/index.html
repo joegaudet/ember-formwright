@@ -56,6 +56,7 @@
         </ul>
         <ul>
           <li class="wide-only"><a href="#why">Why</a></li>
+          <li class="wide-only"><a href="#types">Types</a></li>
           <li><a href="#validation">Validation</a></li>
           <li><a href="guide/">Guide</a></li>
           <li class="wide-only"><a href="#testing">Testing</a></li>
@@ -211,10 +212,7 @@
         <h2>Strict mode, named args, nothing to register</h2>
         <p>
           Import <code>Form</code> into a <code>.gts</code> template. Fields, nested forms and
-          buttons come from the form itself, already bound to it. With Glint, the whole form is
-          typed by its model: each <code>@for</code> must be a real path (a typo or a wrong nested
-          path fails the typecheck), and field values, <code>@format</code>, errors and hooks take
-          the type at that path.
+          buttons come from the form itself, already bound to it.
         </p>
         <pre><code class="language-typescript">import { Form } from '@ember-formwright/ember'
 import '@ember-formwright/ember/theme.css' // optional
@@ -246,6 +244,62 @@ import '@ember-formwright/ember/theme.css' // optional
         <p>
           <a href="guide/" role="button">Read the guide</a>&nbsp; Every control, option and hook,
           with live, tested examples.
+        </p>
+      </section>
+
+      <section id="types">
+        <p class="eyebrow">Types</p>
+        <h2>Typed by your model, down to the nested path</h2>
+        <p>
+          With Glint, a form is typed by its <code>@model</code>. Every <code>@for</code> must be a
+          real path, nested forms check against their own model, and each field's value and
+          <code>@format</code> take the type at its path. A typo is a build error, not a blank field
+          in production.
+        </p>
+        <div class="grid">
+          <pre><code class="language-typescript">import { tracked } from '@glimmer/tracking'
+import type { TOC } from '@ember/component/template-only'
+import { Form } from '@ember-formwright/ember'
+
+class Address {
+  @tracked city = 'Lisbon'
+}
+class Order {
+  @tracked email = ''
+  @tracked seats = 1
+  address = new Address()
+}
+const shout = (text: string) =&gt; text.toUpperCase()
+
+export const OrderForm: TOC&lt;{ Args: { order: Order } }&gt; = &lt;template&gt;
+  &lt;Form @model={{@order}} as |f|&gt;
+    &lt;f.Field @for="emial" /&gt;
+    &lt;f.Field @for="seats" @format={{shout}} /&gt;
+    &lt;f.Field @for="seats" as |field|&gt;{{field.value}}&lt;/f.Field&gt;
+    &lt;f.Form @model={{@order.address}} as |a|&gt;
+      &lt;a.Field @for="email" /&gt;
+    &lt;/f.Form&gt;
+  &lt;/Form&gt;
+&lt;/template&gt;</code></pre>
+          <pre><code class="language-plaintext">$ ember-tsc --noEmit
+
+order-form.gts(17,15): error TS2820: Type '"emial"' is not
+  assignable to type '"email" | "seats" | "address" |
+  "address.city"'. Did you mean '"email"'?
+
+order-form.gts(18,28): error TS2322: Type '(text: string)
+  =&gt; string' is not assignable to type '(value: number)
+  =&gt; string'.
+    Type 'number' is not assignable to type 'string'.
+
+order-form.gts(21,17): error TS2322: Type '"email"' is not
+  assignable to type '"city"'.</code></pre>
+        </div>
+        <p>
+          Errors and hooks follow the same model: <code>ErrorMap&lt;Order&gt;</code> only takes
+          Order's paths, and <code>@onChange(path, value)</code> types <code>value</code> by
+          <code>path</code>. Models typed loosely (<code>any</code>, or a
+          <code>Record&lt;string, unknown&gt;</code>) accept any path, as before.
         </p>
       </section>
 
