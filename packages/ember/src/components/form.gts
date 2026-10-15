@@ -88,17 +88,18 @@ export interface FormSignature<M extends object = object> {
 
 /**
  * `f.Form`: a Form bound to its parent. Generic like Form itself, so each nested form infers
- * its own model from `@model` and its fields are checked against it.
+ * its own model from `@model` and its fields are checked against it. A part of a loosely typed
+ * model (a changeset's `cs.address` is `unknown`) gets a loosely typed form.
  */
-export type NestedForm = abstract new <N extends object>(
-  ...args: any
-) => InstanceType<
+export type NestedForm = abstract new <N>(...args: any) => InstanceType<
   ComponentLike<{
-    Element: FormSignature<N>['Element']
-    Args: Omit<FormSignature<N>['Args'], 'parent'>
-    Blocks: FormSignature<N>['Blocks']
+    Element: FormSignature<ObjectOr<N>>['Element']
+    Args: Omit<FormSignature<ObjectOr<N>>['Args'], 'parent' | 'model'> & { model: N }
+    Blocks: FormSignature<ObjectOr<N>>['Blocks']
   }>
 >
+
+type ObjectOr<N> = [N] extends [object] ? N : object
 
 /**
  * `f.Field`: a Field bound to its form. Generic over the path, so each field's value,
