@@ -13,6 +13,7 @@ const PAGES = [
   'controls/built-in-controls.md',
   'controls/custom-controls.md',
   'going-further/data-layers.md',
+  'going-further/changesets.md',
   'going-further/theming.md',
   'going-further/testing.md',
   'reference/api.md',

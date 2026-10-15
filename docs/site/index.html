@@ -59,6 +59,7 @@
           <li class="wide-only"><a href="#types">Types</a></li>
           <li><a href="#validation">Validation</a></li>
           <li><a href="guide/">Guide</a></li>
+          <li class="wide-only"><a href="#changesets">Changesets</a></li>
           <li class="wide-only"><a href="#testing">Testing</a></li>
           <li class="wide-only"><a href="#adapters">Adapters</a></li>
           <li class="wide-only"><a href="#demo">Demo</a></li>
@@ -333,6 +334,30 @@ const validator = (user: User) =&gt; ({
         </div>
       </section>
 
+      <section id="changesets">
+        <p class="eyebrow">Changesets</p>
+        <h2>Edits stay private until they save</h2>
+        <p>
+          Hand the form an ember-changeset changeset and the model only changes on a valid submit.
+          Changeset validations show on their fields, reset drops the pending edits, and a failed
+          save leaves the model as it was.
+          <a href="guide/going-further/changesets.md">Set it up in three steps.</a>
+        </p>
+        <div class="grid">
+          <pre><code class="language-bash">npm i @ember-formwright/changeset ember-changeset</code></pre>
+          <pre><code class="language-typescript">// One validator per field: true, or the message
+export const UserValidations = {
+  email: (_key: string, value: unknown) =&gt;
+    String(value).includes('@') || 'Enter an email',
+}</code></pre>
+        </div>
+        <pre><code class="language-handlebars">&lt;Form @model={{changeset @user UserValidations}}
+  @adapter={{changesetAdapter}} @validator={{changesetValidator}} as |f|&gt;
+  &lt;f.Field @for="email" @label="Email" /&gt;
+  &lt;f.Submit /&gt; &lt;f.Reset /&gt;
+&lt;/Form&gt;</code></pre>
+      </section>
+
       <section id="testing">
         <p class="eyebrow">Testing</p>
         <h2>Harnesses: tests that read like your users</h2>
@@ -478,11 +503,6 @@ import { warpDriveAdapter } from '@ember-formwright/warp-drive'
 
 setDefaultAdapter(warpDriveAdapter)</code></pre>
         </div>
-        <pre><code class="language-handlebars">{{! edit through a changeset; the model changes on submit }}
-&lt;Form @model={{changeset @user UserValidations}}
-  @adapter={{changesetAdapter}} @validator={{changesetValidator}} as |f|&gt;
-  &lt;f.Field @for="email" @label="Email" /&gt;
-&lt;/Form&gt;</code></pre>
         <pre><code class="language-handlebars">{{! options straight from a real-enums class }}
 &lt;f.Field @for="state" @control="radio" @label="State"
   @options={{enumOptions OrderState except=(array OrderState.Cancelled)}} /&gt;</code></pre>

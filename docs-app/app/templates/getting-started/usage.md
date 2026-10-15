@@ -16,6 +16,7 @@ A form owns a model, saves it on submit, and can reset it to the values it last 
   `record.save()`, and reset calls `rollbackAttributes()`. See [Data layers](../going-further/data-layers.md).
 - **An ember-changeset changeset**, with `@ember-formwright/changeset`. Edits stay in the
   changeset until a valid submit applies and saves them. Reset calls `changeset.rollback()`.
+  See [Changesets](../going-further/changesets.md).
 
 ## Submitting
 
