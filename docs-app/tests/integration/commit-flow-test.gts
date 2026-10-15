@@ -113,6 +113,32 @@ module('Integration | CommitFlow', function (hooks) {
     await a11yAudit()
   })
 
+  test('native rollback: the model changes, Formwright restores its baseline', async function (assert) {
+    await render(<template><CommitFlow /></template>)
+    await click('[data-test-flow-layer="native"]')
+    assert.dom('[data-test-flow-lane="pending"]').includesText('Model')
+    assert.dom('[data-test-flow-lane="saved"]').includesText('Baseline')
+    assert.dom(lane('pending')).hasText('Ada', 'the model always holds a value')
+
+    await click('[data-test-flow-next]')
+    assert.dom(lane('pending')).hasText('Grace')
+    assert.dom(caption).includesText("set(model, 'name', 'Grace')")
+
+    await click('[data-test-flow-scenario="rollback"]')
+    await click('[data-test-flow-next]')
+    await click('[data-test-flow-next]')
+    assert.dom(caption).includesText('baseline')
+    assert.dom(lane('field')).hasText('Ada')
+    assert.dom(lane('pending')).hasText('Ada', 'the baseline is back on the model')
+    assert.dom(lane('saved')).hasText('Ada')
+
+    await click('[data-test-flow-scenario="commit"]')
+    await click('[data-test-flow-next]')
+    await click('[data-test-flow-next]')
+    assert.dom(caption).includesText('new baseline')
+    assert.dom(lane('saved')).hasText('Grace')
+  })
+
   test('Back steps backwards', async function (assert) {
     await render(<template><CommitFlow /></template>)
     assert.dom('[data-test-flow-back]').isDisabled()

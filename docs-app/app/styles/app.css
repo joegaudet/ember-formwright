@@ -45,6 +45,11 @@ a {
   color: var(--g-accent);
 }
 
+/* Anchor jumps land below the sticky header. */
+html {
+  scroll-padding-top: 5rem;
+}
+
 /* ---- header and layout --------------------------------------------------------------- */
 
 .guide-header {
@@ -215,6 +220,27 @@ a {
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.015em;
+}
+
+/* The "#" link a heading gets for sharing; shown on hover or focus. */
+.heading-anchor {
+  margin-left: 0.4rem;
+  color: var(--g-muted);
+  text-decoration: none;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+:is(h2, h3):hover > .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .heading-anchor {
+    opacity: 0.6;
+  }
 }
 
 .guide-prose h3 {

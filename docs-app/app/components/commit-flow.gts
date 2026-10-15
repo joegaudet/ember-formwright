@@ -4,7 +4,7 @@ import { on } from '@ember/modifier'
 import { fn } from '@ember/helper'
 
 type Mode = 'form' | 'inline'
-type Layer = 'warp-drive' | 'changeset'
+type Layer = 'warp-drive' | 'changeset' | 'native'
 type Scenario = 'commit' | 'rollback'
 type LaneName = 'field' | 'draft' | 'pending' | 'saved'
 type Press = 'submit' | 'reset' | 'commit' | 'cancel'
@@ -31,6 +31,7 @@ const start: Step = {
   caption: {
     'warp-drive': `The field shows the record's saved name, ${OLD}.`,
     changeset: `The field reads ${OLD} through the changeset, which has no changes yet.`,
+    native: `The field reads ${OLD} from the model, and Formwright notes it as its baseline.`,
   },
 }
 
@@ -43,6 +44,7 @@ const write = (from: LaneName): Step => ({
   caption: {
     'warp-drive': `The adapter writes record.name = '${NEW}'. The record is dirty, and anything else showing it already sees ${NEW}.`,
     changeset: `The adapter writes changeset.set('name', '${NEW}'). The model underneath still says ${OLD}.`,
+    native: `The adapter writes set(model, 'name', '${NEW}'). The model changes at once; Formwright's baseline still says ${OLD}.`,
   },
 })
 
@@ -55,6 +57,7 @@ const draft: Step = {
   caption: {
     'warp-drive': `Inline, the field keeps its own draft. Nothing reaches the record until you commit.`,
     changeset: `Inline, the field keeps its own draft. Nothing reaches the changeset until you commit.`,
+    native: `Inline, the field keeps its own draft. Nothing reaches the model until you commit.`,
   },
 }
 
@@ -67,6 +70,7 @@ const save = (action: string): Step => ({
   caption: {
     'warp-drive': `The form validates, then calls record.save(). The server has ${NEW}, and the record is clean.`,
     changeset: `The form validates, then calls changeset.save(): it applies ${NEW} to the model and saves the model.`,
+    native: `The form validates, calls model.save() (or @onSubmit), then records ${NEW} as the new baseline.`,
   },
 })
 
@@ -79,6 +83,7 @@ const reset: Step = {
   caption: {
     'warp-drive': `Reset calls record.rollbackAttributes(): every attribute goes back to its last saved value.`,
     changeset: `Reset calls changeset.rollback(): the pending change is dropped. The model never saw it.`,
+    native: `Native rollback: Formwright writes its baseline, ${OLD}, back to the model with set(). No data layer needed.`,
   },
 }
 
@@ -91,6 +96,7 @@ const cancel: Step = {
   caption: {
     'warp-drive': `Cancel drops the draft; the record never saw it. After a commit, Reset rolls the record back as in a form.`,
     changeset: `Cancel drops the draft; the changeset never saw it. After a commit, Reset rolls the changeset back as in a form.`,
+    native: `Cancel drops the draft; the model never saw it. After a commit, Reset restores Formwright's baseline as in a form.`,
   },
 }
 
@@ -108,6 +114,7 @@ const STEPS: Record<Mode, Record<Scenario, Step[]>> = {
 const LANES: Record<Layer, Record<'pending' | 'saved', string>> = {
   'warp-drive': { pending: 'Record (unsaved)', saved: 'Server' },
   changeset: { pending: 'Changeset', saved: 'Model' },
+  native: { pending: 'Model', saved: 'Baseline (last save)' },
 }
 
 const PLAY_EVERY_MS = 2000
@@ -118,7 +125,7 @@ const keyed = (key: string) => [key]
 
 /**
  * An animated walk through what commit and rollback do to a value, in a form or inline, with
- * a WarpDrive record or an ember-changeset changeset as the model.
+ * a WarpDrive record, an ember-changeset changeset, or a plain object (native rollback).
  */
 export class CommitFlow extends Component {
   @tracked mode: Mode = 'form'
@@ -153,7 +160,11 @@ export class CommitFlow extends Component {
       return {
         name,
         label: labels[name],
-        value: step.values[name],
+        // Natively the "pending" lane is the model itself, so it always holds a value.
+        value:
+          this.layer === 'native' && name === 'pending'
+            ? (step.values.pending ?? step.values.saved)
+            : step.values[name],
         key: `${this.mode}-${this.scenario}-${this.index}`,
         active: step.from === name || step.to === name,
         arrow: next === undefined ? null : forward ? 'forward' : back ? 'back' : 'idle',
@@ -275,6 +286,12 @@ export class CommitFlow extends Component {
             data-test-flow-layer="changeset"
             {{on "click" (fn this.setLayer "changeset")}}
           >ember-changeset</button>
+          <button
+            type="button"
+            aria-pressed={{if (eq this.layer "native") "true" "false"}}
+            data-test-flow-layer="native"
+            {{on "click" (fn this.setLayer "native")}}
+          >Native</button>
         </div>
         <div class="flow-toggle" role="group" aria-label="Scenario">
           <button

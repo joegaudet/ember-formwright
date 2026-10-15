@@ -1,4 +1,5 @@
 import { Page } from 'kolay/components'
+import { headingAnchors } from '../heading-anchors.ts'
 
 <template>
   <Page>
@@ -9,7 +10,7 @@ import { Page } from 'kolay/components'
       <div class="guide-error" role="alert">{{String error}}</div>
     </:error>
     <:success as |Prose|>
-      <article class="guide-prose"><Prose /></article>
+      <article class="guide-prose" {{headingAnchors}}><Prose /></article>
     </:success>
   </Page>
 </template>

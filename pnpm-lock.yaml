@@ -174,6 +174,9 @@ importers:
       ember-load-initializers:
         specifier: ^3.0.1
         version: 3.0.1(ember-source@7.3.1(@glimmer/component@2.1.1))
+      ember-modifier:
+        specifier: ^4.3.0
+        version: 4.3.0(@babel/core@7.29.7)
       ember-primitives:
         specifier: ^0.60.1
         version: 0.60.1(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@ember/test-waiters@4.1.2)(@glimmer/component@2.1.1)(@glint/template@1.9.0)(ember-modifier@4.3.0(@babel/core@7.29.7))(ember-resources@7.1.0(@glimmer/component@2.1.1)(@glint/template@1.9.0))

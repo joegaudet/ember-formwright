@@ -58,10 +58,17 @@ change writes through the adapter at once. Inline, the field keeps a draft until
 with ✓ or Enter, and ✕ or Esc drops it. Submit saves the pending changes, and Reset rolls them
 back.
 
-The data layer decides where pending changes live. A WarpDrive record tracks its own dirty
-attributes, so anything else showing the record sees an edit straight away. A changeset holds
-the edits itself, and the model sees nothing until it saves. Pick a mode and a data layer, then
-press **Play** or step through.
+The data layer decides where pending changes live and who rolls them back:
+
+- **WarpDrive:** the record tracks its own dirty attributes, so anything else showing the
+  record sees an edit straight away. Reset calls `rollbackAttributes()`.
+- **ember-changeset:** the changeset holds the edits, and the model sees nothing until it
+  saves. Reset calls `changeset.rollback()`.
+- **Native:** with a plain object or `@tracked` class, edits go straight to the model and
+  Formwright keeps a baseline: the values the fields had when they rendered or last saved.
+  Reset writes the baseline back, and a successful submit records a new one.
+
+Pick a mode and a data layer, then press **Play** or step through.
 
 <CommitFlow />
 

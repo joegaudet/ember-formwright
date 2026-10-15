@@ -122,7 +122,14 @@
     <main class="container">
       <section id="why">
         <p class="eyebrow">Why</p>
-        <h2>A field is ten things. You should write one.</h2>
+        <h2>
+          A field is ten things. You should write one.<a
+            class="section-link"
+            href="#why"
+            aria-label="Link to “A field is ten things. You should write one.”"
+            >#</a
+          >
+        </h2>
         <p>
           An accessible field needs a label tied to its input, a hint and an error region the input
           is described by, <code>aria-invalid</code> at the right moment, a value bound one way and
@@ -212,7 +219,14 @@
 
       <section id="usage">
         <p class="eyebrow">Usage</p>
-        <h2>Strict mode, named args, nothing to register</h2>
+        <h2>
+          Strict mode, named args, nothing to register<a
+            class="section-link"
+            href="#usage"
+            aria-label="Link to “Strict mode, named args, nothing to register”"
+            >#</a
+          >
+        </h2>
         <p>
           Import <code>Form</code> into a <code>.gts</code> template. Fields, nested forms and
           buttons come from the form itself, already bound to it.
@@ -252,7 +266,14 @@ import '@ember-formwright/ember/theme.css' // optional
 
       <section id="types">
         <p class="eyebrow">Types</p>
-        <h2>Typed by your model, down to the nested path</h2>
+        <h2>
+          Typed by your model, down to the nested path<a
+            class="section-link"
+            href="#types"
+            aria-label="Link to “Typed by your model, down to the nested path”"
+            >#</a
+          >
+        </h2>
         <p>
           With Glint, a form is typed by its <code>@model</code>. Every <code>@for</code> must be a
           real path, nested forms check against their own model, and each field's value and
@@ -308,7 +329,14 @@ order-form.gts(21,17): error TS2322: Type '"email"' is not
 
       <section id="validation">
         <p class="eyebrow">Validation</p>
-        <h2>Bring the schema you already have</h2>
+        <h2>
+          Bring the schema you already have<a
+            class="section-link"
+            href="#validation"
+            aria-label="Link to “Bring the schema you already have”"
+            >#</a
+          >
+        </h2>
         <p>
           Validation runs on submit. After a failed submit it re-runs on every change, so errors
           clear as they are fixed. Nested forms validate with their root.
@@ -336,7 +364,14 @@ const validator = (user: User) =&gt; ({
 
       <section id="changesets">
         <p class="eyebrow">Changesets</p>
-        <h2>Edits stay private until they save</h2>
+        <h2>
+          Edits stay private until they save<a
+            class="section-link"
+            href="#changesets"
+            aria-label="Link to “Edits stay private until they save”"
+            >#</a
+          >
+        </h2>
         <p>
           Hand the form an ember-changeset changeset and the model only changes on a valid submit.
           Changeset validations show on their fields, reset drops the pending edits, and a failed
@@ -363,7 +398,14 @@ export const UserValidations = {
 
       <section id="testing">
         <p class="eyebrow">Testing</p>
-        <h2>Harnesses: tests that read like your users</h2>
+        <h2>
+          Harnesses: tests that read like your users<a
+            class="section-link"
+            href="#testing"
+            aria-label="Link to “Harnesses: tests that read like your users”"
+            >#</a
+          >
+        </h2>
         <p>
           Describe a form once as a harness class. Decorators declare its fields, each with the
           harness for its control, and its nested forms. Every harness is created once and looks up
@@ -450,7 +492,14 @@ export class SignupForm extends FormHarness {
 
       <section id="adapters">
         <p class="eyebrow">Adapters</p>
-        <h2>Small packages for the rest of your stack</h2>
+        <h2>
+          Small packages for the rest of your stack<a
+            class="section-link"
+            href="#adapters"
+            aria-label="Link to “Small packages for the rest of your stack”"
+            >#</a
+          >
+        </h2>
         <p>
           The core edits any object. Each adapter is a few dozen lines, so it is easy to read, and
           easy to write your own.
@@ -513,7 +562,7 @@ setDefaultAdapter(warpDriveAdapter)</code></pre>
 
       <section id="demo">
         <p class="eyebrow">Demo</p>
-        <h2>Try it</h2>
+        <h2>Try it<a class="section-link" href="#demo" aria-label="Link to “Try it”">#</a></h2>
         <p>
           This is the real addon, built from the repository's test app. Submit it empty, fix the
           errors one by one, open the inline editor, and watch the model change on the right.
@@ -528,7 +577,14 @@ setDefaultAdapter(warpDriveAdapter)</code></pre>
 
       <section id="migrating">
         <p class="eyebrow">Coming from ember-foxy-forms</p>
-        <h2>Formwright is its successor</h2>
+        <h2>
+          Formwright is its successor<a
+            class="section-link"
+            href="#migrating"
+            aria-label="Link to “Formwright is its successor”"
+            >#</a
+          >
+        </h2>
         <p>
           Same idea, rebuilt for modern Ember: a v2 addon in TypeScript with
           <code>.gts</code> components, named arguments only, and no runtime dependencies beyond

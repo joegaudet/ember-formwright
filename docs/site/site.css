@@ -528,3 +528,29 @@ td img {
   font-weight: 700;
   vertical-align: middle;
 }
+
+/* The "#" link a section heading gets for sharing; shown on hover or focus. */
+.section-link {
+  margin-left: 0.4rem;
+  color: var(--pico-muted-color);
+  text-decoration: none;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+h2:hover > .section-link,
+.section-link:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .section-link {
+    opacity: 0.6;
+  }
+}
+
+/* Anchor jumps land below the sticky header. */
+html {
+  scroll-padding-top: 5rem;
+}
