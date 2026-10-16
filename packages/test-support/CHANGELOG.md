@@ -1,5 +1,13 @@
 # @ember-formwright/test-support
 
+## 1.2.0
+
+### Minor Changes
+
+- 795950d: `f.state.status` names the form's state: `clean`, `dirty`, `invalid` (a submit failed
+  validation) or `submitting`. The `<form>` (and a nested form's `<fieldset>`) carries it as
+  `data-status`, and `FormHarness` reads it as `status`. `FormStatus` is exported for typing it.
+
 ## 1.1.0
 
 No changes in this release.

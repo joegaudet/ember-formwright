@@ -1,6 +1,6 @@
 {
   "name": "@ember-formwright/test-support",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Form harnesses and normalized data-test selectors for testing Formwright forms.",
   "keywords": [
     "ember-addon",

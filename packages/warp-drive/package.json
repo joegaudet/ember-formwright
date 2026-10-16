@@ -1,6 +1,6 @@
 {
   "name": "@ember-formwright/warp-drive",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Formwright model adapter for WarpDrive / ember-data records: save, rollback, dirty state and server errors.",
   "keywords": [
     "ember-addon",
