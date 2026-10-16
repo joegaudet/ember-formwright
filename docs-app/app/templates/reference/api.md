@@ -8,6 +8,8 @@ Generated from the packages' TypeScript declarations.
 
 <APIDocs @package="@ember-formwright/ember" @module="declarations/components/form" @name="FormState" />
 
+<APIDocs @package="@ember-formwright/ember" @module="declarations/components/form" @name="FormStatus" />
+
 ## Field
 
 <APIDocs @package="@ember-formwright/ember" @module="declarations/components/field" @name="FieldSignature" />

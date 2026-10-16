@@ -20,9 +20,20 @@ import Field, { type FieldSignature } from './field.gts'
 import Button from './button.gts'
 import Errors from './errors.gts'
 
+/**
+ * Where a form is in its life cycle:
+ *
+ * - `clean`: every field matches its baseline (the value it rendered with, or last saved)
+ * - `dirty`: a field differs from its baseline
+ * - `invalid`: a submit failed validation; the form re-validates on every change
+ * - `submitting`: the save is in flight
+ */
+export type FormStatus = 'clean' | 'dirty' | 'invalid' | 'submitting'
+
 /** What `<Form as |f|>` exposes as `f.state`. */
 export interface FormState<M extends object = object> {
   readonly model: M
+  readonly status: FormStatus
   readonly isDirty: boolean
   readonly isSubmitting: boolean
   readonly isValid: boolean
@@ -212,6 +223,13 @@ export default class Form<M extends object = object>
   get isDirty(): boolean {
     void this.version
     return this.fields.some(f => this.isFieldDirty(f.path)) || this.children.some(c => c.isDirty)
+  }
+
+  /** A nested form shares its root's submit, so it reports the root's submitting and failed state. */
+  get status(): FormStatus {
+    if (this.root.isSubmitting) return 'submitting'
+    if (this.root.hasFailedSubmit && !this.isValid) return 'invalid'
+    return this.isDirty ? 'dirty' : 'clean'
   }
 
   get isValid(): boolean {
@@ -453,6 +471,7 @@ export default class Form<M extends object = object>
         class="fw-form fw-form--nested"
         disabled={{this.disabled}}
         data-test-fw-form={{this.name}}
+        data-status={{this.status}}
         ...attributes
         {{this.capture}}
       >
@@ -476,6 +495,7 @@ export default class Form<M extends object = object>
         data-test-fw-form={{this.name}}
         data-submitting={{if this.isSubmitting ""}}
         data-dirty={{if this.isDirty ""}}
+        data-status={{this.status}}
         ...attributes
         {{this.capture}}
         {{on "submit" this.onSubmit}}

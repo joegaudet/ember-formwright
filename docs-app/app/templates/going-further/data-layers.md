@@ -43,39 +43,8 @@ setDefaultAdapter(warpDriveAdapter)
 
 ## Changesets (ember-changeset)
 
-```bash
-npm install @ember-formwright/changeset ember-changeset
-```
-
-Pass a changeset as the model. Edits stay in the changeset, and the object underneath
-changes only when a valid submit applies them.
-
-<Example @name="data-changeset" @title="Editing through a changeset" />
-
-| The form does      | The changeset gets                                                       |
-| ------------------ | ------------------------------------------------------------------------ |
-| read / write       | through the changeset, never the model                                   |
-| validate           | `changeset.validate()`, with `@validator={{changesetValidator}}`         |
-| submit             | `changeset.save()`: applies the changes, then calls the model's `save()` |
-| reset              | `changeset.rollback()`                                                   |
-| save a nested form | when its own changeset `isDirty`                                         |
-
-Use `changesetValidator` whenever the changeset has validations. An invalid changeset's own
-`save()` skips the changes but still saves the model, so `changesetAdapter` refuses to save
-one. The validator stops the submit first and shows each message on its field.
-
-Build the changeset with a validation map: `{{changeset @user UserValidations}}` with
-`ember-changeset-validations`, or `Changeset(model, lookupValidator(map), map)`. A changeset
-built from a single validator function only checks the fields that changed, so an empty
-field nobody touched passes.
-
-If the model's `save()` fails (a WarpDrive record and a 422, say), the adapter puts the
-model's values back and the edits stay in the changeset, ready to retry or reset.
-
-A nested form's `@model` is either its own changeset, saved with the root when dirty, or part
-of the parent's (`@model={{@model.address}}`). Edits to a part land in the parent changeset,
-which saves and rolls them back with everything else. For a nested object outside the
-changeset, give that form its own `@adapter`.
+`@ember-formwright/changeset` edits through an ember-changeset changeset, so the model
+changes only on a valid submit. See [Changesets](../going-further/changesets.md).
 
 ## Rolling back
 

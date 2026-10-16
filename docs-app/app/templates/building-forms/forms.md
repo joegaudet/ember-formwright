@@ -35,6 +35,25 @@ never reach the model. A field can opt in or out with its own `@requireConfirm`.
 
 <Example @name="require-confirm" @title="Apply or cancel each change" />
 
+## States
+
+A form is always in one of four states. Read it as `f.state.status`, or as `data-status` on
+the `<form>` for CSS and tests.
+
+| Status       | When                                                                         | Leaves when                                   |
+| ------------ | ---------------------------------------------------------------------------- | --------------------------------------------- |
+| `clean`      | Every field matches its baseline: the value it rendered with, or last saved. | A value changes.                              |
+| `dirty`      | A field differs from its baseline.                                           | You submit, reset, or put the value back.     |
+| `invalid`    | A submit failed validation. The form re-validates on every change.           | The errors are fixed (`dirty`), or you reset. |
+| `submitting` | The save is in flight, and `<f.Submit>` is busy.                             | It saves (`clean`), or it fails (`dirty`).    |
+
+<Example @name="form-status" @title="Watch the status change" />
+
+The same machine runs with every data layer; only where the pending changes live differs. The
+[Changesets](../going-further/changesets.md#one-state-machine-three-data-layers) page animates it
+with the default adapter, WarpDrive and ember-changeset. A nested form reports its own status
+on its fieldset, and shares its root's `submitting` and `invalid`.
+
 ## Lifecycle hooks
 
 Hooks let your app react to what the form does. Submit the example empty, then with an email,

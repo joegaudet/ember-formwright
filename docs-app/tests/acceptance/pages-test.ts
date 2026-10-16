@@ -13,6 +13,7 @@ const PAGES = [
   'controls/built-in-controls.md',
   'controls/custom-controls.md',
   'going-further/data-layers.md',
+  'going-further/changesets.md',
   'going-further/theming.md',
   'going-further/testing.md',
   'reference/api.md',
@@ -34,6 +35,10 @@ module('Acceptance | guide pages', function (hooks) {
             .replace(/\s+/g, ' ')
             .slice(0, 600),
         )
+      // Every section heading links to itself, so it can be shared.
+      for (const heading of document.querySelectorAll('.guide-prose h2[id]')) {
+        assert.dom(heading.querySelector('a.heading-anchor')).hasAttribute('href', `#${heading.id}`)
+      }
       // Every <Example> on the page found its file.
       for (const example of document.querySelectorAll('[data-test-example]')) {
         assert

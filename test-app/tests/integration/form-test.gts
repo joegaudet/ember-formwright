@@ -272,6 +272,92 @@ module('Integration | Form', function (hooks) {
     assert.strictEqual(user.name, 'Grace')
   })
 
+  test('status walks the form state machine: clean, dirty, invalid, submitting', async function (assert) {
+    const user = new User()
+    let finish!: () => void
+    const onSubmit = () => new Promise<void>(r => (finish = r))
+    const validator = (u: User): ErrorMap<User> => (u.name ? {} : { name: ['Name is required'] })
+
+    await render(
+      <template>
+        <Form @model={{user}} @validator={{validator}} @onSubmit={{onSubmit}} as |f|>
+          <f.Field @for="name" @label="Name" />
+          <span data-test-status>{{f.state.status}}</span>
+          <f.Submit />
+          <f.Reset />
+        </Form>
+      </template>,
+    )
+
+    assert.dom('[data-test-status]').hasText('clean')
+    assert.dom('form').hasAttribute('data-status', 'clean')
+    assert.strictEqual(ui.status, 'clean')
+
+    await ui.name.fillIn('')
+    assert.dom('[data-test-status]').hasText('dirty')
+
+    await ui.submit()
+    assert.dom('[data-test-status]').hasText('invalid', 'a failed validation')
+    assert.dom('form').hasAttribute('data-status', 'invalid')
+    assert.strictEqual(ui.status, 'invalid')
+
+    await ui.name.fillIn('Grace')
+    assert.dom('[data-test-status]').hasText('dirty', 'fixing the error leaves it dirty')
+
+    click('[data-test-fw-submit]')
+    await new Promise(r => setTimeout(r, 10))
+    assert.dom('[data-test-status]').hasText('submitting')
+    finish()
+    await settled()
+    assert.dom('[data-test-status]').hasText('clean', 'saved: the new baseline')
+
+    await ui.name.fillIn('Hopper')
+    await ui.reset()
+    assert.dom('[data-test-status]').hasText('clean', 'reset returns to clean')
+  })
+
+  test('a failed save leaves the form dirty', async function (assert) {
+    const user = new User()
+    const onSubmit = () => Promise.reject(new Error('422'))
+    const failedSubmit = () => {}
+
+    await render(
+      <template>
+        <Form @model={{user}} @onSubmit={{onSubmit}} @failedSubmit={{failedSubmit}} as |f|>
+          <f.Field @for="name" @label="Name" />
+          <span data-test-status>{{f.state.status}}</span>
+        </Form>
+      </template>,
+    )
+
+    await ui.name.fillIn('Grace')
+    await ui.submit()
+    assert.dom('[data-test-status]').hasText('dirty')
+  })
+
+  test('a nested form reports its own status on its fieldset', async function (assert) {
+    const model = { name: 'Ada', address: { city: 'Rotterdam' } }
+
+    await render(
+      <template>
+        <Form @model={{model}} as |f|>
+          <f.Field @for="name" @label="Name" />
+          <f.Form @model={{model.address}} @name="address" as |a|>
+            <a.Field @for="city" @label="City" />
+          </f.Form>
+        </Form>
+      </template>,
+    )
+
+    await ui.name.fillIn('Grace')
+    assert.dom('fieldset').hasAttribute('data-status', 'clean', 'the nested form has no changes')
+    assert.strictEqual(ui.address.status, 'clean')
+    assert.strictEqual(ui.status, 'dirty')
+
+    await ui.address.city.fillIn('Delft')
+    assert.dom('fieldset').hasAttribute('data-status', 'dirty')
+  })
+
   test('onChange reports each committed value', async function (assert) {
     const changes: Array<[string, unknown]> = []
     const user = new User()

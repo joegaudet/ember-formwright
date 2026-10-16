@@ -70,7 +70,7 @@ standard decorators, write `accessor`.
 
 A harness pointed at the wrong control fails with a message that says so.
 
-A `FormHarness` has `submit()`, `reset()`, `errors` (form-level), `isDirty` and
+A `FormHarness` has `submit()`, `reset()`, `errors` (form-level), `status`, `isDirty` and
 `isSubmitting`, and `field(path, Class)` / `form(name, Class)` for one-off lookups.
 
 ## Custom controls

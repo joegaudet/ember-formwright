@@ -55,12 +55,13 @@
           </li>
         </ul>
         <ul>
-          <li class="wide-only"><a href="#why">Why</a></li>
-          <li class="wide-only"><a href="#types">Types</a></li>
+          <li class="wide-only roomy-only"><a href="#why">Why</a></li>
+          <li class="wide-only roomy-only"><a href="#types">Types</a></li>
           <li><a href="#validation">Validation</a></li>
           <li><a href="guide/">Guide</a></li>
-          <li class="wide-only"><a href="#testing">Testing</a></li>
-          <li class="wide-only"><a href="#adapters">Adapters</a></li>
+          <li class="wide-only"><a href="#states">States</a></li>
+          <li class="wide-only roomy-only"><a href="#testing">Testing</a></li>
+          <li class="wide-only roomy-only"><a href="#adapters">Adapters</a></li>
           <li class="wide-only"><a href="#demo">Demo</a></li>
           <li><a href="https://github.com/joegaudet/ember-formwright">GitHub</a></li>
         </ul>
@@ -121,7 +122,14 @@
     <main class="container">
       <section id="why">
         <p class="eyebrow">Why</p>
-        <h2>A field is ten things. You should write one.</h2>
+        <h2>
+          A field is ten things. You should write one.<a
+            class="section-link"
+            href="#why"
+            aria-label="Link to “A field is ten things. You should write one.”"
+            >#</a
+          >
+        </h2>
         <p>
           An accessible field needs a label tied to its input, a hint and an error region the input
           is described by, <code>aria-invalid</code> at the right moment, a value bound one way and
@@ -211,7 +219,14 @@
 
       <section id="usage">
         <p class="eyebrow">Usage</p>
-        <h2>Strict mode, named args, nothing to register</h2>
+        <h2>
+          Strict mode, named args, nothing to register<a
+            class="section-link"
+            href="#usage"
+            aria-label="Link to “Strict mode, named args, nothing to register”"
+            >#</a
+          >
+        </h2>
         <p>
           Import <code>Form</code> into a <code>.gts</code> template. Fields, nested forms and
           buttons come from the form itself, already bound to it.
@@ -251,7 +266,14 @@ import '@ember-formwright/ember/theme.css' // optional
 
       <section id="types">
         <p class="eyebrow">Types</p>
-        <h2>Typed by your model, down to the nested path</h2>
+        <h2>
+          Typed by your model, down to the nested path<a
+            class="section-link"
+            href="#types"
+            aria-label="Link to “Typed by your model, down to the nested path”"
+            >#</a
+          >
+        </h2>
         <p>
           With Glint, a form is typed by its <code>@model</code>. Every <code>@for</code> must be a
           real path, nested forms check against their own model, and each field's value and
@@ -307,7 +329,14 @@ order-form.gts(21,17): error TS2322: Type '"email"' is not
 
       <section id="validation">
         <p class="eyebrow">Validation</p>
-        <h2>Bring the schema you already have</h2>
+        <h2>
+          Bring the schema you already have<a
+            class="section-link"
+            href="#validation"
+            aria-label="Link to “Bring the schema you already have”"
+            >#</a
+          >
+        </h2>
         <p>
           Validation runs on submit. After a failed submit it re-runs on every change, so errors
           clear as they are fixed. Nested forms validate with their root.
@@ -333,9 +362,137 @@ const validator = (user: User) =&gt; ({
         </div>
       </section>
 
+      <section id="states">
+        <p class="eyebrow">States</p>
+        <h2>
+          One state machine, any data layer<a
+            class="section-link"
+            href="#states"
+            aria-label="Link to “One state machine, any data layer”"
+            >#</a
+          >
+        </h2>
+        <p>
+          Every form is <code>clean</code>, <code>dirty</code>, <code>invalid</code> or
+          <code>submitting</code>. Read it as <code>f.state.status</code>, style it with
+          <code>[data-status]</code>, assert it with the harness. Plain objects, WarpDrive records
+          and ember-changeset changesets all run the same machine; only where pending changes live
+          differs.
+          <a href="guide/going-further/changesets.md#one-state-machine-three-data-layers"
+            >Watch it run, step by step.</a
+          >
+        </p>
+        <ul class="state-machine" aria-label="The form's transitions">
+          <li>
+            <span>Save</span> <code>clean</code> → <code>dirty</code> → <code>submitting</code> →
+            <code>clean</code>
+          </li>
+          <li>
+            <span>Invalid</span> <code>dirty</code> → <code>invalid</code> → (fix) →
+            <code>dirty</code>
+          </li>
+          <li><span>Save fails</span> <code>submitting</code> → <code>dirty</code></li>
+          <li>
+            <span>Reset</span> <code>dirty</code> or <code>invalid</code> → <code>clean</code>
+          </li>
+        </ul>
+        <div class="overflow-auto">
+          <table class="striped">
+            <thead>
+              <tr>
+                <th scope="col">You</th>
+                <th scope="col">Status</th>
+                <th scope="col">Default (plain objects)</th>
+                <th scope="col">WarpDrive</th>
+                <th scope="col">ember-changeset</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Edit a field</th>
+                <td><code>dirty</code></td>
+                <td>The model changes; the form keeps each field's baseline.</td>
+                <td>The record's attribute changes and it is dirty.</td>
+                <td>The changeset holds the edit; the model is untouched.</td>
+              </tr>
+              <tr>
+                <th scope="row">Submit, invalid</th>
+                <td><code>invalid</code></td>
+                <td colspan="3">
+                  Nothing saves. Errors show on their fields, focus moves to the first, and the form
+                  re-validates on every change.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Submit, valid</th>
+                <td><code>submitting</code> → <code>clean</code></td>
+                <td><code>model.save()</code>, then a new baseline.</td>
+                <td><code>record.save()</code>.</td>
+                <td><code>changeset.save()</code> applies, then saves the model.</td>
+              </tr>
+              <tr>
+                <th scope="row">The save fails</th>
+                <td><code>dirty</code></td>
+                <td>The model keeps the edit; the baseline does not move.</td>
+                <td>Server errors show on their fields.</td>
+                <td>The model is put back; the edit stays in the changeset.</td>
+              </tr>
+              <tr>
+                <th scope="row">Reset</th>
+                <td><code>clean</code></td>
+                <td>The baseline is written back.</td>
+                <td><code>record.rollbackAttributes()</code>.</td>
+                <td><code>changeset.rollback()</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="changesets">
+        <p class="eyebrow">Changesets</p>
+        <h2>
+          Edits stay private until they save<a
+            class="section-link"
+            href="#changesets"
+            aria-label="Link to “Edits stay private until they save”"
+            >#</a
+          >
+        </h2>
+        <p>
+          Hand the form an ember-changeset changeset and the model only changes on a valid submit.
+          Changeset validations show on their fields, reset drops the pending edits, and a failed
+          save leaves the model as it was.
+          <a href="guide/going-further/changesets.md">Set it up in three steps</a>, then
+          <a href="guide/going-further/changesets.md#one-state-machine-three-data-layers"
+            >watch commit and rollback play out</a
+          >, inline and in a form, with WarpDrive or ember-changeset.
+        </p>
+        <div class="grid">
+          <pre><code class="language-bash">npm i @ember-formwright/changeset ember-changeset</code></pre>
+          <pre><code class="language-typescript">// One validator per field: true, or the message
+export const UserValidations = {
+  email: (_key: string, value: unknown) =&gt;
+    String(value).includes('@') || 'Enter an email',
+}</code></pre>
+        </div>
+        <pre><code class="language-handlebars">&lt;Form @model={{changeset @user UserValidations}}
+  @adapter={{changesetAdapter}} @validator={{changesetValidator}} as |f|&gt;
+  &lt;f.Field @for="email" @label="Email" /&gt;
+  &lt;f.Submit /&gt; &lt;f.Reset /&gt;
+&lt;/Form&gt;</code></pre>
+      </section>
+
       <section id="testing">
         <p class="eyebrow">Testing</p>
-        <h2>Harnesses: tests that read like your users</h2>
+        <h2>
+          Harnesses: tests that read like your users<a
+            class="section-link"
+            href="#testing"
+            aria-label="Link to “Harnesses: tests that read like your users”"
+            >#</a
+          >
+        </h2>
         <p>
           Describe a form once as a harness class. Decorators declare its fields, each with the
           harness for its control, and its nested forms. Every harness is created once and looks up
@@ -422,7 +579,14 @@ export class SignupForm extends FormHarness {
 
       <section id="adapters">
         <p class="eyebrow">Adapters</p>
-        <h2>Small packages for the rest of your stack</h2>
+        <h2>
+          Small packages for the rest of your stack<a
+            class="section-link"
+            href="#adapters"
+            aria-label="Link to “Small packages for the rest of your stack”"
+            >#</a
+          >
+        </h2>
         <p>
           The core edits any object. Each adapter is a few dozen lines, so it is easy to read, and
           easy to write your own.
@@ -478,11 +642,6 @@ import { warpDriveAdapter } from '@ember-formwright/warp-drive'
 
 setDefaultAdapter(warpDriveAdapter)</code></pre>
         </div>
-        <pre><code class="language-handlebars">{{! edit through a changeset; the model changes on submit }}
-&lt;Form @model={{changeset @user UserValidations}}
-  @adapter={{changesetAdapter}} @validator={{changesetValidator}} as |f|&gt;
-  &lt;f.Field @for="email" @label="Email" /&gt;
-&lt;/Form&gt;</code></pre>
         <pre><code class="language-handlebars">{{! options straight from a real-enums class }}
 &lt;f.Field @for="state" @control="radio" @label="State"
   @options={{enumOptions OrderState except=(array OrderState.Cancelled)}} /&gt;</code></pre>
@@ -490,7 +649,7 @@ setDefaultAdapter(warpDriveAdapter)</code></pre>
 
       <section id="demo">
         <p class="eyebrow">Demo</p>
-        <h2>Try it</h2>
+        <h2>Try it<a class="section-link" href="#demo" aria-label="Link to “Try it”">#</a></h2>
         <p>
           This is the real addon, built from the repository's test app. Submit it empty, fix the
           errors one by one, open the inline editor, and watch the model change on the right.
@@ -505,7 +664,14 @@ setDefaultAdapter(warpDriveAdapter)</code></pre>
 
       <section id="migrating">
         <p class="eyebrow">Coming from ember-foxy-forms</p>
-        <h2>Formwright is its successor</h2>
+        <h2>
+          Formwright is its successor<a
+            class="section-link"
+            href="#migrating"
+            aria-label="Link to “Formwright is its successor”"
+            >#</a
+          >
+        </h2>
         <p>
           Same idea, rebuilt for modern Ember: a v2 addon in TypeScript with
           <code>.gts</code> components, named arguments only, and no runtime dependencies beyond
