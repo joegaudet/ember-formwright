@@ -568,6 +568,26 @@ html {
   gap: 0.6rem;
 }
 
+.example-preview .status-badge {
+  display: inline-block;
+  padding: 0.05rem 0.55rem;
+  border-radius: 999px;
+  font: 600 0.82rem var(--g-mono);
+  color: var(--fw-text, var(--g-fg));
+  background: var(--g-accent-soft);
+}
+
+.example-preview .status-badge[data-status='invalid'] {
+  background: color-mix(in srgb, var(--g-coral) 18%, transparent);
+}
+
+.example-preview .switch {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
 .example-preview .status {
   min-height: 1.5em;
   margin: 0;
@@ -741,6 +761,66 @@ html {
   box-shadow: 0 0 0 3px var(--g-accent-soft);
 }
 
+.flow-ui-input.is-invalid {
+  border-color: var(--g-coral);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-coral) 18%, transparent);
+}
+
+.flow-ui-error {
+  flex-basis: 100%;
+  color: var(--g-coral);
+  font-size: 0.85rem;
+  animation: flow-arrive 0.4s ease-out;
+}
+
+/* The form's state machine: one pill per status, the current one lit. */
+.flow-machine {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.flow-states {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+}
+
+.flow-state {
+  --state-color: var(--g-accent);
+  text-align: center;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid var(--g-border);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--g-muted);
+  background: var(--g-bg);
+  transition:
+    color 0.3s,
+    border-color 0.3s,
+    background 0.3s;
+}
+
+.flow-state.is-invalid {
+  --state-color: var(--g-coral);
+}
+
+.flow-state[aria-current='step'] {
+  color: var(--g-fg);
+  border-color: var(--state-color);
+  background: color-mix(in srgb, var(--state-color) 16%, var(--g-bg));
+  animation: flow-enter-state 0.6s ease-out;
+}
+
+.flow-status {
+  font: 0.78rem var(--g-mono);
+  color: var(--g-muted);
+  overflow-wrap: anywhere;
+}
+
 .flow-lanes {
   list-style: none;
   margin: 0;
@@ -871,6 +951,15 @@ html {
   }
 }
 
+@keyframes flow-enter-state {
+  from {
+    box-shadow: 0 0 0 0 var(--state-color);
+  }
+  to {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
 @keyframes flow-arrive {
   from {
     opacity: 0;
@@ -898,6 +987,10 @@ html {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
+  }
+
+  .flow-states {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .flow-ui-actions {
@@ -980,7 +1073,9 @@ html {
   .flow-arrow,
   .flow-typed,
   .flow-ui-input::after,
-  .flow-ui-button.is-pressed {
+  .flow-ui-button.is-pressed,
+  .flow-ui-error,
+  .flow-state[aria-current='step'] {
     animation: none;
   }
 }

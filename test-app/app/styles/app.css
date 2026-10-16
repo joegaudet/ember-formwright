@@ -69,6 +69,19 @@ body {
   font-size: 0.9rem;
 }
 
+/* f.state.status, shown so the demo's state machine is visible. */
+.status-machine {
+  margin-left: auto;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: color-mix(in srgb, var(--fw-accent) 14%, transparent);
+}
+
+.status-machine[data-status='invalid'] {
+  background: color-mix(in srgb, var(--fw-error) 18%, transparent);
+}
+
 .model {
   margin: 0;
   font:

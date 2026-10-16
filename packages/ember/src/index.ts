@@ -1,4 +1,9 @@
-export { default as Form, type FormSignature, type FormState } from './components/form.gts'
+export {
+  default as Form,
+  type FormSignature,
+  type FormState,
+  type FormStatus,
+} from './components/form.gts'
 export { default as Field, type FieldSignature } from './components/field.gts'
 export { default as Button, type ButtonSignature } from './components/button.gts'
 export { default as Errors } from './components/errors.gts'

@@ -121,6 +121,7 @@ class Demo extends Component {
                 this.saved
               }}Saved ✓{{/if}}
             </span>
+            <code class="status-machine" data-status={{f.state.status}}>{{f.state.status}}</code>
           </div>
         </Form>
       </section>

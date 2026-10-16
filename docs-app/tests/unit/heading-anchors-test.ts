@@ -23,13 +23,13 @@ module('Unit | linkHeadings', function () {
     const element = prose()
     const scrolled: string[] = []
     element.querySelector('#more')!.scrollIntoView = () => scrolled.push('more')
-    linkHeadings(element, '#more')
+    assert.true(linkHeadings(element, '#more'), 'it found the target')
     assert.deepEqual(scrolled, ['more'])
   })
 
   test('ignores a hash that names nothing, and running twice adds one link', function (assert) {
     const element = prose()
-    linkHeadings(element, '#nothing')
+    assert.false(linkHeadings(element, '#nothing'), 'not there (yet)')
     linkHeadings(element, '')
     assert.strictEqual(element.querySelectorAll('a.heading-anchor').length, 2)
   })

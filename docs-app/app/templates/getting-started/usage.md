@@ -41,11 +41,11 @@ half-edited model behind. Pass `@resetOnDestroy={{false}}` to keep them.
 
 ## What a form yields
 
-| Yielded               |                                                                                               |
-| --------------------- | --------------------------------------------------------------------------------------------- |
-| `f.Field`             | A field bound to this form.                                                                   |
-| `f.Form`              | A nested form. See [Nested forms](../building-forms/nested-forms.md).                         |
-| `f.Submit`, `f.Reset` | Buttons. Pass your own text as the block.                                                     |
-| `f.Button`            | A plain button that shows a busy state while the promise returned by `@onClick` is pending.   |
-| `f.Errors`            | Form-level errors, plus any error no field shows.                                             |
-| `f.state`             | `isDirty`, `isSubmitting`, `isValid`, `errors`, `model`, `submit()`, `reset()`, `validate()`. |
+| Yielded               |                                                                                                                                                          |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `f.Field`             | A field bound to this form.                                                                                                                              |
+| `f.Form`              | A nested form. See [Nested forms](../building-forms/nested-forms.md).                                                                                    |
+| `f.Submit`, `f.Reset` | Buttons. Pass your own text as the block.                                                                                                                |
+| `f.Button`            | A plain button that shows a busy state while the promise returned by `@onClick` is pending.                                                              |
+| `f.Errors`            | Form-level errors, plus any error no field shows.                                                                                                        |
+| `f.state`             | `status`, `isDirty`, `isSubmitting`, `isValid`, `errors`, `model`, `submit()`, `reset()`, `validate()`. See [States](../building-forms/forms.md#states). |

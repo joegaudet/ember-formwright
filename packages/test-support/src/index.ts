@@ -376,6 +376,11 @@ export class FormHarness {
     return this.root.hasAttribute('data-dirty')
   }
 
+  /** The form's state: `clean`, `dirty`, `invalid` or `submitting`. A nested form has its own. */
+  get status(): 'clean' | 'dirty' | 'invalid' | 'submitting' {
+    return this.element.getAttribute('data-status') as 'clean' | 'dirty' | 'invalid' | 'submitting'
+  }
+
   private get root(): Element {
     return this.element.closest('form') ?? this.element
   }

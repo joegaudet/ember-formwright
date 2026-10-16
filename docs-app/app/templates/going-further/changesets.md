@@ -6,6 +6,42 @@ and saves them. Reset drops them, and the model never sees a half-made edit.
 
 <Example @name="data-changeset" @title="Editing through a changeset" @noModel={{true}} />
 
+## What forms already do, without a changeset
+
+You may not need one. With a plain object or a `@tracked` class, a `<Form>` and its fields
+already keep track of changes and undo them:
+
+- **A baseline per field.** When a field first renders, its form records the value it shows.
+  After a successful submit, the saved values become the new baseline.
+- **One status.** `f.state.status` is `clean`, `dirty`, `invalid` or `submitting`, and
+  `data-status` on the `<form>` mirrors it. See [States](../building-forms/forms.md#states).
+- **Dirty state.** `f.state.isDirty` (and `data-dirty` on the form) is true while any field
+  differs from its baseline. Type the old value back and the field is clean again. Nested forms
+  count toward their parent.
+- **Reset.** `<f.Reset>` writes each changed value back to the model with Ember's `set`, clears
+  the errors, drops any unconfirmed drafts, and resets nested forms too.
+- **Rollback on teardown.** Leaving a page with unsaved changes rolls them back, so a
+  half-edited model never lingers. `@resetOnDestroy={{false}}` keeps them.
+- **Drafts before the model.** With [`@requireConfirm`](../building-forms/forms.md) or
+  `@inline`, a field holds a change as a draft until ✓ or Enter. ✕ or Esc drops it, and the
+  model never sees it.
+- **Nested saves.** Submit saves the root model, then each nested form that has changes,
+  parents before children.
+
+### When a changeset earns its place
+
+- **Other UI must not see unsaved edits.** Without one, a field writes to the model as you type
+  (or as you commit a draft), so anything else showing that model updates too. A changeset
+  keeps every edit to itself until it saves.
+- **Rollback beyond the fields.** Native rollback restores only the paths the form's fields
+  bound, and keeps objects by reference. `changeset.rollback()` drops every pending change.
+- **A failed save.** With a changeset the model goes back to how it was and the edits stay
+  buffered to retry. Natively, the model already holds the edits.
+- **Validations you already have**, written for `ember-changeset-validations`.
+
+[Rolling back](../going-further/data-layers.md#rolling-back) compares the two in detail, and
+the animation below shows both.
+
 ## Setup
 
 1. **Install** the adapter next to ember-changeset:
@@ -51,20 +87,22 @@ and saves them. Reset drops them, and the model never sees a half-made edit.
 | reset              | `changeset.rollback()`                                                   |
 | save a nested form | when its own changeset `isDirty`                                         |
 
-## How commit and rollback flow
+## One state machine, three data layers
 
-A value takes the same path whichever data layer holds the pending changes. In a form, every
-change writes through the adapter at once. Inline, the field keeps a draft until you commit it
+Every form runs the same [state machine](../building-forms/forms.md#states): `clean`, `dirty`,
+`invalid` and `submitting`, read as `f.state.status`. The data layer never changes the states,
+only where pending changes live and who rolls them back. In a form, every change writes
+through the adapter at once. Inline, the field keeps a draft until you commit it
 with ✓ or Enter, and ✕ or Esc drops it. Submit saves the pending changes, and Reset rolls them
 back.
 
-The data layer decides where pending changes live and who rolls them back:
+Here is where each one keeps them:
 
 - **WarpDrive:** the record tracks its own dirty attributes, so anything else showing the
   record sees an edit straight away. Reset calls `rollbackAttributes()`.
 - **ember-changeset:** the changeset holds the edits, and the model sees nothing until it
   saves. Reset calls `changeset.rollback()`.
-- **Native:** with a plain object or `@tracked` class, edits go straight to the model and
+- **Default:** with a plain object or `@tracked` class, edits go straight to the model and
   Formwright keeps a baseline: the values the fields had when they rendered or last saved.
   Reset writes the baseline back, and a successful submit records a new one.
 

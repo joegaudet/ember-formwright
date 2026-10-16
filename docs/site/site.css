@@ -102,6 +102,13 @@
   align-items: center;
 }
 
+/* Below a wide desktop, the nav keeps the sections people jump to most. */
+@media (max-width: 1149px) {
+  .site-nav .roomy-only {
+    display: none;
+  }
+}
+
 /* Keeps the nav on one row at phone width. */
 @media (max-width: 575px) {
   .site-nav .wide-only {
@@ -553,4 +560,23 @@ h2:hover > .section-link,
 /* Anchor jumps land below the sticky header. */
 html {
   scroll-padding-top: 5rem;
+}
+
+/* The form's transitions, one path per line. */
+.state-machine {
+  padding: 0;
+  margin: 1.5rem 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.state-machine li {
+  list-style: none;
+  margin: 0;
+}
+
+.state-machine span {
+  display: inline-block;
+  min-width: 6.5rem;
+  font-weight: 600;
 }

@@ -53,6 +53,7 @@ signup.email.value // what the control shows
 signup.email.errors // ['That email looks off']
 signup.email.isInvalid // also: isDirty, isRequired, isDisabled, label, hint
 signup.errors // form-level errors from <f.Errors />
+signup.status // 'clean', 'dirty', 'invalid' or 'submitting'
 ```
 
 Each child harness is created once, the first time you read it, and kept: `signup.email` is

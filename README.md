@@ -66,8 +66,9 @@ const addressSchema = z.object({ city: z.string().min(1, 'City is required') })
 | `@resetOnDestroy`                                             | Roll back unsaved changes on teardown. Default `true`.                            |
 
 It yields `Field`, `Form` (nested, renders a `<fieldset>`; pass `@legend`), `Submit`, `Reset`,
-`Button`, `Errors` (form-level errors) and `state` (`isDirty`, `isSubmitting`, `isValid`,
-`errors`, `submit()`, `reset()`, `validate()`).
+`Button`, `Errors` (form-level errors) and `state` (`status`, `isDirty`, `isSubmitting`,
+`isValid`, `errors`, `submit()`, `reset()`, `validate()`). `status` is the form's state:
+`clean`, `dirty`, `invalid` or `submitting`, also set as `data-status` on the `<form>`.
 
 Validation runs on submit. After a failed submit it re-runs on every change, so errors clear as
 they are fixed, and focus moves to the first invalid control. Nested forms validate and save
