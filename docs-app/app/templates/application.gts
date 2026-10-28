@@ -1,4 +1,5 @@
 import { PageNav } from 'kolay/components'
+import BasicDropdownWormhole from 'ember-basic-dropdown/components/basic-dropdown-wormhole'
 
 const LOGO = `${import.meta.env.BASE_URL}logo.svg`
 
@@ -48,4 +49,5 @@ function title(name: string): string {
       {{outlet}}
     </main>
   </div>
+  <BasicDropdownWormhole />
 </template>

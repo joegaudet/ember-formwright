@@ -130,6 +130,7 @@ they rendered or last saved.
 | [`@ember-formwright/changeset`](packages/changeset)       | ember-changeset: edits buffered until a valid submit, validations, rollback.       |
 | [`@ember-formwright/real-enums`](packages/real-enums)     | [real-enums](https://joegaudet.com/real-enums/) classes as options.                |
 | [`@ember-formwright/maskito`](packages/maskito)           | A `masked` control powered by Maskito.                                             |
+| [`@ember-formwright/power-select`](packages/power-select) | Searchable, async and multiple selects powered by ember-power-select.              |
 | [`@ember-formwright/test-support`](packages/test-support) | Form harnesses for tests.                                                          |
 
 ## Testing

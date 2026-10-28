@@ -1,1 +1,1 @@
-{ "order": ["built-in-controls", "custom-controls"] }
+{ "order": ["built-in-controls", "custom-controls", "power-select"] }

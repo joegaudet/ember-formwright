@@ -12,6 +12,7 @@ const PAGES = [
   'building-forms/nested-forms.md',
   'controls/built-in-controls.md',
   'controls/custom-controls.md',
+  'controls/power-select.md',
   'going-further/data-layers.md',
   'going-further/changesets.md',
   'going-further/theming.md',

@@ -192,7 +192,9 @@ export default class Field<
     const options = this.args.options
     const labelFor = (v: unknown) => {
       const option = options?.find(o => matches(v, o, this.args.optionKey))
-      return option === undefined ? String(v) : labelOf(option, this.args.optionLabel)
+      // Without the option (e.g. options from an async search), an object value is its own option.
+      if (option === undefined && (typeof v !== 'object' || v === null)) return String(v)
+      return labelOf(option ?? v, this.args.optionLabel)
     }
     return Array.isArray(value) ? value.map(labelFor).join(', ') : labelFor(value)
   }
@@ -247,8 +249,13 @@ export default class Field<
     }
   }
 
+  /** Focuses the element the label points at (any control), else the first native input. */
   focusControl = modifier((element: HTMLElement, [shouldFocus]: [boolean]) => {
-    if (shouldFocus) element.querySelector<HTMLElement>('input, select, textarea')?.focus()
+    if (!shouldFocus) return
+    const target =
+      element.querySelector<HTMLElement>(`#${CSS.escape(this.id)}`) ??
+      element.querySelector<HTMLElement>('input, select, textarea')
+    target?.focus()
   })
 
   openPopover = modifier((popover: HTMLElement, [isCallout]: [boolean]) => {
@@ -371,6 +378,7 @@ class ControlArea<M extends object, P extends Path<M>> extends Component<
               showCount=field.args.showCount
               currency=field.args.currency
               locale=field.args.locale
+              callout=field.useCallout
             )
             as |Control|
           }}

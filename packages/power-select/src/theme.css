@@ -1,0 +1,56 @@
+/*
+ * Formwright hooks for ember-power-select. Import power-select's own CSS first, then this:
+ *
+ *   import 'ember-basic-dropdown/styles'
+ *   import 'ember-power-select/styles'
+ *   import '@ember-formwright/ember/theme.css'
+ *   import '@ember-formwright/power-select/theme.css'
+ *
+ * It doesn't restyle power-select. It makes the trigger follow the Formwright theme's custom
+ * properties (borders, radius, focus ring, invalid and disabled states), and lets a dropdown
+ * rendered in a callout overflow the popover.
+ */
+.fw-power-select.ember-power-select-trigger {
+  font: inherit;
+  color: var(--fw-fg);
+  background: var(--fw-bg);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  padding: 0.35rem 1.6rem 0.35rem 0.7rem;
+  min-height: 2.4rem;
+}
+
+.fw-power-select.ember-power-select-trigger:focus,
+.fw-power-select.ember-power-select-trigger--active {
+  outline: none;
+  border-color: var(--fw-border-focus);
+  box-shadow: var(--fw-ring);
+}
+
+.fw-field[data-invalid] .fw-power-select.ember-power-select-trigger,
+.fw-power-select.ember-power-select-trigger[aria-invalid='true'] {
+  border-color: var(--fw-error);
+}
+
+.fw-power-select.ember-power-select-trigger[aria-disabled='true'],
+.fw-field[data-disabled] .fw-power-select.ember-power-select-trigger {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.fw-power-select-control {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  position: relative;
+}
+
+/* A dropdown rendered in place inside a callout must not be clipped by the popover. */
+.fw-callout:has(.ember-basic-dropdown-content--in-place) {
+  overflow: visible;
+}
+
+/* power-select's own placeholder grey is too light against --fw-bg. */
+.fw-power-select .ember-power-select-placeholder {
+  color: var(--fw-muted);
+}

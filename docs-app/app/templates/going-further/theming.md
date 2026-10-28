@@ -50,6 +50,10 @@ The theme follows the operating system. To force a scheme for part of a page, as
 | `[data-submitting]`, `[data-dirty]`                                    | Form state, on the `<form>`                |
 | `[aria-busy="true"]`                                                   | A button whose action is running           |
 
+`@ember-formwright/power-select/theme.css` gives power-select's trigger the same custom
+properties: border, radius, focus ring, and the invalid and disabled states. Import it after
+power-select's own CSS; it doesn't restyle the dropdown.
+
 <div class="callout">
 
 **Coming from ember-foxy-forms**

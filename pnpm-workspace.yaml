@@ -16,6 +16,7 @@ overrides:
   '@ember-formwright/changeset': 'workspace:*'
   '@ember-formwright/ember': 'workspace:*'
   '@ember-formwright/maskito': 'workspace:*'
+  '@ember-formwright/power-select': 'workspace:*'
   # Kolay pins an older @glint/template; one copy keeps template types compatible.
   '@glint/template': ^1.9.0
   '@ember-formwright/real-enums': 'workspace:*'

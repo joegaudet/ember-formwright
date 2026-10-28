@@ -1,0 +1,110 @@
+{
+  "name": "@ember-formwright/power-select",
+  "version": "1.2.0",
+  "description": "Searchable, async and multiple selects for Formwright, powered by ember-power-select.",
+  "keywords": [
+    "ember-addon",
+    "ember",
+    "forms",
+    "formwright",
+    "power-select",
+    "select"
+  ],
+  "license": "MIT",
+  "author": "Joe Gaudet <joe@joegaudet.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joegaudet/ember-formwright.git",
+    "directory": "packages/power-select"
+  },
+  "homepage": "https://joegaudet.com/ember-formwright/",
+  "bugs": "https://github.com/joegaudet/ember-formwright/issues",
+  "exports": {
+    ".": {
+      "types": "./declarations/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./test-support": {
+      "types": "./declarations/test-support/index.d.ts",
+      "default": "./dist/test-support/index.js"
+    },
+    "./theme.css": "./dist/theme.css",
+    "./addon-main.js": "./addon-main.cjs"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "declarations/*"
+      ]
+    }
+  },
+  "files": [
+    "addon-main.cjs",
+    "declarations",
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "rollup --config",
+    "start": "rollup --config --watch",
+    "typecheck": "ember-tsc --noEmit",
+    "prepack": "rollup --config"
+  },
+  "dependencies": {
+    "@embroider/addon-shim": "^1.10.3",
+    "decorator-transforms": "^2.4.0"
+  },
+  "peerDependencies": {
+    "@ember-formwright/ember": "workspace:^",
+    "@ember-formwright/test-support": "workspace:^",
+    "@ember/test-helpers": ">= 5.0.0",
+    "ember-power-select": ">= 9.0.0",
+    "ember-source": ">= 6.12.0"
+  },
+  "peerDependenciesMeta": {
+    "@ember-formwright/test-support": {
+      "optional": true
+    },
+    "@ember/test-helpers": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/plugin-transform-typescript": "^7.29.7",
+    "@babel/runtime": "^7.29.7",
+    "@ember-formwright/ember": "workspace:*",
+    "@ember-formwright/test-support": "workspace:*",
+    "@ember/library-tsconfig": "^3.0.0",
+    "@ember/test-helpers": "^5.7.0",
+    "@embroider/addon-dev": "^8.4.2",
+    "@embroider/macros": "^1.21.1",
+    "@glimmer/component": "^2.1.1",
+    "@glimmer/tracking": "^1.1.2",
+    "@glint/ember-tsc": "^1.11.6",
+    "@glint/template": "^1.9.0",
+    "@rollup/plugin-babel": "^7.1.0",
+    "babel-plugin-ember-template-compilation": "^4.0.1",
+    "ember-basic-dropdown": "^9.0.1",
+    "ember-concurrency": "^5.3.0",
+    "ember-power-select": "^9.0.3",
+    "ember-source": "~7.3.0",
+    "rollup": "^4.64.6",
+    "typescript": "~6.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "ember": {
+    "edition": "octane"
+  },
+  "ember-addon": {
+    "version": 2,
+    "type": "addon",
+    "main": "addon-main.cjs"
+  }
+}

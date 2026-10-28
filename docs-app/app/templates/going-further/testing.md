@@ -70,6 +70,10 @@ standard decorators, write `accessor`.
 
 A harness pointed at the wrong control fails with a message that says so.
 
+`power-select` and `power-select-multiple` have their own, `PowerSelectHarness`, in
+`@ember-formwright/power-select/test-support`: `select(text)`, `search(text)`, `clear()`,
+`remove(text)`, `options()`, `selected`. See [Power select](../controls/power-select.md#testing).
+
 A `FormHarness` has `submit()`, `reset()`, `errors` (form-level), `status`, `isDirty` and
 `isSubmitting`, and `field(path, Class)` / `form(name, Class)` for one-off lookups.
 
