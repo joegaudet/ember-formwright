@@ -39,20 +39,20 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.3rem 0.4rem;
+  row-gap: 0.25rem;
+  /* No start padding: each line's first divider sits just outside, and is clipped. */
+  padding: 0.3rem 0.4rem 0.3rem 0;
+  overflow: hidden;
   border-bottom: 1px solid var(--fw-border);
   background: color-mix(in srgb, var(--fw-fg) 3%, var(--fw-bg));
 }
 
+/* A divider before every group; on a wrapped toolbar no line starts with one. */
 .fw-rich-text-group {
   display: inline-flex;
   gap: 0.15rem;
-}
-
-.fw-rich-text-group + .fw-rich-text-group {
-  padding-inline-start: 0.35rem;
-  margin-inline-start: 0.1rem;
+  margin-inline-start: -1px;
+  padding-inline: 0.4rem 0.1rem;
   border-inline-start: 1px solid var(--fw-border);
 }
 
