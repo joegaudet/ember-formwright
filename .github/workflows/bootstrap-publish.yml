@@ -43,8 +43,9 @@
 # too). The tag push then finds nothing left to publish and only creates the
 # GitHub release.
 #
-# Restored for @ember-formwright/power-select and @ember-formwright/layouts,
-# first published in 1.3.0.
+# Restored for @ember-formwright/power-select, @ember-formwright/layouts,
+# @ember-formwright/power-calendar, @ember-formwright/file-upload and
+# @ember-formwright/tiptap, first published in 1.3.0.
 #
 # Afterwards:
 #   1. npmjs.com, per package: Settings > Trusted publisher >
