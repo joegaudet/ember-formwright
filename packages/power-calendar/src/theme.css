@@ -1,1 +1,228 @@
-/* @ember-formwright/power-calendar theme */
+/*
+ * Formwright's theme for the date-picker and date-range controls. Import it after
+ * ember-basic-dropdown's styles and the Formwright theme:
+ *
+ *   import 'ember-basic-dropdown/styles'
+ *   import '@ember-formwright/ember/theme.css'
+ *   import '@ember-formwright/power-calendar/theme.css'
+ *
+ * It styles the trigger like the other controls and the calendar from the Formwright theme's
+ * custom properties, so ember-power-calendar's own stylesheet isn't needed. Size the calendar
+ * with --fw-calendar-cell (default 2.25rem).
+ */
+.fw-date-picker-control {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  position: relative;
+}
+
+/* ---- trigger ------------------------------------------------------------------------- */
+
+.fw-date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.4rem;
+  font: inherit;
+  text-align: start;
+  color: var(--fw-fg);
+  background: var(--fw-bg);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+}
+
+.fw-date-picker[aria-expanded='true'] {
+  border-color: var(--fw-border-focus);
+  box-shadow: var(--fw-ring);
+}
+
+.fw-date-picker:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.fw-date-picker-placeholder {
+  color: var(--fw-muted);
+}
+
+.fw-date-picker-icon {
+  flex: none;
+  fill: none;
+  stroke: var(--fw-muted);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.fw-date-picker[aria-expanded='true'] .fw-date-picker-icon {
+  stroke: var(--fw-accent);
+}
+
+/* ---- dropdown ------------------------------------------------------------------------ */
+
+.fw-date-picker-dropdown.ember-basic-dropdown-content {
+  margin-block: 0.35rem;
+  padding: 0.75rem;
+  color: var(--fw-fg);
+  background: var(--fw-bg);
+  border: 1px solid var(--fw-border);
+  border-radius: calc(var(--fw-radius) + 4px);
+  box-shadow:
+    0 12px 32px rgb(0 0 0 / 14%),
+    0 2px 6px rgb(0 0 0 / 6%);
+}
+
+/* A dropdown rendered in place inside a callout must not be clipped by the popover. */
+.fw-callout:has(.fw-date-picker-dropdown) {
+  overflow: visible;
+}
+
+/* ---- calendar ------------------------------------------------------------------------ */
+
+.fw-calendar {
+  --fw-calendar-cell-size: var(--fw-calendar-cell, 2.25rem);
+  width: calc(var(--fw-calendar-cell-size) * 7);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+.fw-calendar * {
+  box-sizing: border-box;
+}
+
+.fw-calendar .ember-power-calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.fw-calendar .ember-power-calendar-nav-title {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+}
+
+.fw-calendar .ember-power-calendar-nav-control {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  font: inherit;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--fw-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--fw-radius);
+  cursor: pointer;
+}
+
+.fw-calendar .ember-power-calendar-nav-control:hover {
+  color: var(--fw-fg);
+  background: color-mix(in srgb, var(--fw-fg) 7%, transparent);
+}
+
+.fw-calendar .ember-power-calendar-row {
+  display: flex;
+}
+
+.fw-calendar .ember-power-calendar-weekday {
+  display: grid;
+  place-items: center;
+  width: var(--fw-calendar-cell-size);
+  height: 1.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--fw-muted);
+}
+
+.fw-calendar .ember-power-calendar-day {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: var(--fw-calendar-cell-size);
+  height: var(--fw-calendar-cell-size);
+  padding: 0;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  color: var(--fw-fg);
+  background: transparent;
+  border: 0;
+  border-radius: var(--fw-radius);
+  cursor: pointer;
+}
+
+.fw-calendar .ember-power-calendar-day--other-month {
+  color: var(--fw-muted);
+}
+
+.fw-calendar .ember-power-calendar-day:not([disabled]):hover {
+  background: color-mix(in srgb, var(--fw-accent) 12%, transparent);
+}
+
+.fw-calendar .ember-power-calendar-day--today {
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--fw-accent);
+}
+
+.fw-calendar .ember-power-calendar-day[disabled] {
+  color: var(--fw-muted);
+  opacity: 0.45;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.fw-calendar .ember-power-calendar-day:focus-visible,
+.fw-calendar .ember-power-calendar-nav-control:focus-visible {
+  outline: none;
+  box-shadow: var(--fw-ring);
+  position: relative;
+}
+
+/* A range: the days between its ends get a band, the ends a solid fill. */
+.fw-calendar .ember-power-calendar-day--selected {
+  color: var(--fw-fg);
+  background: color-mix(in srgb, var(--fw-accent) 16%, transparent);
+  border-radius: 0;
+}
+
+.fw-calendar .ember-power-calendar-day--selected:not([disabled]):hover {
+  background: color-mix(in srgb, var(--fw-accent) 26%, transparent);
+}
+
+.fw-calendar .ember-power-calendar-day--range-start {
+  border-start-start-radius: var(--fw-radius);
+  border-end-start-radius: var(--fw-radius);
+}
+
+.fw-calendar .ember-power-calendar-day--range-end {
+  border-start-end-radius: var(--fw-radius);
+  border-end-end-radius: var(--fw-radius);
+}
+
+/* A single date, and a range's ends. */
+.fw-calendar:not(.fw-calendar--range) .ember-power-calendar-day--selected,
+.fw-calendar .ember-power-calendar-day--range-start,
+.fw-calendar .ember-power-calendar-day--range-end,
+.fw-calendar
+  .ember-power-calendar-day--selected:is(
+    .ember-power-calendar-day--range-start,
+    .ember-power-calendar-day--range-end
+  ):not([disabled]):hover {
+  color: var(--fw-accent-fg);
+  background: var(--fw-accent);
+  font-weight: 600;
+}
+
+.fw-calendar:not(.fw-calendar--range) .ember-power-calendar-day--selected {
+  border-radius: var(--fw-radius);
+}
