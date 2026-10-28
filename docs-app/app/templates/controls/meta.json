@@ -1,1 +1,11 @@
-{ "order": ["built-in-controls", "custom-controls", "power-select"] }
+{
+  "order": [
+    "built-in-controls",
+    "custom-controls",
+    "power-select",
+    "date-picker",
+    "phone",
+    "file-upload",
+    "rich-text"
+  ]
+}

@@ -1,0 +1,185 @@
+/*
+ * The rich-text control, on the Formwright theme's custom properties. Import it after the core
+ * theme:
+ *
+ *   import '@ember-formwright/ember/theme.css'
+ *   import '@ember-formwright/tiptap/theme.css'
+ *
+ * The box looks like a Formwright textarea: a toolbar on top, the document below.
+ */
+.fw-rich-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--fw-bg);
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  overflow: hidden;
+}
+
+.fw-rich-text:focus-within {
+  border-color: var(--fw-border-focus);
+  box-shadow: var(--fw-ring);
+}
+
+.fw-field[data-invalid] .fw-rich-text,
+.fw-rich-text:has([aria-invalid='true']) {
+  border-color: var(--fw-error);
+}
+
+.fw-rich-text--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---- toolbar ---------------------------------------------------------------------- */
+
+.fw-rich-text-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 0.25rem;
+  /* No start padding: each line's first divider sits just outside, and is clipped. */
+  padding: 0.3rem 0.4rem 0.3rem 0;
+  overflow: hidden;
+  border-bottom: 1px solid var(--fw-border);
+  background: color-mix(in srgb, var(--fw-fg) 3%, var(--fw-bg));
+}
+
+/* A divider before every group; on a wrapped toolbar no line starts with one. */
+.fw-rich-text-group {
+  display: inline-flex;
+  gap: 0.15rem;
+  margin-inline-start: -1px;
+  padding-inline: 0.4rem 0.1rem;
+  border-inline-start: 1px solid var(--fw-border);
+}
+
+.fw-rich-text-tool {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1;
+  color: var(--fw-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: calc(var(--fw-radius) - 2px);
+  cursor: pointer;
+}
+
+.fw-rich-text-tool b,
+.fw-rich-text-tool i,
+.fw-rich-text-tool s,
+.fw-rich-text-tool span {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+}
+
+.fw-rich-text-tool span {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.fw-rich-text-tool:hover:not(:disabled) {
+  color: var(--fw-fg);
+  background: color-mix(in srgb, var(--fw-fg) 7%, transparent);
+}
+
+.fw-rich-text-tool[aria-pressed='true'] {
+  color: var(--fw-accent);
+  background: color-mix(in srgb, var(--fw-accent) 12%, transparent);
+  border-color: color-mix(in srgb, var(--fw-accent) 30%, transparent);
+}
+
+.fw-rich-text-tool:focus-visible {
+  outline: none;
+  box-shadow: var(--fw-ring);
+  border-color: var(--fw-border-focus);
+}
+
+.fw-rich-text-tool:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ---- document --------------------------------------------------------------------- */
+
+.fw-rich-text-editor {
+  position: relative;
+  min-height: 8rem;
+  padding: 0.6rem 0.8rem;
+  color: var(--fw-fg);
+  line-height: 1.55;
+  outline: none;
+  overflow-wrap: anywhere;
+}
+
+.fw-rich-text .fw-rich-text-editor > :first-child {
+  margin-top: 0;
+}
+
+.fw-rich-text .fw-rich-text-editor > :last-child {
+  margin-bottom: 0;
+}
+
+.fw-rich-text-editor p {
+  margin: 0 0 0.6em;
+}
+
+/* Two classes deep, so a page's own prose styles (borders on h2, ...) don't reach in. */
+.fw-rich-text .fw-rich-text-editor h2,
+.fw-rich-text .fw-rich-text-editor h3 {
+  margin: 0.9em 0 0.4em;
+  padding: 0;
+  border: 0;
+  line-height: 1.25;
+}
+
+.fw-rich-text .fw-rich-text-editor h2 {
+  font-size: 1.3rem;
+}
+
+.fw-rich-text .fw-rich-text-editor h3 {
+  font-size: 1.1rem;
+}
+
+.fw-rich-text-editor ul,
+.fw-rich-text-editor ol {
+  margin: 0 0 0.6em;
+  padding-inline-start: 1.4rem;
+}
+
+.fw-rich-text-editor li p {
+  margin: 0.15em 0;
+}
+
+.fw-rich-text-editor blockquote {
+  margin: 0 0 0.6em;
+  padding-inline-start: 0.8rem;
+  border-inline-start: 3px solid var(--fw-border);
+  color: var(--fw-muted);
+}
+
+.fw-rich-text-editor code {
+  font-size: 0.9em;
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--fw-fg) 8%, transparent);
+}
+
+.fw-rich-text-editor[data-empty]::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  color: var(--fw-muted);
+  pointer-events: none;
+}
+
+.fw-rich-text-editor[contenteditable='false'] {
+  cursor: not-allowed;
+}

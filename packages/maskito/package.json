@@ -24,6 +24,14 @@
       "types": "./declarations/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./phone": {
+      "types": "./declarations/phone.d.ts",
+      "default": "./dist/phone.js"
+    },
+    "./test-support": {
+      "types": "./declarations/test-support/index.d.ts",
+      "default": "./dist/test-support/index.js"
+    },
     "./addon-main.js": "./addon-main.cjs"
   },
   "typesVersions": {
@@ -53,26 +61,36 @@
   },
   "peerDependencies": {
     "@ember-formwright/ember": "workspace:^",
+    "@ember-formwright/test-support": "workspace:^",
+    "@ember/test-helpers": ">= 5.0.0",
     "@maskito/core": ">= 5.0.0",
-    "ember-source": ">= 6.12.0"
+    "@maskito/kit": ">= 5.0.0",
+    "@maskito/phone": ">= 5.0.0",
+    "ember-source": ">= 6.12.0",
+    "libphonenumber-js": ">= 1.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@babel/plugin-transform-typescript": "^7.29.7",
     "@babel/runtime": "^7.29.7",
+    "@ember-formwright/ember": "workspace:*",
+    "@ember-formwright/test-support": "workspace:*",
     "@ember/library-tsconfig": "^3.0.0",
+    "@ember/test-helpers": "^5.7.0",
     "@embroider/addon-dev": "^8.4.2",
     "@glimmer/component": "^2.1.1",
     "@glimmer/tracking": "^1.1.2",
     "@glint/ember-tsc": "^1.11.6",
     "@glint/template": "^1.9.0",
+    "@maskito/core": "^5.6.1",
+    "@maskito/kit": "^5.6.1",
+    "@maskito/phone": "^5.6.1",
     "@rollup/plugin-babel": "^7.1.0",
     "babel-plugin-ember-template-compilation": "^4.0.1",
     "ember-source": "~7.3.0",
+    "libphonenumber-js": "^1.13.15",
     "rollup": "^4.64.6",
-    "typescript": "~6.0.3",
-    "@ember-formwright/ember": "workspace:*",
-    "@maskito/core": "^5.6.0"
+    "typescript": "~6.0.3"
   },
   "publishConfig": {
     "access": "public"
@@ -87,5 +105,22 @@
     "version": 2,
     "type": "addon",
     "main": "addon-main.cjs"
+  },
+  "peerDependenciesMeta": {
+    "@ember-formwright/test-support": {
+      "optional": true
+    },
+    "@ember/test-helpers": {
+      "optional": true
+    },
+    "@maskito/kit": {
+      "optional": true
+    },
+    "@maskito/phone": {
+      "optional": true
+    },
+    "libphonenumber-js": {
+      "optional": true
+    }
   }
 }

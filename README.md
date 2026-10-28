@@ -124,15 +124,18 @@ The core edits any object through a `ModelAdapter` (`get`, `set`, and optionally
 `setDefaultAdapter()`. Without `rollback`, reset restores the values the form's fields had when
 they rendered or last saved.
 
-| Package                                                   |                                                                                    |
-| --------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| [`@ember-formwright/warp-drive`](packages/warp-drive)     | WarpDrive / ember-data records: save, rollback, server errors, nested new records. |
-| [`@ember-formwright/changeset`](packages/changeset)       | ember-changeset: edits buffered until a valid submit, validations, rollback.       |
-| [`@ember-formwright/real-enums`](packages/real-enums)     | [real-enums](https://joegaudet.com/real-enums/) classes as options.                |
-| [`@ember-formwright/maskito`](packages/maskito)           | A `masked` control powered by Maskito.                                             |
-| [`@ember-formwright/power-select`](packages/power-select) | Searchable, async and multiple selects powered by ember-power-select.              |
-| [`@ember-formwright/layouts`](packages/layouts)           | Field layouts (horizontal, compact, checkbox-after) and an `Actions` bar.          |
-| [`@ember-formwright/test-support`](packages/test-support) | Form harnesses for tests.                                                          |
+| Package                                                       |                                                                                                                       |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| [`@ember-formwright/warp-drive`](packages/warp-drive)         | WarpDrive / ember-data records: save, rollback, server errors, nested new records.                                    |
+| [`@ember-formwright/changeset`](packages/changeset)           | ember-changeset: edits buffered until a valid submit, validations, rollback.                                          |
+| [`@ember-formwright/real-enums`](packages/real-enums)         | [real-enums](https://joegaudet.com/real-enums/) classes as options.                                                   |
+| [`@ember-formwright/maskito`](packages/maskito)               | A `masked` control powered by Maskito, and a `phone` control (`@ember-formwright/maskito/phone`) storing E.164.       |
+| [`@ember-formwright/power-select`](packages/power-select)     | Searchable, async and multiple selects powered by ember-power-select.                                                 |
+| [`@ember-formwright/power-calendar`](packages/power-calendar) | `date-picker` and `date-range` controls powered by ember-power-calendar.                                              |
+| [`@ember-formwright/file-upload`](packages/file-upload)       | `file` and `files` controls: a drop zone, file list and optional uploads with progress, powered by ember-file-upload. |
+| [`@ember-formwright/tiptap`](packages/tiptap)                 | A `rich-text` control with a toolbar, storing HTML or JSON, powered by Tiptap.                                        |
+| [`@ember-formwright/layouts`](packages/layouts)               | Field layouts (horizontal, compact, checkbox-after) and an `Actions` bar.                                             |
+| [`@ember-formwright/test-support`](packages/test-support)     | Form harnesses for tests.                                                                                             |
 
 ## Testing
 

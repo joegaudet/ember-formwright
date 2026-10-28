@@ -1,0 +1,226 @@
+/*
+ * Formwright styles for the file controls. Import after the Formwright theme:
+ *
+ *   import '@ember-formwright/ember/theme.css'
+ *   import '@ember-formwright/file-upload/theme.css'
+ *
+ * Everything follows the theme's custom properties (--fw-border, --fw-accent, --fw-radius, ...).
+ */
+.fw-file-control {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.fw-dropzone-body {
+  position: relative;
+  border: 1.5px dashed var(--fw-border);
+  border-radius: var(--fw-radius);
+  background: color-mix(in srgb, var(--fw-accent) 3%, var(--fw-bg));
+  transition:
+    border-color 0.15s,
+    background-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.fw-dropzone-body:hover:not([data-disabled]) {
+  border-color: color-mix(in srgb, var(--fw-accent) 55%, var(--fw-border));
+}
+
+.fw-dropzone-body[data-active] {
+  border-style: solid;
+  border-color: var(--fw-accent);
+  background: color-mix(in srgb, var(--fw-accent) 10%, var(--fw-bg));
+}
+
+.fw-dropzone-body:has(.fw-file-input:focus-visible) {
+  border-style: solid;
+  border-color: var(--fw-border-focus);
+  box-shadow: var(--fw-ring);
+}
+
+.fw-field[data-invalid] .fw-dropzone-body,
+.fw-dropzone-body:has(.fw-file-input[aria-invalid='true']) {
+  border-color: var(--fw-error);
+}
+
+.fw-dropzone-body[data-disabled] {
+  opacity: 0.6;
+}
+
+/* The input stays focusable and named by the field's label; the zone is what shows. */
+.fw-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.fw-dropzone-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem 0.6rem;
+  padding: 1.1rem 1rem;
+  text-align: center;
+  color: var(--fw-muted);
+  cursor: pointer;
+}
+
+.fw-dropzone-body[data-disabled] .fw-dropzone-label {
+  cursor: not-allowed;
+}
+
+.fw-dropzone-icon {
+  color: var(--fw-accent);
+  flex: none;
+}
+
+.fw-dropzone-text strong {
+  color: var(--fw-accent);
+  font-weight: 600;
+}
+
+.fw-dropzone-accept {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+}
+
+.fw-file-rejected {
+  margin: 0;
+  color: var(--fw-error);
+  font-size: 0.85rem;
+}
+
+.fw-file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.fw-file {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.6rem;
+  padding: 0.45rem 0.5rem 0.45rem 0.55rem;
+  border: 1px solid var(--fw-border);
+  border-radius: var(--fw-radius);
+  background: var(--fw-bg);
+}
+
+.fw-file-kind {
+  flex: none;
+  min-width: 2.6rem;
+  padding: 0.2rem 0.3rem;
+  border-radius: calc(var(--fw-radius) * 0.6);
+  background: color-mix(in srgb, var(--fw-accent) 12%, var(--fw-bg));
+  color: var(--fw-accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.fw-file-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fw-file-size {
+  color: var(--fw-muted);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.fw-file-remove,
+.fw-file-retry {
+  flex: none;
+  font: inherit;
+  color: var(--fw-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: calc(var(--fw-radius) * 0.6);
+  cursor: pointer;
+}
+
+.fw-file-remove {
+  width: 1.8rem;
+  height: 1.8rem;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.fw-file-retry {
+  padding: 0.15rem 0.5rem;
+  font-size: 0.85rem;
+  color: var(--fw-accent);
+}
+
+.fw-file-remove:hover,
+.fw-file-retry:hover {
+  color: var(--fw-fg);
+  background: color-mix(in srgb, var(--fw-fg) 7%, transparent);
+}
+
+.fw-file-remove:focus-visible,
+.fw-file-retry:focus-visible {
+  outline: none;
+  border-color: var(--fw-border-focus);
+  box-shadow: var(--fw-ring);
+}
+
+.fw-file-progress {
+  flex-basis: 100%;
+  height: 0.3rem;
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--fw-border) 60%, transparent);
+  accent-color: var(--fw-accent);
+}
+
+.fw-file-progress::-webkit-progress-bar {
+  background: transparent;
+}
+
+.fw-file-progress::-webkit-progress-value {
+  background: var(--fw-accent);
+  border-radius: 999px;
+  transition: width 0.2s;
+}
+
+.fw-file-progress::-moz-progress-bar {
+  background: var(--fw-accent);
+  border-radius: 999px;
+}
+
+.fw-file--failed {
+  border-color: color-mix(in srgb, var(--fw-error) 50%, var(--fw-border));
+}
+
+.fw-file--failed .fw-file-kind {
+  background: color-mix(in srgb, var(--fw-error) 12%, var(--fw-bg));
+  color: var(--fw-error);
+}
+
+/* Its own line under the name, like the progress bar it replaces. */
+.fw-file-error {
+  order: 1;
+  flex-basis: 100%;
+  color: var(--fw-error);
+  font-size: 0.8rem;
+}

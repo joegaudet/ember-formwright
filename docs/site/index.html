@@ -63,6 +63,7 @@
           <li><a href="guide/">Guide</a></li>
           <li class="wide-only"><a href="#states">States</a></li>
           <li class="wide-only roomy-only"><a href="#testing">Testing</a></li>
+          <li class="wide-only roomy-only"><a href="#controls">Controls</a></li>
           <li class="wide-only roomy-only"><a href="#adapters">Adapters</a></li>
           <li class="wide-only"><a href="#demo">Demo</a></li>
           <li><a href="https://github.com/joegaudet/ember-formwright">GitHub</a></li>
@@ -258,8 +259,8 @@ import '@ember-formwright/ember/theme.css' // optional
           <code>time</code>, <code>textarea</code>, <code>select</code>, <code>radio</code>,
           <code>checkbox</code>, <code>checkbox-group</code> and <code>currency</code> (formatted
           with <code>Intl</code>). Pass any component to <code>@control</code>, or register one by
-          name. Searchable, async and multiple selects come from
-          <code>@ember-formwright/power-select</code>.
+          name. Searchable selects, date pickers, phone numbers, file uploads and rich text come
+          from <a href="#controls">add-on packages</a>, one library each.
         </p>
         <p>
           Layouts change a field's structure without touching its wiring. Set
@@ -592,6 +593,106 @@ export class SignupForm extends FormHarness {
         </div>
       </section>
 
+      <section id="controls">
+        <p class="eyebrow">Controls</p>
+        <h2>
+          More controls, one package each<a
+            class="section-link"
+            href="#controls"
+            aria-label="Link to “More controls, one package each”"
+            >#</a
+          >
+        </h2>
+        <p>
+          Each add-on wraps one well-kept library, registers a control name, and ships a harness for
+          tests and a stylesheet that follows the Formwright theme. Install the ones you use.
+          Labels, errors, <code>aria-invalid</code>, reset, inline editing and callouts work as they
+          do for every other field. Shown here from the guide's live examples, next to the model
+          they edit.
+        </p>
+        <div class="addon-gallery">
+          <figure>
+            <img
+              src="img/addon-date-picker.png"
+              alt="A check-in date picker and a stay date range, the range's calendar open on November 2026 with the 12th to the 16th highlighted, beside the model holding ISO dates."
+              width="750"
+              height="513"
+              loading="lazy"
+            />
+            <figcaption>
+              <strong>Date pickers</strong> <code>@ember-formwright/power-calendar</code>
+              <span
+                ><code>date-picker</code> and <code>date-range</code>, stored as ISO dates.</span
+              >
+            </figcaption>
+          </figure>
+          <figure>
+            <img
+              src="img/addon-phone.png"
+              alt="Three phone fields, a US number, a UK mobile and a French office number, each formatted as typed, beside the model holding E.164 numbers."
+              width="750"
+              height="426"
+              loading="lazy"
+            />
+            <figcaption>
+              <strong>Phone numbers</strong> <code>@ember-formwright/maskito/phone</code>
+              <span>Masked per country as you type, stored as E.164.</span>
+            </figcaption>
+          </figure>
+          <figure>
+            <img
+              src="img/addon-file-upload.png"
+              alt="A résumé drop zone holding one PDF, and a work samples drop zone holding a PNG and a PDF, each file listed with its size and a remove button."
+              width="750"
+              height="514"
+              loading="lazy"
+            />
+            <figcaption>
+              <strong>File uploads</strong> <code>@ember-formwright/file-upload</code>
+              <span>Drop zones, file lists, and uploads with progress.</span>
+            </figcaption>
+          </figure>
+          <figure>
+            <img
+              src="img/addon-rich-text.png"
+              alt="A rich-text editor with a toolbar of bold, italic, strike, headings, lists, quote, undo and redo, holding a heading, a paragraph and a bulleted list, beside the model holding its HTML."
+              width="750"
+              height="483"
+              loading="lazy"
+            />
+            <figcaption>
+              <strong>Rich text</strong> <code>@ember-formwright/tiptap</code>
+              <span>A Tiptap editor with a toolbar, stored as HTML or JSON.</span>
+            </figcaption>
+          </figure>
+        </div>
+        <pre><code class="language-typescript">// app/app.ts: register what you installed
+import { registerPowerCalendarControls } from '@ember-formwright/power-calendar'
+import { registerPhoneControl } from '@ember-formwright/maskito/phone'
+import { registerFileUploadControls } from '@ember-formwright/file-upload'
+import { registerTiptapControl } from '@ember-formwright/tiptap'
+
+registerPowerCalendarControls() // @control="date-picker" and "date-range"
+registerPhoneControl() // @control="phone"
+registerFileUploadControls() // @control="file" and "files"
+registerTiptapControl() // @control="rich-text"</code></pre>
+        <pre><code class="language-handlebars">&lt;f.Field @for="stay" @control="date-range" @label="Stay" @min={{today}} /&gt;
+&lt;f.Field @for="phone" @control="phone" @label="Phone" as |field|&gt;
+  &lt;field.Control @country="GB" /&gt;
+&lt;/f.Field&gt;
+&lt;f.Field @for="avatar" @control="file" @label="Avatar" as |field|&gt;
+  &lt;field.Control @accept="image/*" @upload={{this.uploadAvatar}} /&gt;
+&lt;/f.Field&gt;
+&lt;f.Field @for="body" @control="rich-text" @label="Body" @required={{true}} /&gt;</code></pre>
+        <p>
+          <a href="guide/controls/date-picker.md">Date picker</a> ·
+          <a href="guide/controls/phone.md">Phone</a> ·
+          <a href="guide/controls/file-upload.md">File upload</a> ·
+          <a href="guide/controls/rich-text.md">Rich text</a>: every argument, with live, tested
+          examples.
+        </p>
+      </section>
+
       <section id="adapters">
         <p class="eyebrow">Adapters</p>
         <h2>
@@ -641,13 +742,37 @@ export class SignupForm extends FormHarness {
               </tr>
               <tr>
                 <th scope="row"><code>@ember-formwright/maskito</code></th>
-                <td>A <code>masked</code> control powered by Maskito: phones, cards, dates.</td>
+                <td>
+                  A <code>masked</code> control powered by Maskito: cards, dates, anything with a
+                  shape. And <code>phone</code>, from <code>@ember-formwright/maskito/phone</code>:
+                  masked per country, stored as E.164.
+                </td>
               </tr>
               <tr>
                 <th scope="row"><code>@ember-formwright/power-select</code></th>
                 <td>
                   <code>power-select</code> and <code>power-select-multiple</code> controls on
                   ember-power-select: search, async options, chips, with a harness for tests.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>@ember-formwright/power-calendar</code></th>
+                <td>
+                  <code>date-picker</code> and <code>date-range</code> on ember-power-calendar,
+                  storing ISO dates or <code>Date</code>s, with no moment or luxon to install.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>@ember-formwright/file-upload</code></th>
+                <td>
+                  <code>file</code> and <code>files</code> on ember-file-upload: a drop zone, the
+                  chosen files listed, and optional uploads with progress.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>@ember-formwright/tiptap</code></th>
+                <td>
+                  A <code>rich-text</code> control on Tiptap, with a toolbar, storing HTML or JSON.
                 </td>
               </tr>
               <tr>
