@@ -7,6 +7,7 @@ settings:
 overrides:
   '@ember-formwright/changeset': workspace:*
   '@ember-formwright/ember': workspace:*
+  '@ember-formwright/layouts': workspace:*
   '@ember-formwright/maskito': workspace:*
   '@ember-formwright/power-select': workspace:*
   '@glint/template': ^1.9.0
@@ -76,6 +77,9 @@ importers:
       '@ember-formwright/ember':
         specifier: workspace:*
         version: link:../packages/ember
+      '@ember-formwright/layouts':
+        specifier: workspace:*
+        version: link:../packages/layouts
       '@ember-formwright/maskito':
         specifier: workspace:*
         version: link:../packages/maskito
@@ -410,6 +414,61 @@ importers:
         specifier: ~6.0.3
         version: 6.0.3
 
+  packages/layouts:
+    dependencies:
+      '@embroider/addon-shim':
+        specifier: ^1.10.3
+        version: 1.10.3
+      decorator-transforms:
+        specifier: ^2.4.0
+        version: 2.4.0(@babel/core@7.29.7)
+    devDependencies:
+      '@babel/core':
+        specifier: ^7.29.7
+        version: 7.29.7
+      '@babel/plugin-transform-typescript':
+        specifier: ^7.29.7
+        version: 7.29.9(@babel/core@7.29.7)
+      '@babel/runtime':
+        specifier: ^7.29.7
+        version: 7.29.10
+      '@ember-formwright/ember':
+        specifier: workspace:*
+        version: link:../ember
+      '@ember/library-tsconfig':
+        specifier: ^3.0.0
+        version: 3.0.0
+      '@embroider/addon-dev':
+        specifier: ^8.4.2
+        version: 8.4.2(@glint/template@1.9.0)(rollup@4.64.6)
+      '@glimmer/component':
+        specifier: ^2.1.1
+        version: 2.1.1
+      '@glimmer/tracking':
+        specifier: ^1.1.2
+        version: 1.1.2
+      '@glint/ember-tsc':
+        specifier: ^1.11.6
+        version: 1.11.6(ember-source@7.3.1(@glimmer/component@2.1.1))(typescript@6.0.3)
+      '@glint/template':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@rollup/plugin-babel':
+        specifier: ^7.1.0
+        version: 7.1.0(@babel/core@7.29.7)(rollup@4.64.6)
+      babel-plugin-ember-template-compilation:
+        specifier: ^4.0.1
+        version: 4.0.1
+      ember-source:
+        specifier: ~7.3.0
+        version: 7.3.1(@glimmer/component@2.1.1)
+      rollup:
+        specifier: ^4.64.6
+        version: 4.64.6
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+
   packages/maskito:
     dependencies:
       '@embroider/addon-shim':
@@ -618,6 +677,9 @@ importers:
       '@ember-formwright/ember':
         specifier: workspace:*
         version: link:../packages/ember
+      '@ember-formwright/layouts':
+        specifier: workspace:*
+        version: link:../packages/layouts
       '@ember-formwright/maskito':
         specifier: workspace:*
         version: link:../packages/maskito

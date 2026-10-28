@@ -22,6 +22,7 @@
     "@babel/runtime": "^7.29.7",
     "@ember-formwright/changeset": "workspace:*",
     "@ember-formwright/ember": "workspace:*",
+    "@ember-formwright/layouts": "workspace:*",
     "@ember-formwright/maskito": "workspace:*",
     "@ember-formwright/power-select": "workspace:*",
     "@ember-formwright/real-enums": "workspace:*",

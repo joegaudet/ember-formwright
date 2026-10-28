@@ -1,1 +1,1 @@
-{ "order": ["forms", "fields", "validation", "nested-forms"] }
+{ "order": ["forms", "fields", "layouts", "validation", "nested-forms"] }

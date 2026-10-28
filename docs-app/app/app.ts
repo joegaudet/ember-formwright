@@ -7,6 +7,7 @@ import 'ember-basic-dropdown/styles'
 import 'ember-power-select/styles'
 import '@ember-formwright/ember/theme.css'
 import '@ember-formwright/power-select/theme.css'
+import '@ember-formwright/layouts/layouts.css'
 import './styles/app.css'
 
 export default class App extends Application {

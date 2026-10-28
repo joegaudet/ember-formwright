@@ -14,6 +14,18 @@ Generated from the packages' TypeScript declarations.
 
 <APIDocs @package="@ember-formwright/ember" @module="declarations/components/field" @name="FieldSignature" />
 
+## Layouts
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/layout" @name="FieldLayoutSignature" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/layout" @name="FieldLayoutParts" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/layout" @name="FieldLayoutState" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/layout" @name="registerLayout" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/layout" @name="setDefaultLayout" />
+
 ## Controls
 
 <APIDocs @package="@ember-formwright/ember" @module="declarations/controls/signature" @name="ControlSignature" />

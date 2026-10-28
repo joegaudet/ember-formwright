@@ -91,6 +91,9 @@ and errors still render around it.
 The block also yields `id`, `value`, `errors` and `isInvalid`, so your markup can follow the
 field's state.
 
+The block replaces only the control. To move the label, hint or errors, use a
+[layout](./layouts.md).
+
 <div class="callout">
 
 **Coming from ember-foxy-forms**

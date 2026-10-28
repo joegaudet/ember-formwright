@@ -8,6 +8,7 @@ const PAGES = [
   'getting-started/usage.md',
   'building-forms/forms.md',
   'building-forms/fields.md',
+  'building-forms/layouts.md',
   'building-forms/validation.md',
   'building-forms/nested-forms.md',
   'controls/built-in-controls.md',

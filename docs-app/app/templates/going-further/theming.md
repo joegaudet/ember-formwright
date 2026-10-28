@@ -35,6 +35,25 @@ The theme follows the operating system. To force a scheme for part of a page, as
 <div data-fw-scheme="dark">…forms here are dark…</div>
 ```
 
+## When CSS is enough
+
+Each field is one `div.fw-field`, holding its label, hint, control area and errors in that order.
+A purely visual change is CSS on that element. Use a [layout](../building-forms/layouts.md)
+only to change the structure: the order, or wrappers.
+
+```css
+/* A label column, without a layout */
+.my-form .fw-field {
+  grid-template-columns: 10rem 1fr;
+}
+.my-form .fw-field > :not(.fw-label) {
+  grid-column: 2;
+}
+```
+
+`@ember-formwright/layouts/layouts.css` styles the shipped layouts with the same custom
+properties, plus `--fw-label-width` for `horizontal`.
+
 ## Styling without the theme
 
 | Selector                                                               | On                                         |

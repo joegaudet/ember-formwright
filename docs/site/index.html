@@ -262,6 +262,18 @@ import '@ember-formwright/ember/theme.css' // optional
           <code>@ember-formwright/power-select</code>.
         </p>
         <p>
+          Layouts change a field's structure without touching its wiring. Set
+          <code>@layout</code> on a form or a field, or write your own from pre-wired parts:
+        </p>
+        <pre><code class="language-handlebars">&lt;Form @model={{@member}} @layout="horizontal" as |f|&gt;
+  &lt;f.Field @for="name" @label="Name" /&gt;
+  &lt;f.Field @for="agree" @control="checkbox" @label="I agree" @layout="checkbox-after" /&gt;
+  &lt;Actions&gt;
+    &lt;:left&gt;&lt;f.Submit&gt;Save&lt;/f.Submit&gt;&lt;f.Reset&gt;Cancel&lt;/f.Reset&gt;&lt;/:left&gt;
+    &lt;:right&gt;&lt;f.Button @onClick={{this.delete}}&gt;Delete&lt;/f.Button&gt;&lt;/:right&gt;
+  &lt;/Actions&gt;
+&lt;/Form&gt;</code></pre>
+        <p>
           <a href="guide/" role="button">Read the guide</a>&nbsp; Every control, option and hook,
           with live, tested examples.
         </p>
@@ -636,6 +648,15 @@ export class SignupForm extends FormHarness {
                 <td>
                   <code>power-select</code> and <code>power-select-multiple</code> controls on
                   ember-power-select: search, async options, chips, with a harness for tests.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><code>@ember-formwright/layouts</code></th>
+                <td>
+                  <code>horizontal</code>, <code>compact</code> and
+                  <code>checkbox-after</code> field layouts, and an <code>Actions</code> bar for the
+                  form's buttons. Or write your own: a layout arranges pre-wired parts, so it can't
+                  break accessibility or the test selectors.
                 </td>
               </tr>
               <tr>

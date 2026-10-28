@@ -1,0 +1,123 @@
+/*
+ * Styles for @ember-formwright/layouts. Import after the core theme:
+ *
+ *   import '@ember-formwright/ember/theme.css'
+ *   import '@ember-formwright/layouts/layouts.css'
+ *
+ * Built on the theme's custom properties, plus:
+ *   --fw-label-width   the label column of `horizontal` (default 10rem)
+ */
+
+/* ---- horizontal ------------------------------------------------------------------------ */
+
+.fw-field:has(> .fw-horizontal-body) {
+  grid-template-columns: var(--fw-label-width, 10rem) minmax(0, 1fr);
+  column-gap: calc(var(--fw-gap) * 3);
+  align-items: start;
+}
+
+.fw-field:has(> .fw-horizontal-body) > .fw-horizontal-label {
+  padding-block-start: 0.55rem;
+}
+
+/* A legend can't be a grid item of its fieldset; float it into the label column instead. */
+.fw-group:has(> .fw-horizontal-body) {
+  display: block;
+}
+
+.fw-group:has(> .fw-horizontal-body) > .fw-horizontal-label {
+  float: inline-start;
+  width: var(--fw-label-width, 10rem);
+  padding-block-start: 0;
+}
+
+.fw-group > .fw-horizontal-body {
+  margin-inline-start: calc(var(--fw-label-width, 10rem) + var(--fw-gap) * 3);
+}
+
+.fw-horizontal-body {
+  display: grid;
+  gap: var(--fw-gap);
+  min-width: 0;
+}
+
+@media (max-width: 40rem) {
+  .fw-field:has(> .fw-horizontal-body) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fw-group:has(> .fw-horizontal-body) > .fw-horizontal-label {
+    float: none;
+    width: auto;
+  }
+
+  .fw-group > .fw-horizontal-body {
+    margin-inline-start: 0;
+  }
+}
+
+/* ---- compact --------------------------------------------------------------------------- */
+
+.fw-field:has(> .fw-compact-errors),
+.fw-group:has(> .fw-compact-errors) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: calc(var(--fw-gap) * 2);
+  row-gap: var(--fw-gap);
+}
+
+.fw-field:has(> .fw-compact-errors) > .fw-label {
+  white-space: nowrap;
+}
+
+.fw-field:has(> .fw-compact-errors) > .fw-control-area,
+.fw-group:has(> .fw-compact-errors) > .fw-control-area {
+  flex: 1 1 10rem;
+}
+
+.fw-field:has(> .fw-compact-errors) > .fw-hint,
+.fw-compact-errors {
+  flex-basis: 100%;
+}
+
+.fw-compact-errors:empty {
+  display: none;
+}
+
+/* ---- checkbox-after -------------------------------------------------------------------- */
+
+.fw-field:has(> .fw-checkbox-after-label) {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+
+/* The core theme reorders a checkbox's label with CSS; here the markup is already in order. */
+.fw-field:has(> .fw-checkbox-after-label) > .fw-label {
+  order: 0;
+}
+
+.fw-field:has(> .fw-checkbox-after-label) > .fw-hint,
+.fw-field:has(> .fw-checkbox-after-label) > .fw-errors {
+  grid-column: 1 / -1;
+}
+
+/* ---- actions --------------------------------------------------------------------------- */
+
+.fw-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--fw-gap);
+}
+
+.fw-actions-left,
+.fw-actions-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fw-gap);
+}
+
+.fw-actions-right {
+  margin-inline-start: auto;
+}
