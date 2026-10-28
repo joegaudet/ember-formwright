@@ -15,13 +15,16 @@ overrides:
   # Examples ask for the published ranges; inside the workspace they get the local packages.
   '@ember-formwright/changeset': 'workspace:*'
   '@ember-formwright/ember': 'workspace:*'
+  '@ember-formwright/file-upload': 'workspace:*'
   '@ember-formwright/layouts': 'workspace:*'
   '@ember-formwright/maskito': 'workspace:*'
+  '@ember-formwright/power-calendar': 'workspace:*'
   '@ember-formwright/power-select': 'workspace:*'
   # Kolay pins an older @glint/template; one copy keeps template types compatible.
   '@glint/template': ^1.9.0
   '@ember-formwright/real-enums': 'workspace:*'
   '@ember-formwright/test-support': 'workspace:*'
+  '@ember-formwright/tiptap': 'workspace:*'
   '@ember-formwright/warp-drive': 'workspace:*'
 
 # ember-repl (a Kolay dependency, used by docs-app) is a v2 addon with no addon-main file,

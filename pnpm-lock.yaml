@@ -7,12 +7,15 @@ settings:
 overrides:
   '@ember-formwright/changeset': workspace:*
   '@ember-formwright/ember': workspace:*
+  '@ember-formwright/file-upload': workspace:*
   '@ember-formwright/layouts': workspace:*
   '@ember-formwright/maskito': workspace:*
+  '@ember-formwright/power-calendar': workspace:*
   '@ember-formwright/power-select': workspace:*
   '@glint/template': ^1.9.0
   '@ember-formwright/real-enums': workspace:*
   '@ember-formwright/test-support': workspace:*
+  '@ember-formwright/tiptap': workspace:*
   '@ember-formwright/warp-drive': workspace:*
 
 packageExtensionsChecksum: sha256-ar1TdysYi81PR7Qh/mHUMz/2UK11qCSawCkwnx+GO88=
@@ -77,12 +80,18 @@ importers:
       '@ember-formwright/ember':
         specifier: workspace:*
         version: link:../packages/ember
+      '@ember-formwright/file-upload':
+        specifier: workspace:*
+        version: link:../packages/file-upload
       '@ember-formwright/layouts':
         specifier: workspace:*
         version: link:../packages/layouts
       '@ember-formwright/maskito':
         specifier: workspace:*
         version: link:../packages/maskito
+      '@ember-formwright/power-calendar':
+        specifier: workspace:*
+        version: link:../packages/power-calendar
       '@ember-formwright/power-select':
         specifier: workspace:*
         version: link:../packages/power-select
@@ -92,6 +101,9 @@ importers:
       '@ember-formwright/test-support':
         specifier: workspace:*
         version: link:../packages/test-support
+      '@ember-formwright/tiptap':
+        specifier: workspace:*
+        version: link:../packages/tiptap
       '@ember-formwright/warp-drive':
         specifier: workspace:*
         version: link:../packages/warp-drive
@@ -141,17 +153,29 @@ importers:
         specifier: ^1.9.0
         version: 1.9.0
       '@maskito/core':
-        specifier: ^5.6.0
-        version: 5.6.0
+        specifier: ^5.6.1
+        version: 5.6.1
       '@maskito/kit':
-        specifier: ^5.6.0
-        version: 5.6.0(@maskito/core@5.6.0)
+        specifier: ^5.6.1
+        version: 5.6.1(@maskito/core@5.6.1)
+      '@maskito/phone':
+        specifier: ^5.6.1
+        version: 5.6.1(@maskito/core@5.6.1)(@maskito/kit@5.6.1(@maskito/core@5.6.1))(libphonenumber-js@1.13.15)
       '@rollup/plugin-babel':
         specifier: ^7.1.0
         version: 7.1.0(@babel/core@7.29.7)(rollup@4.64.6)
       '@shikijs/rehype':
         specifier: ^3.20.0
         version: 3.23.0
+      '@tiptap/core':
+        specifier: ^3.32.0
+        version: 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/pm':
+        specifier: ^3.32.0
+        version: 3.32.1
+      '@tiptap/starter-kit':
+        specifier: ^3.32.0
+        version: 3.32.1
       '@types/qunit':
         specifier: ^2.19.14
         version: 2.19.14
@@ -185,12 +209,18 @@ importers:
       ember-concurrency:
         specifier: ^5.3.0
         version: 5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0)
+      ember-file-upload:
+        specifier: ^10.1.0
+        version: 10.1.0(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(@glint/template@1.9.0)(ember-modifier@4.3.0(@babel/core@7.29.7))(tracked-built-ins@4.1.2(@babel/core@7.29.7))
       ember-load-initializers:
         specifier: ^3.0.1
         version: 3.0.1(ember-source@7.3.1(@glimmer/component@2.1.1))
       ember-modifier:
         specifier: ^4.3.0
         version: 4.3.0(@babel/core@7.29.7)
+      ember-power-calendar:
+        specifier: ^2.0.1
+        version: 2.0.1(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(@glint/template@1.9.0)(ember-concurrency@5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0))
       ember-power-select:
         specifier: ^9.0.3
         version: 9.0.3(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(ember-basic-dropdown@9.0.1(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@embroider/macros@1.21.3(@babel/core@7.29.7)(@glint/template@1.9.0))(@glimmer/component@2.1.1))(ember-concurrency@5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0))
@@ -209,6 +239,9 @@ importers:
       kolay:
         specifier: 5.4.0
         version: 5.4.0(@babel/core@7.29.7)(@codemirror/lang-css@6.3.1)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@lezer/javascript@1.5.6)(@lezer/lr@1.4.11)(rolldown@1.2.14)(rollup@4.64.6)(typescript@6.0.3)(vite@8.3.4(@types/node@26.6.5)(terser@5.51.2)(yaml@2.9.1))(webpack@5.111.1)
+      libphonenumber-js:
+        specifier: ^1.13.15
+        version: 1.13.15
       qunit:
         specifier: ^2.26.0
         version: 2.26.0
@@ -221,6 +254,9 @@ importers:
       testem:
         specifier: ^3.21.0
         version: 3.21.3(@babel/core@7.29.7)(ejs@3.1.10)(handlebars@4.7.10)(underscore@1.13.8)
+      tracked-built-ins:
+        specifier: ^4.0.0
+        version: 4.1.2(@babel/core@7.29.7)
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
@@ -414,6 +450,79 @@ importers:
         specifier: ~6.0.3
         version: 6.0.3
 
+  packages/file-upload:
+    dependencies:
+      '@embroider/addon-shim':
+        specifier: ^1.10.3
+        version: 1.10.3
+      decorator-transforms:
+        specifier: ^2.4.0
+        version: 2.4.0(@babel/core@7.29.7)
+      ember-modifier:
+        specifier: ^4.3.0
+        version: 4.3.0(@babel/core@7.29.7)
+    devDependencies:
+      '@babel/core':
+        specifier: ^7.29.7
+        version: 7.29.7
+      '@babel/plugin-transform-typescript':
+        specifier: ^7.29.7
+        version: 7.29.9(@babel/core@7.29.7)
+      '@babel/runtime':
+        specifier: ^7.29.7
+        version: 7.29.10
+      '@ember-formwright/ember':
+        specifier: workspace:*
+        version: link:../ember
+      '@ember-formwright/test-support':
+        specifier: workspace:*
+        version: link:../test-support
+      '@ember/library-tsconfig':
+        specifier: ^3.0.0
+        version: 3.0.0
+      '@ember/test-helpers':
+        specifier: ^5.7.0
+        version: 5.7.0(@babel/core@7.29.7)
+      '@embroider/addon-dev':
+        specifier: ^8.4.2
+        version: 8.4.2(@glint/template@1.9.0)(rollup@4.64.6)
+      '@embroider/macros':
+        specifier: ^1.21.1
+        version: 1.21.3(@babel/core@7.29.7)(@glint/template@1.9.0)
+      '@glimmer/component':
+        specifier: ^2.1.1
+        version: 2.1.1
+      '@glimmer/tracking':
+        specifier: ^1.1.2
+        version: 1.1.2
+      '@glint/ember-tsc':
+        specifier: ^1.11.6
+        version: 1.11.6(ember-source@7.3.1(@glimmer/component@2.1.1))(typescript@6.0.3)
+      '@glint/template':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@rollup/plugin-babel':
+        specifier: ^7.1.0
+        version: 7.1.0(@babel/core@7.29.7)(rollup@4.64.6)
+      babel-plugin-ember-template-compilation:
+        specifier: ^4.0.1
+        version: 4.0.1
+      ember-file-upload:
+        specifier: ^10.1.0
+        version: 10.1.0(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(@glint/template@1.9.0)(ember-modifier@4.3.0(@babel/core@7.29.7))(tracked-built-ins@4.1.2(@babel/core@7.29.7))
+      ember-source:
+        specifier: ~7.3.0
+        version: 7.3.1(@glimmer/component@2.1.1)
+      rollup:
+        specifier: ^4.64.6
+        version: 4.64.6
+      tracked-built-ins:
+        specifier: ^4.0.0
+        version: 4.1.2(@babel/core@7.29.7)
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+
   packages/layouts:
     dependencies:
       '@embroider/addon-shim':
@@ -493,9 +602,15 @@ importers:
       '@ember-formwright/ember':
         specifier: workspace:*
         version: link:../ember
+      '@ember-formwright/test-support':
+        specifier: workspace:*
+        version: link:../test-support
       '@ember/library-tsconfig':
         specifier: ^3.0.0
         version: 3.0.0
+      '@ember/test-helpers':
+        specifier: ^5.7.0
+        version: 5.7.0(@babel/core@7.29.7)
       '@embroider/addon-dev':
         specifier: ^8.4.2
         version: 8.4.2(@glint/template@1.9.0)(rollup@4.64.6)
@@ -512,14 +627,99 @@ importers:
         specifier: ^1.9.0
         version: 1.9.0
       '@maskito/core':
-        specifier: ^5.6.0
-        version: 5.6.0
+        specifier: ^5.6.1
+        version: 5.6.1
+      '@maskito/kit':
+        specifier: ^5.6.1
+        version: 5.6.1(@maskito/core@5.6.1)
+      '@maskito/phone':
+        specifier: ^5.6.1
+        version: 5.6.1(@maskito/core@5.6.1)(@maskito/kit@5.6.1(@maskito/core@5.6.1))(libphonenumber-js@1.13.15)
       '@rollup/plugin-babel':
         specifier: ^7.1.0
         version: 7.1.0(@babel/core@7.29.7)(rollup@4.64.6)
       babel-plugin-ember-template-compilation:
         specifier: ^4.0.1
         version: 4.0.1
+      ember-source:
+        specifier: ~7.3.0
+        version: 7.3.1(@glimmer/component@2.1.1)
+      libphonenumber-js:
+        specifier: ^1.13.15
+        version: 1.13.15
+      rollup:
+        specifier: ^4.64.6
+        version: 4.64.6
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+
+  packages/power-calendar:
+    dependencies:
+      '@embroider/addon-shim':
+        specifier: ^1.10.3
+        version: 1.10.3
+      decorator-transforms:
+        specifier: ^2.4.0
+        version: 2.4.0(@babel/core@7.29.7)
+      ember-modifier:
+        specifier: ^4.3.0
+        version: 4.3.0(@babel/core@7.29.7)
+    devDependencies:
+      '@babel/core':
+        specifier: ^7.29.7
+        version: 7.29.7
+      '@babel/plugin-transform-typescript':
+        specifier: ^7.29.7
+        version: 7.29.9(@babel/core@7.29.7)
+      '@babel/runtime':
+        specifier: ^7.29.7
+        version: 7.29.10
+      '@ember-formwright/ember':
+        specifier: workspace:*
+        version: link:../ember
+      '@ember-formwright/test-support':
+        specifier: workspace:*
+        version: link:../test-support
+      '@ember/library-tsconfig':
+        specifier: ^3.0.0
+        version: 3.0.0
+      '@ember/test-helpers':
+        specifier: ^5.7.0
+        version: 5.7.0(@babel/core@7.29.7)
+      '@embroider/addon-dev':
+        specifier: ^8.4.2
+        version: 8.4.2(@glint/template@1.9.0)(rollup@4.64.6)
+      '@embroider/macros':
+        specifier: ^1.21.1
+        version: 1.21.3(@babel/core@7.29.7)(@glint/template@1.9.0)
+      '@glimmer/component':
+        specifier: ^2.1.1
+        version: 2.1.1
+      '@glimmer/tracking':
+        specifier: ^1.1.2
+        version: 1.1.2
+      '@glint/ember-tsc':
+        specifier: ^1.11.6
+        version: 1.11.6(ember-source@7.3.1(@glimmer/component@2.1.1))(typescript@6.0.3)
+      '@glint/template':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@rollup/plugin-babel':
+        specifier: ^7.1.0
+        version: 7.1.0(@babel/core@7.29.7)(rollup@4.64.6)
+      babel-plugin-ember-template-compilation:
+        specifier: ^4.0.1
+        version: 4.0.1
+      ember-basic-dropdown:
+        specifier: ^9.0.1
+        version: 9.0.1(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@embroider/macros@1.21.3(@babel/core@7.29.7)(@glint/template@1.9.0))(@glimmer/component@2.1.1)
+      ember-concurrency:
+        specifier: ^5.3.0
+        version: 5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0)
+      ember-power-calendar:
+        specifier: ^2.0.1
+        version: 2.0.1(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(@glint/template@1.9.0)(ember-concurrency@5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0))
       ember-source:
         specifier: ~7.3.0
         version: 7.3.1(@glimmer/component@2.1.1)
@@ -638,6 +838,82 @@ importers:
         specifier: ~6.0.3
         version: 6.0.3
 
+  packages/tiptap:
+    dependencies:
+      '@embroider/addon-shim':
+        specifier: ^1.10.3
+        version: 1.10.3
+      decorator-transforms:
+        specifier: ^2.4.0
+        version: 2.4.0(@babel/core@7.29.7)
+      ember-modifier:
+        specifier: ^4.3.0
+        version: 4.3.0(@babel/core@7.29.7)
+    devDependencies:
+      '@babel/core':
+        specifier: ^7.29.7
+        version: 7.29.7
+      '@babel/plugin-transform-typescript':
+        specifier: ^7.29.7
+        version: 7.29.9(@babel/core@7.29.7)
+      '@babel/runtime':
+        specifier: ^7.29.7
+        version: 7.29.10
+      '@ember-formwright/ember':
+        specifier: workspace:*
+        version: link:../ember
+      '@ember-formwright/test-support':
+        specifier: workspace:*
+        version: link:../test-support
+      '@ember/library-tsconfig':
+        specifier: ^3.0.0
+        version: 3.0.0
+      '@ember/test-helpers':
+        specifier: ^5.7.0
+        version: 5.7.0(@babel/core@7.29.7)
+      '@embroider/addon-dev':
+        specifier: ^8.4.2
+        version: 8.4.2(@glint/template@1.9.0)(rollup@4.64.6)
+      '@embroider/macros':
+        specifier: ^1.21.1
+        version: 1.21.3(@babel/core@7.29.7)(@glint/template@1.9.0)
+      '@glimmer/component':
+        specifier: ^2.1.1
+        version: 2.1.1
+      '@glimmer/tracking':
+        specifier: ^1.1.2
+        version: 1.1.2
+      '@glint/ember-tsc':
+        specifier: ^1.11.6
+        version: 1.11.6(ember-source@7.3.1(@glimmer/component@2.1.1))(typescript@6.0.3)
+      '@glint/template':
+        specifier: ^1.9.0
+        version: 1.9.0
+      '@rollup/plugin-babel':
+        specifier: ^7.1.0
+        version: 7.1.0(@babel/core@7.29.7)(rollup@4.64.6)
+      '@tiptap/core':
+        specifier: ^3.32.0
+        version: 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/pm':
+        specifier: ^3.32.0
+        version: 3.32.1
+      '@tiptap/starter-kit':
+        specifier: ^3.32.0
+        version: 3.32.1
+      babel-plugin-ember-template-compilation:
+        specifier: ^4.0.1
+        version: 4.0.1
+      ember-source:
+        specifier: ~7.3.0
+        version: 7.3.1(@glimmer/component@2.1.1)
+      rollup:
+        specifier: ^4.64.6
+        version: 4.64.6
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+
   packages/warp-drive:
     dependencies:
       '@embroider/addon-shim':
@@ -677,12 +953,18 @@ importers:
       '@ember-formwright/ember':
         specifier: workspace:*
         version: link:../packages/ember
+      '@ember-formwright/file-upload':
+        specifier: workspace:*
+        version: link:../packages/file-upload
       '@ember-formwright/layouts':
         specifier: workspace:*
         version: link:../packages/layouts
       '@ember-formwright/maskito':
         specifier: workspace:*
         version: link:../packages/maskito
+      '@ember-formwright/power-calendar':
+        specifier: workspace:*
+        version: link:../packages/power-calendar
       '@ember-formwright/power-select':
         specifier: workspace:*
         version: link:../packages/power-select
@@ -692,6 +974,9 @@ importers:
       '@ember-formwright/test-support':
         specifier: workspace:*
         version: link:../packages/test-support
+      '@ember-formwright/tiptap':
+        specifier: workspace:*
+        version: link:../packages/tiptap
       '@ember-formwright/warp-drive':
         specifier: workspace:*
         version: link:../packages/warp-drive
@@ -741,14 +1026,26 @@ importers:
         specifier: ^1.9.0
         version: 1.9.0
       '@maskito/core':
-        specifier: ^5.6.0
-        version: 5.6.0
+        specifier: ^5.6.1
+        version: 5.6.1
       '@maskito/kit':
-        specifier: ^5.6.0
-        version: 5.6.0(@maskito/core@5.6.0)
+        specifier: ^5.6.1
+        version: 5.6.1(@maskito/core@5.6.1)
+      '@maskito/phone':
+        specifier: ^5.6.1
+        version: 5.6.1(@maskito/core@5.6.1)(@maskito/kit@5.6.1(@maskito/core@5.6.1))(libphonenumber-js@1.13.15)
       '@rollup/plugin-babel':
         specifier: ^7.1.0
         version: 7.1.0(@babel/core@7.29.7)(rollup@4.64.6)
+      '@tiptap/core':
+        specifier: ^3.32.0
+        version: 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/pm':
+        specifier: ^3.32.0
+        version: 3.32.1
+      '@tiptap/starter-kit':
+        specifier: ^3.32.0
+        version: 3.32.1
       '@types/qunit':
         specifier: ^2.19.14
         version: 2.19.14
@@ -779,9 +1076,15 @@ importers:
       ember-concurrency:
         specifier: ^5.3.0
         version: 5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0)
+      ember-file-upload:
+        specifier: ^10.1.0
+        version: 10.1.0(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(@glint/template@1.9.0)(ember-modifier@4.3.0(@babel/core@7.29.7))(tracked-built-ins@4.1.2(@babel/core@7.29.7))
       ember-load-initializers:
         specifier: ^3.0.1
         version: 3.0.1(ember-source@7.3.1(@glimmer/component@2.1.1))
+      ember-power-calendar:
+        specifier: ^2.0.1
+        version: 2.0.1(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(@glint/template@1.9.0)(ember-concurrency@5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0))
       ember-power-select:
         specifier: ^9.0.3
         version: 9.0.3(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(ember-basic-dropdown@9.0.1(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@embroider/macros@1.21.3(@babel/core@7.29.7)(@glint/template@1.9.0))(@glimmer/component@2.1.1))(ember-concurrency@5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0))
@@ -794,6 +1097,9 @@ importers:
       ember-source:
         specifier: ~7.3.0
         version: 7.3.1(@glimmer/component@2.1.1)
+      libphonenumber-js:
+        specifier: ^1.13.15
+        version: 1.13.15
       qunit:
         specifier: ^2.26.0
         version: 2.26.0
@@ -803,6 +1109,9 @@ importers:
       testem:
         specifier: ^3.21.0
         version: 3.21.3(@babel/core@7.29.7)(ejs@3.1.10)(handlebars@4.7.10)(underscore@1.13.8)
+      tracked-built-ins:
+        specifier: ^4.0.0
+        version: 4.1.2(@babel/core@7.29.7)
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
@@ -2082,13 +2391,20 @@ packages:
   '@marijn/find-cluster-break@1.0.4':
     resolution: {integrity: sha512-Wy0V7+SGUjnF9/TkiM1hKVDPj7jKXduPNboMVtHTA8dySMURWqfg/JZ9E2Sq8JgSJmkl7k7Qe9FLeMSrSraWmQ==}
 
-  '@maskito/core@5.6.0':
-    resolution: {integrity: sha512-CchnaPiXWy4llMEsb6AG4o7CwlyS2j/1ttHQXo0FMnLhcA5OwlFgMpEb6gCZkUN5a0Bns8UTjm7eUpVBHRoqUQ==}
+  '@maskito/core@5.6.1':
+    resolution: {integrity: sha512-P5XKR1wwkTLagzyH79ZE6TfQI20IR+eHeP8hoKrfqlr99luLo1QYTux9OFPvIH+o2GGzCkIBbgwYaquunZlC1Q==}
 
-  '@maskito/kit@5.6.0':
-    resolution: {integrity: sha512-QbOElQlC/fUlZG7KhNKDDTovXCp1hnm9BT6JzffW/y3hKEepDn3iWAbUxi4mHnQEkrWw24LWI1j8VENdlGgmbQ==}
+  '@maskito/kit@5.6.1':
+    resolution: {integrity: sha512-iFGbJpXkagGzLPgxnneTZaV5YAUfSNBAc+y3SgdSYWY4fGJpZvzwVTLmHIngyEHPsd0VzIV9DcXKuzFnIkZfiA==}
     peerDependencies:
-      '@maskito/core': ^5.6.0
+      '@maskito/core': ^5.6.1
+
+  '@maskito/phone@5.6.1':
+    resolution: {integrity: sha512-DCykm1dEuz+S0ANHeDFC+y5Knt0mTVGfS/kLyA3bJs+yOOkJBVpe08yisrQTcY/ZJBwu9jDKH7EJ+DAoIpRR6A==}
+    peerDependencies:
+      '@maskito/core': ^5.6.1
+      '@maskito/kit': ^5.6.1
+      libphonenumber-js: '>=1.0.0'
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -2591,6 +2907,133 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@tiptap/core@3.32.1':
+    resolution: {integrity: sha512-ImhEufkmqFK1mIbcYAZOhoBColsdy4sepB3Wd6vDPULbonGXL1LliLs79IiVY1hzmqkBksxwyqkyPxlcFMNTdQ==}
+    peerDependencies:
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-blockquote@3.32.1':
+    resolution: {integrity: sha512-R1PSA2kjhTnbL8uw9yBd7E9rqR4mCqcs4jsFELVzbPAzUrvv3zOvfjBotdzTvru28++Y1ptf57EK3kVs4JFzww==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-bold@3.32.1':
+    resolution: {integrity: sha512-mQFAKhUXdOQHjueSfhf1+rsbWORLMxr/UG0L8RhEF83npTxD4a0yq8MaJKLCgFZKp4OULajMxoVg7wTFQT/NUA==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extension-bullet-list@3.32.1':
+    resolution: {integrity: sha512-RoR0oenJ4HSf0UJ4EQKZiFUFCGjGeWrO0ulIh9ziK9T3GPnAo9nrv1uyiZjaHGVc5/TeOvZ2z2xX0fugSsEuPQ==}
+    peerDependencies:
+      '@tiptap/extension-list': 3.32.1
+
+  '@tiptap/extension-code-block@3.32.1':
+    resolution: {integrity: sha512-kK0XTm6xt1qowqX/1AOq9vGIljrou+3tQefi7qV6D6um2opIj/w7y+iFluH3s3F/tLFW44R53xDC+KXbCoAt1Q==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-code@3.32.1':
+    resolution: {integrity: sha512-QVpgbAXqBAd+WWuib8KXfFd2ccbwb1/1gqh4D34pEltknMtFlrLhftpNXnE+1nsHm2dUtY9tbS42tU3yQ32yIA==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extension-document@3.32.1':
+    resolution: {integrity: sha512-0BkKoRkKniaOLeMfqUGYSD+QIyQ2fa9Md0s77b6ofmGdcUw3Garo70uHKOjV8L0Y4wZZz61E3wvd41Efr9C8vw==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extension-dropcursor@3.32.1':
+    resolution: {integrity: sha512-xdXH67DAryheNS3RAkt/9WBJ8OZ/oGyedNiyxvUsD9Np7WwS8IZ0d3fUYjiUQ9axdE1nnPCD08XSYd+O53XD8w==}
+    peerDependencies:
+      '@tiptap/extensions': 3.32.1
+
+  '@tiptap/extension-gapcursor@3.32.1':
+    resolution: {integrity: sha512-9+oUUr3MalmJ2XOU8PVJbQPJUTOTO9MrT8Z7wtNiAjyJlpTDSot0jgb3xPGVH/9WloU7K/KzuwQlnAs0K+7+ig==}
+    peerDependencies:
+      '@tiptap/extensions': 3.32.1
+
+  '@tiptap/extension-hard-break@3.32.1':
+    resolution: {integrity: sha512-xx7E4pSwlsXRSxRpXh40SQp5/5Qz7k2efP7CYAWuHQC64DjknlVeGcmnuM7ZUYmT6aa1JFzstBU0Q6iDXlX4eQ==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extension-heading@3.32.1':
+    resolution: {integrity: sha512-45OuAbyzbgcecd7wZfyGI/9cs2AtvOJFDXsrRG9YFWQKDTe1IuuJMT2/9SRYOE+BJSD1gZWRwQVInEJ6PS0tmQ==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extension-horizontal-rule@3.32.1':
+    resolution: {integrity: sha512-gdnlsfYs5lvL71xosvWE7EecpZyHagEOuPWiBh+y0z7VX7QRT4eqmt+Im8A7uG+hw9gaPUwxbERPjxP2SvuA9g==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-italic@3.32.1':
+    resolution: {integrity: sha512-AKmJY7JG1DKbF+rXVvK/u3/0S3WXYduVkHCeV85hXd0cT8S2h9AWNo4aufJ6niYGuLnbKl0vaV6Z9Is/81ixlw==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extension-link@3.32.1':
+    resolution: {integrity: sha512-uYiZvnn11CbEKEsyMFOtwEvD3TGFnMG54XClCO9tR4SILll6X8nJuhTlt4D6BJFIJah3Qq14inMpr/YTplx69w==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-list-item@3.32.1':
+    resolution: {integrity: sha512-MSbpWNDFGY/YPJrzYfxMDJRqcSQiDKIztIvPKlvL8pDXkU+5DWsrqjCfgOLtjys13h7JPCX1kMDupUWCDpNNwA==}
+    peerDependencies:
+      '@tiptap/extension-list': 3.32.1
+
+  '@tiptap/extension-list-keymap@3.32.1':
+    resolution: {integrity: sha512-3C/y5GXCrmXhL9TdbFuPk7KqEwTWlr1iHLn6tvvoLWHEldoRjffvVkLJigoJ2gKpyu9JnCxpKXgPc0yNdXnBTA==}
+    peerDependencies:
+      '@tiptap/extension-list': 3.32.1
+
+  '@tiptap/extension-list@3.32.1':
+    resolution: {integrity: sha512-7OXo4BH0/r3hdzg055/9DxvykYDf8V/fB8Y1YsgVnmkDywnlQhaaqITD1XG3Gx1yioJwQ/2IiFGOwndVLKF9ow==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-ordered-list@3.32.1':
+    resolution: {integrity: sha512-TrEtPv2iM/S/8C9mjU6kT9XOqYNkSpAUZWHJkUgXVQWwIMq8V1+mcBq+FNBsGyieIRdiosWMvngtpKCEw1LIWQ==}
+    peerDependencies:
+      '@tiptap/extension-list': 3.32.1
+
+  '@tiptap/extension-paragraph@3.32.1':
+    resolution: {integrity: sha512-gRUUShNxeg9jUrct1x4npiI/wqgmqkO0lZoTbEXLJjxfU3NM46Q0hBO+tLB+lWvOo0SEo71eoy32uyPkZ11dzg==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extension-strike@3.32.1':
+    resolution: {integrity: sha512-xduHVV0AilSabWrKXDudQu4kLqL2sCns3hokS7D453e0rgMezOmHglbGqm+AcP8nVQ0a5sw4g1XEHNBPKkr8Vg==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extension-text@3.32.1':
+    resolution: {integrity: sha512-/cM+x4zHjNpceFX/K1nR/DoND5upYPcJnt7PkEyiLbkMKey1xzU86zbsxtKrgVtJpO9aLOnanN5O0d4DVNDDhg==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extension-underline@3.32.1':
+    resolution: {integrity: sha512-GzJaWZS6ADOZWTtNKcmK9sDR4CtVWjnVBsQZbnaPqnc2cUg4mNLX9IBaCJWYE3GjfoEnhoJOtEcolYSNTbKzWA==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+
+  '@tiptap/extensions@3.32.1':
+    resolution: {integrity: sha512-yjFOMinGm4CVTlJn9BqusW/HDR6iCyhZ/OJOeJAPwcTg0S4HudceCgyFFh1N3ulHfWtzh4BNGuK+lyPFrjIUOw==}
+    peerDependencies:
+      '@tiptap/core': 3.32.1
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/pm@3.32.1':
+    resolution: {integrity: sha512-xgIcbATKQQiabqOntfTuN2jk+fDXL+zaCIdWfgQL2xpnIDx9rQRf60oljorYuYIEybJ5Uqo6PE7iu8Zq7LJbjQ==}
+
+  '@tiptap/starter-kit@3.32.1':
+    resolution: {integrity: sha512-/WD75HLZEGk2snYhejdWA/rbpIR/7BEcU4aQfztABNXDJGAOKKwyI8FQOCTHs7YoyYgpDEZoc2RoFOsih2IK2w==}
 
   '@tybys/wasm-util@0.10.4':
     resolution: {integrity: sha512-W3c4gRigFS0T/Ma4qIYF3GDAc5AQdHb1yL5znJT1Zv1YaD9Kitx656wBjvr19qbiosmZT8lWDM5BEMynUqX65A==}
@@ -4055,6 +4498,22 @@ packages:
   ember-estree@0.8.1:
     resolution: {integrity: sha512-8gOi6SvtEGJ7njzSfVbzTOB46ryIYNQi9a56QBr0ZvXW676eJslnIet5n3oS6zAiaae0TkxbYForfDekzDUd2A==}
 
+  ember-file-upload@10.1.0:
+    resolution: {integrity: sha512-ESYmuTxD9mVC12q75jXWqJRspXOMhHxvPDQEZ8DmG0SVCM3ebbxpciWX771XLxnn/BYl0AfnnFjldhuVo28yGQ==}
+    engines: {node: 16.* || >= 18}
+    peerDependencies:
+      '@ember/test-helpers': ^2.9.3 || ^3.0.3 || ^4.0.4 || ^5.0.0
+      '@glimmer/component': '>=1.1.2'
+      ember-cli-mirage: '*'
+      ember-modifier: ^3.2.7 || ^4.1.0
+      miragejs: '*'
+      tracked-built-ins: '>=3.1.1'
+    peerDependenciesMeta:
+      ember-cli-mirage:
+        optional: true
+      miragejs:
+        optional: true
+
   ember-load-initializers@3.0.1:
     resolution: {integrity: sha512-qV3vxJKw5+7TVDdtdLPy8PhVsh58MlK8jwzqh5xeOwJPNP7o0+BlhvwoIlLYTPzGaHdfjEIFCgVSyMRGd74E1g==}
     engines: {node: '>= 18.*'}
@@ -4067,6 +4526,13 @@ packages:
   ember-page-title@9.0.3:
     resolution: {integrity: sha512-fedRHUsvq8tIZgOii8jTrfAyeq+la/9H5eAzhNNwEyzo7nDMmqK2SxsyBUGXprd8fOacsPabLlzlucMi/4mUpA==}
     engines: {node: 16.* || >= 18}
+
+  ember-power-calendar@2.0.1:
+    resolution: {integrity: sha512-Gw7YSGrT3Dm1ifWy2mVEv1dheXFrmzTt+kibWPzOrRlBPUOR6HBhb58a3L86zQfRsplI7bmJsRpcmiSzPkDcGg==}
+    peerDependencies:
+      '@ember/test-helpers': ^5.0.0
+      '@glimmer/component': ^2.0.0
+      ember-concurrency: ^5.1.0
 
   ember-power-select@9.0.3:
     resolution: {integrity: sha512-0V2i2c6cyGbQHKKeFS1NvaYahesWqGpEdbGnTuYq7oTpGfEk0q95nTi9DLNmr3Jdsm71fEp2NnA+bFVkzNymMg==}
@@ -5309,6 +5775,9 @@ packages:
   lezer-glimmer@2.0.3:
     resolution: {integrity: sha512-f8iv3pfuQmhUxa6csy6YX8aLBtaqh0ImfER1k7jjT4/QCRi5ZnFQTLaZOkUbwuPy0BGrmSoCvXGChODFgQsaCw==}
 
+  libphonenumber-js@1.13.15:
+    resolution: {integrity: sha512-AHdhEQeDFEJ4GKDAQ9AwxChy+v2kUILUB3TGQRpkXMkWePjXTU/WQEzWVQoIx/Gz8fE73Wr5SEuZCy2vk8jrMQ==}
+
   lightningcss-android-arm64@1.33.0:
     resolution: {integrity: sha512-gEpRTalKdosp4Bb8qWtc2iOgE5SeIHlpS1up9bFq2wAyYhl1UdTObYiHe98zEM9SQvSoqQZ1IQD0JNpg3Ml5pg==}
     engines: {node: '>= 12.0.0'}
@@ -5388,6 +5857,9 @@ packages:
 
   linkify-it@5.0.2:
     resolution: {integrity: sha512-ONTm2jCMAVZjgQa/Fy1kScXsuOoF5NPTsoFBdE1KVIZ2vAh/r9+Bqo+0jINCBYnavTPQZz38QzFTme79ENoN3Q==}
+
+  linkifyjs@4.4.0:
+    resolution: {integrity: sha512-InTexvtbai+2c+dEVGcc6O6P2DMVIiwD9a/i4zFroazOIYLOS6FSVmAJ7kFeumnCMx6/gQqNAkbUvgMubV4+MA==}
 
   livereload-js@3.4.1:
     resolution: {integrity: sha512-5MP0uUeVCec89ZbNOT/i97Mc+q3SxXmiUGhRFOTmhrGPn//uWVQdCvcLJDy64MSBR5MidFdOR7B9viumoavy6g==}
@@ -5941,6 +6413,9 @@ packages:
     resolution: {integrity: sha512-eNwHudNbO1folBP3JsZ19v9azXWtQZjICdr3Q0TDPIaeBQ3mXLrh54wM+er0+hSp+dWKf+Z8KM58CYzEyIYxYg==}
     engines: {node: '>=6'}
 
+  orderedmap@2.1.1:
+    resolution: {integrity: sha512-TvAWxi0nDe1j/rtMcWcIj94+Ffe6n7zhow33h40SKxmsmozs6dz/e+EajymfoFcHd7sxNn8yHM8839uixMOV6g==}
+
   os-locale@6.0.2:
     resolution: {integrity: sha512-qIb8bzRqaN/vVqEYZ7lTAg6PonskO7xOmM7OClD28F6eFa4s5XGe4bGpHUHMoCHbNNuR0pDYFeSLiW5bnjWXIA==}
     engines: {node: '>=12.20'}
@@ -6212,6 +6687,45 @@ packages:
   property-information@7.2.0:
     resolution: {integrity: sha512-IAtzIB6sUiWaJYrX9smp3V46pBGbBeLFRGdh25kg1334VcBlD8HzhPeNIWQH9zhGmo2itIe25EHt9dQP7G5hmg==}
 
+  prosemirror-changeset@2.4.4:
+    resolution: {integrity: sha512-Gyuz9jYdrAeA9I7AholyOes9KUmv/lEwsC5O9s5xF5VB3EgTPsXMGUxz4+H1B+wKVPdZbvRcg1Cp3x8qX+8ofA==}
+
+  prosemirror-commands@1.7.2:
+    resolution: {integrity: sha512-q6Q6szxqdu9Xd6EcdKsqXghu5nQdZTpB4Q9yd04WRc7/jt763e/rT60Owh0L1GYY+T46o5rD+9lEN36dZS43tw==}
+
+  prosemirror-dropcursor@1.8.4:
+    resolution: {integrity: sha512-VmKxhcA6a+h5oPSYmfF1ZNeQqPbyYaIxqZsKqeYCyTlPtrjUgNaHL3P8vVaO19oqAV0zuaM/axkowZHrB1P3Tg==}
+
+  prosemirror-gapcursor@1.4.1:
+    resolution: {integrity: sha512-pMdYaEnjNMSwl11yjEGtgTmLkR08m/Vl+Jj443167p9eB3HVQKhYCc4gmHVDsLPODfZfjr/MmirsdyZziXbQKw==}
+
+  prosemirror-history@1.5.1:
+    resolution: {integrity: sha512-onlwnqKvgtFg6srZOmDOAhlAy1FIHQpOExORybX0S+DvJepE5tPALrB9iGet/2sqqqrelSnB10OoiOJqAvu2DA==}
+
+  prosemirror-inputrules@1.5.1:
+    resolution: {integrity: sha512-7wj4uMjKaXWAQ1CDgxNzNtR9AlsuwzHfdFH1ygEHA2KHF2DOEaXl1CJfNPAKCg9qNEh4rum975QLaCiQPyY6Fw==}
+
+  prosemirror-keymap@1.2.3:
+    resolution: {integrity: sha512-4HucRlpiLd1IPQQXNqeo81BGtkY8Ai5smHhKW9jjPKRc2wQIxksg7Hl1tTI2IfT2B/LgX6bfYvXxEpJl7aKYKw==}
+
+  prosemirror-model@1.25.12:
+    resolution: {integrity: sha512-Ue2gTmXMa7EhpLNhC7J+h4+ykD8ha12K6rrZFFKKJHBForfIStw5gJ6Zrf1mqqAa9NmpmEB4wp9bKmA4eUVjWg==}
+
+  prosemirror-schema-list@1.5.1:
+    resolution: {integrity: sha512-927lFx/uwyQaGwJxLWCZRkjXG0p48KpMj6ueoYiu4JX05GGuGcgzAy62dfiV8eFZftgyBUvLx76RsMe20fJl+Q==}
+
+  prosemirror-state@1.4.4:
+    resolution: {integrity: sha512-6jiYHH2CIGbCfnxdHbXZ12gySFY/fz/ulZE333G6bPqIZ4F+TXo9ifiR86nAHpWnfoNjOb3o5ESi7J8Uz1jXHw==}
+
+  prosemirror-tables@1.8.5:
+    resolution: {integrity: sha512-V/0cDCsHKHe/tfWkeCmthNUcEp1IVO3p6vwN8XtwE9PZQLAZJigbw3QoraAdfJPir4NKJtNvOB8oYGKRl+t0Dw==}
+
+  prosemirror-transform@1.12.4:
+    resolution: {integrity: sha512-2/WuPum3pn+O/Vi2vzpi8210ICUe2kIPXdLYjQ09Pv5DtT5bcKWMJhAKPBwvpPjpp5iOYUVwVEr0gOM1BY1Mgw==}
+
+  prosemirror-view@1.42.8:
+    resolution: {integrity: sha512-ftDZjCs9AjAekXmCfJRn2U3IdlRCl0Yc4tZT1/jJWCsz4DiSifEBXtWmpJpw/4f1Rg328uAUQ+u2lCJ0+AVZkw==}
+
   proxy-addr@2.0.8:
     resolution: {integrity: sha512-5nnx0yGyVUcY6t9RnWcARWtwT9F1D8O9rt08htPvnd49W1IgZtmLkhu9WfMzQj1cFxjHIO6connUNVW5k7AVyQ==}
     engines: {node: '>= 0.10'}
@@ -6465,6 +6979,9 @@ packages:
     resolution: {integrity: sha512-fX1Vy+UNKdXn+xKDnu/HBXbHVr1AY8cSdQj9BU4kLv5aFCMqGpvrVbyUMmjN3DdzWhSAuTbcX8PCNEVaumthYA==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
+
+  rope-sequence@1.3.4:
+    resolution: {integrity: sha512-UT5EDe2cu2E/6O4igUr5PSFs23nvvukicWHx6GnOPlHAiiYbzNuCRQCuiUdHJQcqKalLKlrYJnjY0ySGsXNQXQ==}
 
   route-recognizer@0.3.4:
     resolution: {integrity: sha512-2+MhsfPhvauN1O8KaXpXAOfR/fwe8dnUXVM+xw7yt40lJRfPVQxV6yryZm0cgRvAj5fMF/mdRZbL2ptwbs5i2g==}
@@ -9467,11 +9984,17 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.4': {}
 
-  '@maskito/core@5.6.0': {}
+  '@maskito/core@5.6.1': {}
 
-  '@maskito/kit@5.6.0(@maskito/core@5.6.0)':
+  '@maskito/kit@5.6.1(@maskito/core@5.6.1)':
     dependencies:
-      '@maskito/core': 5.6.0
+      '@maskito/core': 5.6.1
+
+  '@maskito/phone@5.6.1(@maskito/core@5.6.1)(@maskito/kit@5.6.1(@maskito/core@5.6.1))(libphonenumber-js@1.13.15)':
+    dependencies:
+      '@maskito/core': 5.6.1
+      '@maskito/kit': 5.6.1(@maskito/core@5.6.1)
+      libphonenumber-js: 1.13.15
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
@@ -9795,6 +10318,148 @@ snapshots:
   '@socket.io/component-emitter@3.1.2': {}
 
   '@standard-schema/spec@1.1.0': {}
+
+  '@tiptap/core@3.32.1(@tiptap/pm@3.32.1)':
+    dependencies:
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-blockquote@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-bold@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-bullet-list@3.32.1(@tiptap/extension-list@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/extension-list': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-code-block@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-code@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-document@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-dropcursor@3.32.1(@tiptap/extensions@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/extensions': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-gapcursor@3.32.1(@tiptap/extensions@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/extensions': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-hard-break@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-heading@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-horizontal-rule@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-italic@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-link@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/pm': 3.32.1
+      linkifyjs: 4.4.0
+
+  '@tiptap/extension-list-item@3.32.1(@tiptap/extension-list@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/extension-list': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-list-keymap@3.32.1(@tiptap/extension-list@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/extension-list': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-list@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/extension-ordered-list@3.32.1(@tiptap/extension-list@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/extension-list': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-paragraph@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-strike@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-text@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extension-underline@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+
+  '@tiptap/extensions@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/pm': 3.32.1
+
+  '@tiptap/pm@3.32.1':
+    dependencies:
+      prosemirror-changeset: 2.4.4
+      prosemirror-commands: 1.7.2
+      prosemirror-dropcursor: 1.8.4
+      prosemirror-gapcursor: 1.4.1
+      prosemirror-history: 1.5.1
+      prosemirror-inputrules: 1.5.1
+      prosemirror-keymap: 1.2.3
+      prosemirror-model: 1.25.12
+      prosemirror-schema-list: 1.5.1
+      prosemirror-state: 1.4.4
+      prosemirror-tables: 1.8.5
+      prosemirror-transform: 1.12.4
+      prosemirror-view: 1.42.8
+
+  '@tiptap/starter-kit@3.32.1':
+    dependencies:
+      '@tiptap/core': 3.32.1(@tiptap/pm@3.32.1)
+      '@tiptap/extension-blockquote': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+      '@tiptap/extension-bold': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extension-bullet-list': 3.32.1(@tiptap/extension-list@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))
+      '@tiptap/extension-code': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extension-code-block': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+      '@tiptap/extension-document': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extension-dropcursor': 3.32.1(@tiptap/extensions@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))
+      '@tiptap/extension-gapcursor': 3.32.1(@tiptap/extensions@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))
+      '@tiptap/extension-hard-break': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extension-heading': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extension-horizontal-rule': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+      '@tiptap/extension-italic': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extension-link': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+      '@tiptap/extension-list': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+      '@tiptap/extension-list-item': 3.32.1(@tiptap/extension-list@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))
+      '@tiptap/extension-list-keymap': 3.32.1(@tiptap/extension-list@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))
+      '@tiptap/extension-ordered-list': 3.32.1(@tiptap/extension-list@3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1))
+      '@tiptap/extension-paragraph': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extension-strike': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extension-text': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extension-underline': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))
+      '@tiptap/extensions': 3.32.1(@tiptap/core@3.32.1(@tiptap/pm@3.32.1))(@tiptap/pm@3.32.1)
+      '@tiptap/pm': 3.32.1
 
   '@tybys/wasm-util@0.10.4':
     dependencies:
@@ -11793,6 +12458,20 @@ snapshots:
       content-tag: 4.2.1
       oxc-parser: 0.130.0
 
+  ember-file-upload@10.1.0(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(@glint/template@1.9.0)(ember-modifier@4.3.0(@babel/core@7.29.7))(tracked-built-ins@4.1.2(@babel/core@7.29.7)):
+    dependencies:
+      '@ember/test-helpers': 5.7.0(@babel/core@7.29.7)
+      '@ember/test-waiters': 4.1.2
+      '@embroider/addon-shim': 1.10.3
+      '@embroider/macros': 1.21.3(@babel/core@7.29.7)(@glint/template@1.9.0)
+      '@glimmer/component': 2.1.1
+      ember-modifier: 4.3.0(@babel/core@7.29.7)
+      tracked-built-ins: 4.1.2(@babel/core@7.29.7)
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@glint/template'
+      - supports-color
+
   ember-load-initializers@3.0.1(ember-source@7.3.1(@glimmer/component@2.1.1)):
     dependencies:
       ember-source: 7.3.1(@glimmer/component@2.1.1)
@@ -11810,6 +12489,22 @@ snapshots:
       '@embroider/addon-shim': 1.10.3
       '@simple-dom/document': 1.4.0
     transitivePeerDependencies:
+      - supports-color
+
+  ember-power-calendar@2.0.1(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(@glint/template@1.9.0)(ember-concurrency@5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0)):
+    dependencies:
+      '@ember/test-helpers': 5.7.0(@babel/core@7.29.7)
+      '@embroider/addon-shim': 1.10.3
+      '@embroider/macros': 1.21.3(@babel/core@7.29.7)(@glint/template@1.9.0)
+      '@glimmer/component': 2.1.1
+      decorator-transforms: 2.4.0(@babel/core@7.29.7)
+      ember-concurrency: 5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0)
+      ember-element-helper: 0.8.8
+      ember-modifier: 4.3.0(@babel/core@7.29.7)
+      ember-truth-helpers: 5.0.0
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@glint/template'
       - supports-color
 
   ember-power-select@9.0.3(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@glimmer/component@2.1.1)(ember-basic-dropdown@9.0.1(@babel/core@7.29.7)(@ember/test-helpers@5.7.0(@babel/core@7.29.7))(@embroider/macros@1.21.3(@babel/core@7.29.7)(@glint/template@1.9.0))(@glimmer/component@2.1.1))(ember-concurrency@5.3.0(@babel/core@7.29.7)(@glint/template@1.9.0)):
@@ -13472,6 +14167,8 @@ snapshots:
       '@lezer/javascript': 1.5.6
       '@lezer/lr': 1.4.11
 
+  libphonenumber-js@1.13.15: {}
+
   lightningcss-android-arm64@1.33.0:
     optional: true
 
@@ -13529,6 +14226,8 @@ snapshots:
   linkify-it@5.0.2:
     dependencies:
       uc.micro: 2.1.0
+
+  linkifyjs@4.4.0: {}
 
   livereload-js@3.4.1: {}
 
@@ -14194,6 +14893,8 @@ snapshots:
       strip-ansi: 5.2.0
       wcwidth: 1.0.1
 
+  orderedmap@2.1.1: {}
+
   os-locale@6.0.2:
     dependencies:
       lcid: 3.1.1
@@ -14430,6 +15131,80 @@ snapshots:
   promise.hash.helper@1.0.8: {}
 
   property-information@7.2.0: {}
+
+  prosemirror-changeset@2.4.4:
+    dependencies:
+      prosemirror-transform: 1.12.4
+
+  prosemirror-commands@1.7.2:
+    dependencies:
+      prosemirror-model: 1.25.12
+      prosemirror-state: 1.4.4
+      prosemirror-transform: 1.12.4
+
+  prosemirror-dropcursor@1.8.4:
+    dependencies:
+      prosemirror-state: 1.4.4
+      prosemirror-transform: 1.12.4
+      prosemirror-view: 1.42.8
+
+  prosemirror-gapcursor@1.4.1:
+    dependencies:
+      prosemirror-keymap: 1.2.3
+      prosemirror-model: 1.25.12
+      prosemirror-state: 1.4.4
+      prosemirror-view: 1.42.8
+
+  prosemirror-history@1.5.1:
+    dependencies:
+      prosemirror-state: 1.4.4
+      prosemirror-transform: 1.12.4
+      prosemirror-view: 1.42.8
+      rope-sequence: 1.3.4
+
+  prosemirror-inputrules@1.5.1:
+    dependencies:
+      prosemirror-state: 1.4.4
+      prosemirror-transform: 1.12.4
+
+  prosemirror-keymap@1.2.3:
+    dependencies:
+      prosemirror-state: 1.4.4
+      w3c-keyname: 2.2.8
+
+  prosemirror-model@1.25.12:
+    dependencies:
+      orderedmap: 2.1.1
+
+  prosemirror-schema-list@1.5.1:
+    dependencies:
+      prosemirror-model: 1.25.12
+      prosemirror-state: 1.4.4
+      prosemirror-transform: 1.12.4
+
+  prosemirror-state@1.4.4:
+    dependencies:
+      prosemirror-model: 1.25.12
+      prosemirror-transform: 1.12.4
+      prosemirror-view: 1.42.8
+
+  prosemirror-tables@1.8.5:
+    dependencies:
+      prosemirror-keymap: 1.2.3
+      prosemirror-model: 1.25.12
+      prosemirror-state: 1.4.4
+      prosemirror-transform: 1.12.4
+      prosemirror-view: 1.42.8
+
+  prosemirror-transform@1.12.4:
+    dependencies:
+      prosemirror-model: 1.25.12
+
+  prosemirror-view@1.42.8:
+    dependencies:
+      prosemirror-model: 1.25.12
+      prosemirror-state: 1.4.4
+      prosemirror-transform: 1.12.4
 
   proxy-addr@2.0.8:
     dependencies:
@@ -14906,6 +15681,8 @@ snapshots:
       '@rollup/rollup-win32-x64-gnu': 4.64.6
       '@rollup/rollup-win32-x64-msvc': 4.64.6
       fsevents: 2.3.3
+
+  rope-sequence@1.3.4: {}
 
   route-recognizer@0.3.4: {}
 
