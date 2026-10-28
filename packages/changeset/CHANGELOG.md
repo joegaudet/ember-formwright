@@ -1,5 +1,13 @@
 # @ember-formwright/changeset
 
+## 1.3.0
+
+### Patch Changes
+
+- Updated dependencies [aad9026]
+- Updated dependencies [abc6560]
+  - @ember-formwright/ember@1.3.0
+
 ## 1.2.0
 
 ### Patch Changes

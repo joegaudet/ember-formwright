@@ -1,6 +1,6 @@
 {
   "name": "@ember-formwright/layouts",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Field layouts for Formwright: horizontal, compact, checkbox-after, and an Actions bar.",
   "keywords": [
     "ember-addon",
