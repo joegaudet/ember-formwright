@@ -33,6 +33,12 @@ export interface ControlSignature<V = unknown> {
     showCount?: boolean
     currency?: string
     locale?: string
+    /**
+     * The control renders inside a callout: a popover in the top layer. A control with its own
+     * floating UI (a dropdown, a date picker) should render it in place, inside the control,
+     * or it opens underneath the popover and a click on it closes the callout.
+     */
+    callout?: boolean
   }
 }
 

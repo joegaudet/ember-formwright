@@ -258,7 +258,8 @@ import '@ember-formwright/ember/theme.css' // optional
           <code>time</code>, <code>textarea</code>, <code>select</code>, <code>radio</code>,
           <code>checkbox</code>, <code>checkbox-group</code> and <code>currency</code> (formatted
           with <code>Intl</code>). Pass any component to <code>@control</code>, or register one by
-          name.
+          name. Searchable, async and multiple selects come from
+          <code>@ember-formwright/power-select</code>.
         </p>
         <p>
           <a href="guide/" role="button">Read the guide</a>&nbsp; Every control, option and hook,
@@ -499,7 +500,7 @@ export const UserValidations = {
           Describe a form once as a harness class. Decorators declare its fields, each with the
           harness for its control, and its nested forms. Every harness is created once and looks up
           the DOM live, so it survives re-renders. Custom controls get their own harness by
-          subclassing <code>FieldHarness</code>.
+          subclassing <code>FieldHarness</code>, as <code>PowerSelectHarness</code> does.
         </p>
         <div class="grid">
           <pre><code class="language-typescript">import {
@@ -631,6 +632,13 @@ export class SignupForm extends FormHarness {
                 <td>A <code>masked</code> control powered by Maskito: phones, cards, dates.</td>
               </tr>
               <tr>
+                <th scope="row"><code>@ember-formwright/power-select</code></th>
+                <td>
+                  <code>power-select</code> and <code>power-select-multiple</code> controls on
+                  ember-power-select: search, async options, chips, with a harness for tests.
+                </td>
+              </tr>
+              <tr>
                 <th scope="row"><code>@ember-formwright/test-support</code></th>
                 <td>The form harnesses above, with drivers you can extend for custom controls.</td>
               </tr>
@@ -647,6 +655,10 @@ setDefaultAdapter(warpDriveAdapter)</code></pre>
         <pre><code class="language-handlebars">{{! options straight from a real-enums class }}
 &lt;f.Field @for="state" @control="radio" @label="State"
   @options={{enumOptions OrderState except=(array OrderState.Cancelled)}} /&gt;</code></pre>
+        <pre><code class="language-handlebars">{{! a searchable select, options from your API }}
+&lt;f.Field @for="owner" @control="power-select" @label="Owner" @format={{userName}} as |field|&gt;
+  &lt;field.Control @search={{searchUsers}} @searchEnabled={{true}} /&gt;
+&lt;/f.Field&gt;</code></pre>
       </section>
 
       <section id="demo">

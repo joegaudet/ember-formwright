@@ -3,7 +3,10 @@ import compatModules from '@embroider/virtual/compat-modules'
 import Resolver from 'ember-resolver'
 import loadInitializers from 'ember-load-initializers'
 import config from 'docs-app/config/environment'
+import 'ember-basic-dropdown/styles'
+import 'ember-power-select/styles'
 import '@ember-formwright/ember/theme.css'
+import '@ember-formwright/power-select/theme.css'
 import './styles/app.css'
 
 export default class App extends Application {

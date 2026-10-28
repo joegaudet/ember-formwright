@@ -2,6 +2,7 @@ import { module, test } from 'qunit'
 import { setupRenderingTest } from 'test-app/tests/helpers'
 import { render, click, blur } from '@ember/test-helpers'
 import Component from '@glimmer/component'
+import type { TOC } from '@ember/component/template-only'
 import { on } from '@ember/modifier'
 import { get } from '@ember/helper'
 import { a11yAudit } from 'ember-a11y-testing/test-support'
@@ -279,6 +280,61 @@ module('Integration | controls', function (hooks) {
     await click('[data-test-fw-field="a"] [data-test-stepper]')
     await click('[data-test-fw-field="b"] [data-test-stepper]')
     assert.deepEqual(model, { a: 2, b: 6 })
+  })
+
+  test('inline and confirm modes focus a control whose focusable element is not an input', async function (assert) {
+    // A listbox-like control: the field's id is on a div with a tabindex, and a native
+    // input that is not the control comes first.
+    const Picker: TOC<ControlSignature<string>> = <template>
+      <input type="hidden" value={{@value}} />
+      <div id={{@id}} role="combobox" aria-expanded="false" tabindex="0" data-test-picker>
+        {{@value}}
+      </div>
+    </template>
+    const model = { a: 'x', b: 'y' }
+
+    await render(
+      <template>
+        <Form @model={{model}} @inline={{true}} as |f|>
+          <f.Field @for="a" @control={{Picker}} @label="A" />
+        </Form>
+        <Form @model={{model}} @inline={{true}} @callout={{true}} @name="callout" as |f|>
+          <f.Field @for="b" @control={{Picker}} @label="B" />
+        </Form>
+      </template>,
+    )
+
+    await click('[data-test-fw-field="a"] [data-test-fw-display]')
+    assert.dom('[data-test-fw-field="a"] [data-test-picker]').isFocused()
+    await click('[data-test-fw-field="b"] [data-test-fw-display]')
+    assert.dom('[data-test-fw-field="b"] [data-test-picker]').isFocused()
+  })
+
+  test('a control is told when it renders inside a callout', async function (assert) {
+    const Where: TOC<ControlSignature<string>> = <template>
+      <input id={{@id}} data-test-where={{if @callout "callout" "inline"}} />
+    </template>
+    const model = { a: '', b: '' }
+
+    await render(
+      <template>
+        <Form @model={{model}} @inline={{true}} as |f|>
+          <f.Field @for="a" @control={{Where}} @label="A" />
+        </Form>
+        <Form @model={{model}} @inline={{true}} @callout={{true}} @name="callout" as |f|>
+          <f.Field @for="b" @control={{Where}} @label="B" />
+        </Form>
+      </template>,
+    )
+
+    await click('[data-test-fw-field="a"] [data-test-fw-display]')
+    await click('[data-test-fw-field="b"] [data-test-fw-display]')
+    assert
+      .dom('[data-test-fw-field="a"] [data-test-where]')
+      .hasAttribute('data-test-where', 'inline')
+    assert
+      .dom('[data-test-fw-field="b"] [data-test-where]')
+      .hasAttribute('data-test-where', 'callout')
   })
 
   test('an unknown control name throws a helpful error', function (assert) {
