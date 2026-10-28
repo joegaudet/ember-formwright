@@ -106,3 +106,6 @@ npm install @ember-formwright/maskito @maskito/core
 
 Any Maskito options work as `@mask`, including the generators in `@maskito/kit` for numbers,
 dates and times. The model receives the masked text.
+
+For phone numbers, the [`phone` control](../controls/phone.md) in the same package masks by
+country and stores E.164.
