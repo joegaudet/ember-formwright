@@ -16,6 +16,7 @@ import {
   type Validator,
 } from '../validation.ts'
 import type { Path, PathValue } from '../path.ts'
+import type { FieldLayout } from '../layout.ts'
 import Field, { type FieldSignature } from './field.gts'
 import Button from './button.gts'
 import Errors from './errors.gts'
@@ -77,6 +78,11 @@ export interface FormSignature<M extends object = object> {
     autoSubmit?: boolean
     /** Roll back unsaved changes when the form is torn down. Default true. */
     resetOnDestroy?: boolean
+    /**
+     * How fields arrange their label, hint, control and errors: a registered name or a
+     * component. Nested forms inherit it; a field can override it. Default: `setDefaultLayout`.
+     */
+    layout?: string | FieldLayout
     /** Nested forms only: the fieldset's legend. */
     legend?: string
     /** Set by `f.Form`; don't pass it yourself. */
@@ -214,6 +220,11 @@ export default class Form<M extends object = object>
 
   get callout(): boolean {
     return Boolean(this.args.callout ?? this.args.parent?.callout)
+  }
+
+  /** Undefined when neither this form nor a parent sets one: fields use the default. */
+  get layout(): string | FieldLayout | undefined {
+    return this.args.layout ?? this.args.parent?.layout
   }
 
   get requireConfirm(): boolean {
