@@ -62,6 +62,7 @@
   "peerDependencies": {
     "@ember-formwright/ember": "workspace:^",
     "@ember-formwright/test-support": "workspace:^",
+    "@ember/test-helpers": ">= 5.0.0",
     "@maskito/core": ">= 5.0.0",
     "@maskito/kit": ">= 5.0.0",
     "@maskito/phone": ">= 5.0.0",
@@ -106,6 +107,12 @@
     "main": "addon-main.cjs"
   },
   "peerDependenciesMeta": {
+    "@ember-formwright/test-support": {
+      "optional": true
+    },
+    "@ember/test-helpers": {
+      "optional": true
+    },
     "@maskito/kit": {
       "optional": true
     },
@@ -113,9 +120,6 @@
       "optional": true
     },
     "libphonenumber-js": {
-      "optional": true
-    },
-    "@ember-formwright/test-support": {
       "optional": true
     }
   }
