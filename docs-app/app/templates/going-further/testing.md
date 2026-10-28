@@ -70,9 +70,15 @@ standard decorators, write `accessor`.
 
 A harness pointed at the wrong control fails with a message that says so.
 
-`power-select` and `power-select-multiple` have their own, `PowerSelectHarness`, in
-`@ember-formwright/power-select/test-support`: `select(text)`, `search(text)`, `clear()`,
-`remove(text)`, `options()`, `selected`. See [Power select](../controls/power-select.md#testing).
+The add-on controls ship their own harnesses, each extending `FieldHarness`:
+
+| Harness              | From                                            | For                                                                            |
+| -------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------ |
+| `PowerSelectHarness` | `@ember-formwright/power-select/test-support`   | [`power-select`, `power-select-multiple`](../controls/power-select.md#testing) |
+| `DatePickerHarness`  | `@ember-formwright/power-calendar/test-support` | [`date-picker`, `date-range`](../controls/date-picker.md#testing)              |
+| `PhoneHarness`       | `@ember-formwright/maskito/test-support`        | [`phone`](../controls/phone.md#testing)                                        |
+| `FileUploadHarness`  | `@ember-formwright/file-upload/test-support`    | [`file`, `files`](../controls/file-upload.md#testing)                          |
+| `RichTextHarness`    | `@ember-formwright/tiptap/test-support`         | [`rich-text`](../controls/rich-text.md#testing)                                |
 
 A `FormHarness` has `submit()`, `reset()`, `errors` (form-level), `status`, `isDirty` and
 `isSubmitting`, and `field(path, Class)` / `form(name, Class)` for one-off lookups.

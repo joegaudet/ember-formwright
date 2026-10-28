@@ -73,6 +73,12 @@ properties, plus `--fw-label-width` for `horizontal`.
 properties: border, radius, focus ring, and the invalid and disabled states. Import it after
 power-select's own CSS; it doesn't restyle the dropdown.
 
+The other add-on controls do the same for theirs, each from its package's `theme.css`:
+`@ember-formwright/power-calendar` (the trigger and the calendar, so power-calendar's own CSS
+isn't needed; size it with `--fw-calendar-cell`), `@ember-formwright/file-upload` (the drop zone
+and file list) and `@ember-formwright/tiptap` (the toolbar and editor). Import each after the
+core theme.
+
 <div class="callout">
 
 **Coming from ember-foxy-forms**
