@@ -61,7 +61,7 @@ const addressSchema = z.object({ city: z.string().min(1, 'City is required') })
 | `@onChange`                                                   | `(path, value, model)` after each committed change.                               |
 | `@disabled`, `@readonly`                                      | Flow down to every field.                                                         |
 | `@inline`, `@callout`                                         | Inline editing: show values, edit on click; `@callout` edits in a native popover. |
-| `@requireConfirm`                                             | Changes wait for ✔ (or Enter), ✘ (or Esc) discards them.                          |
+| `@requireConfirm`                                             | Changes wait for ✓ (or Enter), ✕ (or Esc) discards them.                          |
 | `@autoSubmit`                                                 | Submit after every committed change.                                              |
 | `@resetOnDestroy`                                             | Roll back unsaved changes on teardown. Default `true`.                            |
 

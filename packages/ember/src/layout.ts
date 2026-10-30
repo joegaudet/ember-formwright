@@ -43,7 +43,7 @@ export interface FieldLayoutParts {
   /** The hint, with the id the control's `aria-describedby` points at. Nothing without `@hint`. */
   Hint: ComponentLike<{ Element: HTMLParagraphElement }>
   /**
-   * Everything about the control: the inline value, the callout, the control, ✔ and ✘. Render
+   * Everything about the control: the inline value, the callout, the control, ✓ and ✕. Render
    * it as `<@parts.Control as |control|>{{yield control}}</@parts.Control>`, which passes a
    * field's block on to it.
    */
