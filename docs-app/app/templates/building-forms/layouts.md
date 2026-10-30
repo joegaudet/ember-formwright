@@ -83,7 +83,7 @@ A layout is a component with `FieldLayoutSignature`. It gets two args:
 | --------- | --------------------------------------------------------------------------------- |
 | `Label`   | `<label for>` the control, or the `<legend>` of a group. Nothing without `@label` |
 | `Hint`    | The hint, with the id the control's `aria-describedby` points at                  |
-| `Control` | Everything about the control: inline value, callout, the control, ✔ and ✘         |
+| `Control` | Everything about the control: inline value, callout, the control, ✓ and ✕         |
 | `Errors`  | The aria-live error region, with its id. Always rendered                          |
 | `Group`   | A group control's `<fieldset>`; for any other control, just its content           |
 

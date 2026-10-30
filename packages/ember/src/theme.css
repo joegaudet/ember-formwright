@@ -264,7 +264,19 @@
 
 .fw-commit,
 .fw-cancel {
-  padding: 0.35rem 0.6rem;
+  display: inline-grid;
+  place-items: center;
+  padding: 0.45rem;
+}
+
+.fw-icon {
+  width: 1.1em;
+  height: 1.1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .fw-button--submit {
