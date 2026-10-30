@@ -27,6 +27,7 @@ function title(name: string): string {
       <span class="guide-tag">Guide</span>
     </a>
     <nav aria-label="Site">
+      <a href="https://joegaudet.com/ember-formwright/">Home</a>
       <a href="https://joegaudet.com/ember-formwright/demo/">Demo</a>
       <a href="https://github.com/joegaudet/ember-formwright">GitHub</a>
     </nav>
@@ -49,5 +50,15 @@ function title(name: string): string {
       {{outlet}}
     </main>
   </div>
+
+  <footer class="guide-footer">
+    More open source from
+    <a href="https://joegaudet.com/">Joe Gaudet</a>:
+    <a href="https://joegaudet.com/harnessed/">harnessed</a>
+    ·
+    <a href="https://joegaudet.com/real-enums/">real-enums</a>
+    ·
+    <a href="https://joegaudet.com/ember-formwright/" aria-current="page">Formwright</a>
+  </footer>
   <BasicDropdownWormhole />
 </template>
