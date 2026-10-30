@@ -1,6 +1,6 @@
 {
   "name": "@ember-formwright/power-calendar",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Date and date-range pickers for Formwright, powered by ember-power-calendar.",
   "keywords": [
     "ember-addon",

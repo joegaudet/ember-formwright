@@ -1,5 +1,27 @@
 # @ember-formwright/ember
 
+## 1.3.0
+
+### Minor Changes
+
+- aad9026: Pluggable field layouts. `@layout` on a `Form` (inherited by nested forms) or a `Field` takes
+  a registered name or a component; `registerLayout` and `setDefaultLayout` work like
+  `registerControl` and `setDefaultAdapter`. A layout receives pre-wired parts (`Label`, `Hint`,
+  `Control`, `Errors`, `Group`) and read-only field state, and places them inside the field's
+  `div.fw-field`. The default layout renders the same markup as before.
+
+  New package, `@ember-formwright/layouts`: `horizontal`, `compact` and `checkbox-after` layouts
+  with their CSS, and an `Actions` bar with `left` and `right` slots.
+
+- abc6560: New package, `@ember-formwright/power-select`: `@control="power-select"` and
+  `@control="power-select-multiple"` on ember-power-select 9, with search, async options, a
+  `PowerSelectHarness` (`@ember-formwright/power-select/test-support`) and theme hooks.
+
+  In the core, inline and confirm modes now focus the element carrying the field's id, so
+  controls whose focusable element isn't an input (a power-select trigger) get focus. Controls
+  receive `@callout` when they render inside a callout popover. An inline field whose object
+  value isn't among its options shows the value's label instead of `[object Object]`.
+
 ## 1.2.0
 
 ### Minor Changes
