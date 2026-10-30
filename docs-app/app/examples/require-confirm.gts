@@ -14,7 +14,7 @@ const AccountForm: TOC<{ Args: { model: Account } }> = <template>
     <f.Field
       @for="username"
       @label="Username"
-      @hint="Press Enter or ✔ to apply, Esc or ✘ to cancel."
+      @hint="Press Enter or ✓ to apply, Esc or ✕ to cancel."
     />
     <f.Field @for="email" @control="email" @label="Email" />
   </Form>

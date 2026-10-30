@@ -57,7 +57,7 @@ import { toPlainText } from '@ember-formwright/tiptap'
 ```
 
 In confirm and inline modes, Enter starts a new paragraph rather than committing the edit;
-commit with ✔, and Escape cancels as usual.
+commit with ✓, and Escape cancels as usual.
 
 ## Testing
 

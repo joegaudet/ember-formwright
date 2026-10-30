@@ -20,7 +20,7 @@ finishes, so the last value always reaches the server.
 
 ## Inline editing
 
-`@inline` shows each field's value as text. Clicking it opens the control, and ✔ (or Enter)
+`@inline` shows each field's value as text. Clicking it opens the control, and ✓ (or Enter)
 applies the change. Add `@callout` and the control opens in a native
 [popover](https://developer.mozilla.org/docs/Web/API/Popover_API) anchored to the value with
 CSS anchor positioning, so no positioning library is needed. Esc or a click outside cancels.
@@ -29,7 +29,7 @@ CSS anchor positioning, so no positioning library is needed. Esc or a click outs
 
 ## Confirming changes
 
-`@requireConfirm` holds each change until the user applies it with ✔ or Enter. ✘ or Esc
+`@requireConfirm` holds each change until the user applies it with ✓ or Enter. ✕ or Esc
 throws it away. It is useful when every write is expensive, or when a half-typed value must
 never reach the model. A field can opt in or out with its own `@requireConfirm`.
 

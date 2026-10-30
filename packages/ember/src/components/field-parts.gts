@@ -152,14 +152,18 @@ export const FieldControl: TOC<FieldControlSignature> = <template>
               aria-label="Apply"
               data-test-fw-commit
               {{on "click" field.commit}}
-            >✔</button>
+            ><svg class="fw-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path
+                  d="M20 6 9 17l-5-5"
+                /></svg></button>
             <button
               type="button"
               class="fw-cancel"
               aria-label="Cancel"
               data-test-fw-cancel
               {{on "click" field.cancel}}
-            >✘</button>
+            ><svg class="fw-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path
+                  d="M18 6 6 18M6 6l12 12"
+                /></svg></button>
           </span>
         {{/if}}
       </div>

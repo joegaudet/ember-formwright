@@ -129,7 +129,7 @@ class Demo extends Component {
       <aside class="demo-side">
         <section class="demo-card">
           <h2>Inline editing</h2>
-          <p>Click a value. The editor opens in a native popover; ✔ applies, Esc cancels.</p>
+          <p>Click a value. The editor opens in a native popover; ✓ applies, Esc cancels.</p>
           <Form @model={{this.profile}} @name="profile" @inline={{true}} @callout={{true}} as |f|>
             <f.Field @for="displayName" @label="Display name" />
             <f.Field @for="role" @label="Role" />
