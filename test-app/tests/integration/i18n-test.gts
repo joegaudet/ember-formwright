@@ -20,7 +20,7 @@ registerPowerCalendarControls()
 
 class Model {
   @tracked name = 'Ada'
-  @tracked resume: { name: string } | null = { name: '⟦cv⟧.pdf' }
+  @tracked resume: { name: string } | null = { name: '«cv.pdf»' }
   @tracked attachments: File[] = []
   @tracked body = ''
   @tracked departure: string | null = null
@@ -62,8 +62,13 @@ function visibleStrings(root: Node): string[] {
   return strings
 }
 
-/** The strings the pseudo-locale didn't wrap: ones that skipped the translator. */
-const untranslated = () => visibleStrings(getRootElement()).filter(s => !s.includes('⟦'))
+/** The test's own data is in «» (file names keep their extension); translated is in ⟦⟧. */
+const isTestData = (s: string) => /^«[^«»]*»(\.\w+)?$/.test(s)
+const isTranslated = (s: string) => s.startsWith('⟦') && s.endsWith('⟧')
+
+/** The strings that skipped the translator. */
+const untranslated = () =>
+  visibleStrings(getRootElement()).filter(s => !isTestData(s) && !isTranslated(s))
 
 class SwitchableTranslator implements Translator {
   @tracked locale = 'en'
@@ -88,24 +93,24 @@ module('Integration | i18n', function (hooks) {
     await render(
       <template>
         <Form @model={{model}} @requireConfirm={{true}} as |f|>
-          <f.Field @for="name" @label="⟦Name⟧" />
-          <f.Field @for="resume" @control="file" @label="⟦Résumé⟧" @optionLabel="name" />
-          <f.Field @for="attachments" @control="files" @label="⟦Files⟧" as |field|>
+          <f.Field @for="name" @label="«Name»" />
+          <f.Field @for="resume" @control="file" @label="«Résumé»" @optionLabel="name" />
+          <f.Field @for="attachments" @control="files" @label="«Files»" as |field|>
             <field.Control @accept=".pdf" @upload={{upload}} />
           </f.Field>
-          <f.Field @for="body" @control="rich-text" @label="⟦Body⟧" @placeholder="⟦Write⟧" />
+          <f.Field @for="body" @control="rich-text" @label="«Body»" @placeholder="«Write»" />
           <f.Field
             @for="departure"
             @control="date-picker"
-            @label="⟦Departure⟧"
-            @placeholder="⟦Pick⟧"
+            @label="«Departure»"
+            @placeholder="«Pick»"
           />
           <f.Submit />
           <f.Reset />
         </Form>
       </template>,
     )
-    await fillIn('[data-test-fw-field="name"] input', '⟦Grace⟧')
+    await fillIn('[data-test-fw-field="name"] input', '«Grace»')
     assert.dom('[data-test-fw-commit]').exists('the confirm buttons are shown')
     await triggerEvent(ui.attachments.dropzone, 'dragenter', {
       dataTransfer: { files: [], types: ['Files'], items: [] },
@@ -118,9 +123,9 @@ module('Integration | i18n', function (hooks) {
     )
 
     await triggerEvent(ui.attachments.dropzone, 'dragleave')
-    await ui.attachments.drop(exe('⟦setup⟧.exe'))
+    await ui.attachments.drop(exe('«setup».exe'))
     assert.dom('[data-test-fw-file-rejected]').exists()
-    await ui.attachments.select(pdf('⟦a⟧.pdf'))
+    await ui.attachments.select(pdf('«a».pdf'))
     assert.dom('progress').exists('an upload is in flight')
     assert.deepEqual(
       untranslated(),
@@ -205,7 +210,7 @@ module('Integration | i18n', function (hooks) {
     assert
       .dom('[data-test-fw-field="attachments"] .fw-dropzone-text')
       .hasText('⟦Ćĥōōśē ƒĩĺēś⟧ or drag it in')
-    assert.dom('[data-test-fw-remove="⟦cv⟧.pdf"]').hasAttribute('aria-label', 'Delete ⟦cv⟧.pdf')
+    assert.dom('[data-test-fw-remove="«cv.pdf»"]').hasAttribute('aria-label', 'Delete «cv.pdf»')
     assert.dom('.fw-rich-text-toolbar').hasAttribute('aria-label', 'Styles')
     assert.dom('[data-test-fw-tool="bold"]').hasAttribute('aria-label', 'Strong')
     assert.dom('[data-test-fw-tool="heading-2"]').hasAttribute('title', 'Title')

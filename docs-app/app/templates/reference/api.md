@@ -46,6 +46,18 @@ Generated from the packages' TypeScript declarations.
 
 <APIDocs @package="@ember-formwright/ember" @module="declarations/validation" @name="Validator" />
 
+## Translation
+
+See [Translation](../going-further/translation.md).
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/i18n" @name="Translator" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/i18n" @name="Message" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/i18n" @name="translate" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/i18n" @name="format" />
+
 ## Test support
 
 The harness classes are documented on the [Testing](../going-further/testing.md) page.

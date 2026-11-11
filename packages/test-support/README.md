@@ -101,6 +101,18 @@ class OrderForm extends FormHarness {
 }
 ```
 
+## Translation
+
+`registerTranslator(translator)` registers a translator as `translator:main` for the current
+test; call it before `render`. `pseudoTranslator` wraps every string in `⟦ ⟧` and accents it,
+so a built-in string that skipped the translator is plain English and easy to assert against:
+
+```ts
+registerTranslator(pseudoTranslator)
+await render(<template><SignupForm /></template>)
+assert.dom('[data-test-fw-submit]').hasText('⟦Śũƀɱĩţ⟧')
+```
+
 ## Selectors
 
 Every Formwright form renders these; the harnesses use them, and so can you:
