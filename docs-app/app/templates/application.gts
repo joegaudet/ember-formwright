@@ -59,6 +59,8 @@ function title(name: string): string {
     <a href="https://joegaudet.com/real-enums/">real-enums</a>
     ·
     <a href="https://joegaudet.com/ember-formwright/" aria-current="page">Formwright</a>
+    ·
+    <a href="https://joegaudet.com/ember-joinery/">Joinery</a>
   </footer>
   <BasicDropdownWormhole />
 </template>
