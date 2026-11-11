@@ -79,6 +79,16 @@ isn't needed; size it with `--fw-calendar-cell`), `@ember-formwright/file-upload
 and file list) and `@ember-formwright/tiptap` (the toolbar and editor). Import each after the
 core theme.
 
+## shadcn/ui's look: Joinery
+
+[Joinery](https://joegaudet.com/ember-joinery/) is shadcn/ui for Ember, a sibling of Formwright.
+Its `@ember-joinery/formwright` package registers Joinery's inputs (Input, Textarea, Select,
+Combobox, Checkbox, Switch, Radio Group, Slider, Date Picker and more) as Formwright controls,
+with a layout that draws shadcn's Field, so a form looks like a shadcn/ui form and keeps
+Formwright's API. Each control comes with a field harness built on Formwright's
+`FieldHarness`. Its guide's [Formwright section](https://joegaudet.com/ember-joinery/guide/formwright/index.md)
+has the setup and the forms from shadcn/ui's examples, rebuilt on Formwright.
+
 <div class="callout">
 
 **Coming from ember-foxy-forms**
