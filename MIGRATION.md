@@ -1,4 +1,48 @@
-# Migrating from ember-foxy-forms
+# Migrating
+
+## From Formwright 1.x to 2.0
+
+2.0 types each field's control against its path. Nothing changes at runtime; `ember-tsc` reports
+what used to slip through.
+
+- **A control must fit its path.** The path must hold what the control stores. A field
+  without `@control` is a text input, so a number, boolean or list path needs one
+  (`@control="number"`).
+- **Mind `null`.** `number` and `currency` store `null` when emptied, and `select`
+  when its blank option is picked. Type those paths to allow it: `seats: number | null`.
+- **Options are typed.** `@options` must hold what the path does, unless `@storeKey` stores
+  their keys.
+- **A field takes only its control's args.** `@currency` on a text field is an error. Args a
+  field doesn't pass on (`@mask`, your control's own) go through the yielded `Control`, which is
+  now typed by the control.
+- **Declare registered controls.** `registerControl('rating', StarRating)` still works, but
+  `@control="rating"` is only typed once the name is declared:
+
+  ```ts
+  declare module '@ember-formwright/ember' {
+    interface FormwrightControls {
+      rating: ControlSignature<number>
+    }
+  }
+  ```
+
+  A control whose value follows the path (a select, a combobox) goes in
+  `FormwrightChoiceControls<T>` instead. The add-on packages declare their default names.
+
+- **`ControlSignature` is split.** `ControlSignature<Value, Extra, Element>` is the wiring every
+  control gets (`ControlWiring`) plus its own args. A custom control that read `@options`,
+  `@min` or `@currency` declares them in `Extra`; `OptionArgs`, `RangeArgs` and `LengthArgs`
+  cover the common ones. `@value` is typed `Value | null | undefined`.
+- **A control chosen at runtime** (`@control={{def.type}}`, typed `string`) can't be checked.
+  Type it as the names that fit the path (`ControlsFor<PathValue<Model, 'plan'>>`), or as
+  `ControlName` on a loose model (`Record<string, unknown>`).
+- **Some add-on controls follow the path.** What `date-picker`, `rich-text` and `file` store
+  depends on `@storeDate`, `@output` and `@upload`, which go through the yielded control, so
+  their types follow the path: keep the two in step.
+- **Loose models give `unknown`.** `PathValue` of a model typed `object` was `never`; it is now
+  `unknown`, like `any` and `Record<string, unknown>` models, and takes any control.
+
+## From ember-foxy-forms
 
 Formwright is ember-foxy-forms rebuilt for modern Ember: a v2 addon, written in TypeScript
 with `.gts` components, imported in strict-mode templates. The ideas carry over (a form owns a

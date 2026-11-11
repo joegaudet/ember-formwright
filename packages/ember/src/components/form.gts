@@ -17,7 +17,7 @@ import {
 } from '../validation.ts'
 import type { Path, PathValue } from '../path.ts'
 import type { FieldLayout } from '../layout.ts'
-import Field, { type FieldSignature } from './field.gts'
+import Field, { type ControlFor, type FieldArgs, type FieldSignature } from './field.gts'
 import Button from './button.gts'
 import Errors from './errors.gts'
 
@@ -119,16 +119,21 @@ export type NestedForm = abstract new <N>(...args: any) => InstanceType<
 type ObjectOr<N> = [N] extends [object] ? N : object
 
 /**
- * `f.Field`: a Field bound to its form. Generic over the path, so each field's value,
- * `@format` and block `value` take the type at its `@for`.
+ * `f.Field`: a Field bound to its form. Generic over the path and the control, so each
+ * field's value, `@format` and block `value` take the type at its `@for`, its `@control` must
+ * fit that type, and it takes the args its control does.
  */
-export type BoundField<M extends object> = abstract new <P extends Path<M>>(
+export type BoundField<M extends object> = abstract new <
+  P extends Path<M>,
+  C extends ControlFor<PathValue<M, P>> = Extract<'input', ControlFor<PathValue<M, P>>>,
+  S extends boolean = false,
+>(
   ...args: any
 ) => InstanceType<
   ComponentLike<{
-    Element: FieldSignature<M, P>['Element']
-    Args: Omit<FieldSignature<M, P>['Args'], 'form'>
-    Blocks: FieldSignature<M, P>['Blocks']
+    Element: FieldSignature<M, P, C, S>['Element']
+    Args: FieldArgs<M, P, C, S>
+    Blocks: FieldSignature<M, P, C, S>['Blocks']
   }>
 >
 
@@ -163,7 +168,7 @@ export default class Form<M extends object = object>
    * tracked state there trips Ember's backtracking assertion. `version` is bumped instead:
    * right after a render that registered something, on removal, and on save.
    */
-  fields: Field<M, any>[] = []
+  fields: Field<M, any, any, any>[] = []
   children: Form<any>[] = []
   @tracked version = 0
   /**
@@ -295,14 +300,14 @@ export default class Form<M extends object = object>
     return !same(baseline.get(path), this.readAt(path))
   }
 
-  register(field: Field<M, any>): void {
+  register(field: Field<M, any, any, any>): void {
     if (!this.baselineOf().has(field.path))
       this.baselineOf().set(field.path, snapshotOf(this.readAt(field.path)))
     this.fields.push(field)
     this.invalidateSoon()
   }
 
-  unregister(field: Field<M, any>): void {
+  unregister(field: Field<M, any, any, any>): void {
     this.fields = this.fields.filter(f => f !== field)
     this.version++
   }

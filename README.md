@@ -80,7 +80,7 @@ with their root: the parent first, then dirty (or new) children, breadth-first.
 | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@for`                                                | The model path: `"email"`, `"address.city"`, `"items[0].name"`.                                                                                                             |
 | `@label`, `@hint`, `@placeholder`, `@required`        |                                                                                                                                                                             |
-| `@control`                                            | A built-in or registered control name (default `"input"`), or a component.                                                                                                  |
+| `@control`                                            | A built-in or registered control name (default `"input"`), or a component, that fits the path.                                                                              |
 | `@options`, `@optionKey`, `@optionLabel`, `@storeKey` | For `select`, `radio` and `checkbox-group`. Options can be primitives or objects; the key defaults to `id`, then `value`. `@storeKey` stores the key instead of the option. |
 | `@min`, `@max`, `@step`                               | Bounds; for `checkbox-group`, `@max` caps the selection.                                                                                                                    |
 | `@disabled`, `@readonly`, `@requireConfirm`           | Override the form.                                                                                                                                                          |
@@ -101,8 +101,8 @@ your own layout; the label, hint and errors still render around it:
 
 ### Custom controls
 
-Any component with `ControlSignature` works: put `@id` on the focusable element and call
-`@onChange(value)`.
+Any component with `ControlSignature<Value, Args>` works: put `@id` on the focusable element
+and call `@onChange(value)`. A field only accepts a control whose `Value` its path can hold.
 
 ```gts
 import { registerControl, type ControlSignature } from '@ember-formwright/ember'
@@ -115,7 +115,18 @@ class Stepper extends Component<ControlSignature<number>> {
 }
 
 registerControl('stepper', Stepper) // then @control="stepper", or pass @control={{Stepper}}
+
+// Declare the name, so @control="stepper" is typed.
+declare module '@ember-formwright/ember' {
+  interface FormwrightControls {
+    stepper: ControlSignature<number>
+  }
+}
 ```
+
+Controls whose value follows the path, as a select's does, are declared in
+`FormwrightChoiceControls<T>`, with `T` the value at the path. See
+[Custom controls](https://joegaudet.com/ember-formwright/guide/controls/custom-controls.md).
 
 ## Adapters
 

@@ -9,7 +9,14 @@ import { guidFor } from '@ember/object/internals'
 import FileDropzone from 'ember-file-upload/components/file-dropzone'
 import type { Queue, UploadFile } from 'ember-file-upload'
 import type FileQueueService from 'ember-file-upload/services/file-queue'
-import { registerControl, labelOf, type ControlSignature } from '@ember-formwright/ember'
+import {
+  registerControl,
+  labelOf,
+  type ControlSignature,
+  type OwnArgs,
+  type ItemOf,
+  type OptionAccessor,
+} from '@ember-formwright/ember'
 
 /** Uploads a file the user chose, and resolves with what the field stores (an id, a URL, ...). */
 export type UploadFn = (file: UploadFile) => Promise<unknown>
@@ -18,6 +25,10 @@ export interface FileUploadControlSignature {
   /** A wrapper around the drop zone and the file list, carrying the control's hooks. */
   Element: HTMLDivElement
   Args: ControlSignature['Args'] & {
+    /** Names a stored value that isn't a `File` (what `@upload` resolved to). */
+    optionLabel?: OptionAccessor
+    /** Formats file sizes. Default the browser's locale. */
+    locale?: string
     /** The file types to offer, as for `<input accept>`: `.pdf`, `image/*`, `text/csv`, ... */
     accept?: string
     /**
@@ -380,4 +391,19 @@ export function registerFileUploadControls({
 }: { single?: string; multiple?: string } = {}): void {
   registerControl(single, FileUploadControl)
   registerControl(multiple, FileUploadMultipleControl)
+}
+
+type FileUploadArgs = OwnArgs<FileUploadControlSignature>
+
+declare module '@ember-formwright/ember' {
+  interface FormwrightChoiceControls<T> {
+    /**
+     * `registerFileUploadControls()`'s default names; declare yours if you pass others. A
+     * file field stores a `File`, or what `@upload` resolves to, so it follows its path.
+     */
+    // shortcut: `@upload`'s result isn't checked against the path; type `UploadFn` by it if
+    // the field ever forwards `@upload`.
+    file: ControlSignature<NonNullable<T> | null, FileUploadArgs, HTMLDivElement>
+    files: ControlSignature<ItemOf<T>[], FileUploadArgs, HTMLDivElement>
+  }
 }

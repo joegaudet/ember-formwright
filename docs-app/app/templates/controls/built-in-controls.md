@@ -4,18 +4,22 @@ Pick a control with `@control`. Every control gets the same wiring from its fiel
 label points at, the value, `onChange`, disabled/readonly/required, `aria-invalid` and
 `aria-describedby`.
 
-| `@control`                                                     | Renders                                         | Stores                                    |
-| -------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------- |
-| `input` (default), `email`, `password`, `url`, `tel`, `search` | `<input type="…">`                              | string                                    |
-| `date`, `datetime`, `time`                                     | `<input type="date">`, `datetime-local`, `time` | string (ISO)                              |
-| `color`                                                        | `<input type="color">`                          | string (`#rrggbb`)                        |
-| `number`, `range`                                              | `<input type="number">`, `range`                | number, or `null` when empty              |
-| `currency`                                                     | a text input formatted with `Intl.NumberFormat` | number, or `null`                         |
-| `textarea`                                                     | `<textarea>`                                    | string                                    |
-| `select`                                                       | `<select>`                                      | the option (or its key, with `@storeKey`) |
-| `radio`                                                        | a `<fieldset>` of radios                        | the option (or its key)                   |
-| `checkbox`                                                     | `<input type="checkbox">`                       | boolean                                   |
-| `checkbox-group`                                               | a `<fieldset>` of checkboxes                    | an array of options (or keys)             |
+Each field's path must hold what its control stores (see
+[Typed controls](../building-forms/fields.md#typed-controls)).
+
+| `@control`                                                     | Renders                                         | Stores                                                                 |
+| -------------------------------------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------- |
+| `input` (default), `email`, `password`, `url`, `tel`, `search` | `<input type="…">`                              | string                                                                 |
+| `date`, `datetime`, `time`                                     | `<input type="date">`, `datetime-local`, `time` | string (ISO)                                                           |
+| `color`                                                        | `<input type="color">`                          | string (`#rrggbb`)                                                     |
+| `number`                                                       | `<input type="number">`                         | number, or `null` when empty                                           |
+| `range`                                                        | `<input type="range">`                          | number                                                                 |
+| `currency`                                                     | a text input formatted with `Intl.NumberFormat` | number, or `null`                                                      |
+| `textarea`                                                     | `<textarea>`                                    | string                                                                 |
+| `select`                                                       | `<select>`                                      | the option (or its key, with `@storeKey`), or `null` for the blank one |
+| `radio`                                                        | a `<fieldset>` of radios                        | the option (or its key)                                                |
+| `checkbox`                                                     | `<input type="checkbox">`                       | boolean                                                                |
+| `checkbox-group`                                               | a `<fieldset>` of checkboxes                    | an array of options (or keys)                                          |
 
 ## Text
 
@@ -23,7 +27,7 @@ label points at, the value, `onChange`, disabled/readonly/required, `aria-invali
 
 ## Numbers and money
 
-`number` and `range` store numbers (or `null` when cleared). `currency` shows the
+`number` stores a number (or `null` when cleared), `range` always a number. `currency` shows the
 amount formatted for its `@locale` and `@currency`, accepts typing in that locale (with its
 decimal separator), and stores a number.
 

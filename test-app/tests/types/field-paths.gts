@@ -7,6 +7,7 @@
 import type { TOC } from '@ember/component/template-only'
 import {
   Form,
+  type ControlSignature,
   type ErrorMap,
   type Path,
   type PathValue,
@@ -14,9 +15,12 @@ import {
 } from '@ember-formwright/ember'
 import type { Account } from 'test-app/demo/account'
 
+/** A control for Date paths, which no built-in control stores. */
+const DateControl = <template></template> as TOC<ControlSignature<Date>>
+
 interface Line {
   name: string
-  qty: number
+  qty: number | null
 }
 
 interface Order {
@@ -41,8 +45,8 @@ export const Paths: TOC<{ Args: { account: Account; order: Order } }> = <templat
     <f.Field @for="customer.address.city" />
     <f.Field @for="lines.0.name" />
     <f.Field @for="lines[0].name" />
-    <f.Field @for="lines" />
-    <f.Field @for="placedAt" />
+    <f.Field @for="lines" @control="checkbox-group" />
+    <f.Field @for="placedAt" @control={{DateControl}} />
     {{! @glint-expect-error: no such key on a line }}
     <f.Field @for="lines.0.price" />
     {{! @glint-expect-error: indexes are numbers }}
@@ -88,17 +92,17 @@ const formatCity = (city: string) => city.toUpperCase()
 export const Values: TOC<{ Args: { account: Account; order: Order } }> = <template>
   <Form @model={{@account}} as |f|>
     <f.Field @for="name" as |field|>{{text field.value}}</f.Field>
-    <f.Field @for="seats" as |field|>{{count field.value}}</f.Field>
+    <f.Field @for="seats" @control="number" as |field|>{{count field.value}}</f.Field>
     {{! @glint-expect-error: seats is a number, not a string }}
-    <f.Field @for="seats" as |field|>{{text field.value}}</f.Field>
+    <f.Field @for="seats" @control="number" as |field|>{{text field.value}}</f.Field>
     <f.Field @for="address.city" @format={{formatCity}} />
     {{! @glint-expect-error: @format gets the seat count, not a string }}
-    <f.Field @for="seats" @format={{formatCity}} />
+    <f.Field @for="seats" @control="number" @format={{formatCity}} />
     {{text f.state.model.name}}
   </Form>
   <Form @model={{@order}} as |f|>
     <f.Field @for="lines[0].name" as |field|>{{text field.value}}</f.Field>
-    <f.Field @for="lines.0.qty" as |field|>{{count field.value}}</f.Field>
+    <f.Field @for="lines.0.qty" @control="number" as |field|>{{count field.value}}</f.Field>
   </Form>
   <Form @model={{@account}} as |f|>
     <f.Form @model={{@account.address}} as |a|>

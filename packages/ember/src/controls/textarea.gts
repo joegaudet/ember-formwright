@@ -1,8 +1,8 @@
 import Component from '@glimmer/component'
 import { on } from '@ember/modifier'
-import type { ControlSignature } from './signature.ts'
+import type { ControlSignature, LengthArgs } from './signature.ts'
 
-export default class Textarea extends Component<ControlSignature<string>> {
+export default class Textarea extends Component<ControlSignature<string, LengthArgs>> {
   get length() {
     return (this.args.value ?? '').length
   }

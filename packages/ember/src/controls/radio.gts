@@ -1,10 +1,10 @@
 import Component from '@glimmer/component'
 import { on } from '@ember/modifier'
 import { fn } from '@ember/helper'
-import type { ControlSignature } from './signature.ts'
+import type { ControlSignature, OptionArgs } from './signature.ts'
 import { isDisabled, keyOf, labelOf, matches, toStored } from './options.ts'
 
-export default class Radio extends Component<ControlSignature> {
+export default class Radio extends Component<ControlSignature<unknown, OptionArgs>> {
   get options() {
     return this.args.options ?? []
   }

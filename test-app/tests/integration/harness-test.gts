@@ -59,7 +59,7 @@ module('Integration | test-support harness', function (hooks) {
     const user = {
       name: 'Ada',
       email: '',
-      plan: 'hobby',
+      plan: 'hobby' as string | null,
       notify: [] as string[],
       seats: 1,
       company: { name: 'Analytical Engines' },

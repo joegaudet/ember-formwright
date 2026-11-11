@@ -12,7 +12,12 @@ import type {
   NormalizeRangeActionValue,
   PowerCalendarDay,
 } from 'ember-power-calendar/utils'
-import { registerControl, type ControlSignature } from '@ember-formwright/ember'
+import {
+  registerControl,
+  type ControlSignature,
+  type OwnArgs,
+  type RangeArgs,
+} from '@ember-formwright/ember'
 import { ensureDateLibrary } from './date-library.ts'
 import {
   formatDate,
@@ -38,21 +43,24 @@ export { nativeDateLibrary } from './date-library.ts'
 export interface DatePickerControlSignature {
   /** A wrapper around the trigger and its dropdown, carrying the control's hooks and attributes. */
   Element: HTMLDivElement
-  Args: ControlSignature['Args'] & {
-    /** Store `Date`s rather than ISO `YYYY-MM-DD` strings. */
-    storeDate?: boolean
-    /** `Intl.DateTimeFormat` options for the trigger's text. Default `{ dateStyle: 'medium' }`. */
-    dateFormat?: Intl.DateTimeFormatOptions
-    /** Days that can't be chosen: dates, or English weekday names ('Sat', 'Sun'). */
-    disabledDates?: Array<Date | string>
-    /** First day of the week, 0 (Sunday) to 6. Default: the locale's. */
-    startOfWeek?: number
-    /** Render the dropdown in place rather than in the wormhole. Forced in a callout. */
-    renderInPlace?: boolean
-    /** date-range: the shortest and longest range, in days. Default: no limits. */
-    minRange?: number
-    maxRange?: number
-  }
+  Args: ControlSignature['Args'] &
+    Pick<RangeArgs, 'min' | 'max'> & {
+      /** Formats the trigger's text and names the weekdays. Default the browser's locale. */
+      locale?: string
+      /** Store `Date`s rather than ISO `YYYY-MM-DD` strings. */
+      storeDate?: boolean
+      /** `Intl.DateTimeFormat` options for the trigger's text. Default `{ dateStyle: 'medium' }`. */
+      dateFormat?: Intl.DateTimeFormatOptions
+      /** Days that can't be chosen: dates, or English weekday names ('Sat', 'Sun'). */
+      disabledDates?: Array<Date | string>
+      /** First day of the week, 0 (Sunday) to 6. Default: the locale's. */
+      startOfWeek?: number
+      /** Render the dropdown in place rather than in the wormhole. Forced in a callout. */
+      renderInPlace?: boolean
+      /** date-range: the shortest and longest range, in days. Default: no limits. */
+      minRange?: number
+      maxRange?: number
+    }
 }
 
 /**
@@ -302,4 +310,28 @@ export function registerPowerCalendarControls({
   ensureDateLibrary()
   registerControl(single, DatePickerControl)
   registerControl(range, DateRangeControl)
+}
+
+type DatePickerArgs = OwnArgs<DatePickerControlSignature>
+
+declare module '@ember-formwright/ember' {
+  interface FormwrightChoiceControls<T> {
+    /**
+     * `registerPowerCalendarControls()`'s default names; declare yours if you pass others. A
+     * date picker stores an ISO date string, or a `Date` with `@storeDate`; once picked, a
+     * date is never cleared.
+     */
+    // shortcut: typed by the path, not by `@storeDate` (which the field doesn't pass on), so a
+    // Date path without it type-checks; type it from the arg if the field ever forwards it.
+    'date-picker': ControlSignature<
+      Extract<NonNullable<T>, DateValue>,
+      DatePickerArgs,
+      HTMLDivElement
+    >
+    'date-range': ControlSignature<
+      Extract<NonNullable<T>, DateRangeValue>,
+      DatePickerArgs,
+      HTMLDivElement
+    >
+  }
 }

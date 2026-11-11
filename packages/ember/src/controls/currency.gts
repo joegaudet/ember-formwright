@@ -1,13 +1,13 @@
 import Component from '@glimmer/component'
 import { tracked } from '@glimmer/tracking'
 import { on } from '@ember/modifier'
-import type { ControlSignature } from './signature.ts'
+import type { ControlSignature, CurrencyArgs } from './signature.ts'
 
 /**
  * A number shown as money. While focused it shows the bare number for editing; on blur it
  * shows the Intl-formatted amount. Parsing follows the locale's decimal separator.
  */
-export default class Currency extends Component<ControlSignature<number | null>> {
+export default class Currency extends Component<ControlSignature<number | null, CurrencyArgs>> {
   @tracked draft: string | null = null
 
   get locale() {

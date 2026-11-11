@@ -10,9 +10,17 @@ import {
   Form,
   registerControl,
   lookupControl,
+  type ControlName,
   type ControlSignature,
 } from '@ember-formwright/ember'
 import { TestForm } from 'test-app/tests/helpers/test-form'
+
+declare module '@ember-formwright/ember' {
+  interface FormwrightControls {
+    /** Registered by the custom controls test. */
+    stepper: ControlSignature<number>
+  }
+}
 
 const SIZES = [
   { id: 's', label: 'Small' },
@@ -30,7 +38,7 @@ module('Integration | controls', function (hooks) {
 
   test('input types map to native inputs', async function (assert) {
     const model = {}
-    const types = [
+    const types: [ControlName, string][] = [
       ['email', 'email'],
       ['password', 'password'],
       ['search', 'search'],
@@ -103,7 +111,7 @@ module('Integration | controls', function (hooks) {
   })
 
   test('select: @storeKey stores the key, and primitives work', async function (assert) {
-    const model = { size: 's', color: 'red' }
+    const model: { size: string | null; color: string | null } = { size: 's', color: 'red' }
     const colors = ['red', 'green']
 
     await render(
@@ -129,7 +137,7 @@ module('Integration | controls', function (hooks) {
   })
 
   test('select: a value missing from the options still shows', async function (assert) {
-    const model = { color: 'blue' }
+    const model: { color: string | null } = { color: 'blue' }
     const colors = ['red', 'green']
 
     await render(

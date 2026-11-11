@@ -9,6 +9,9 @@ import {
   matches,
   toStored,
   type ControlSignature,
+  type OwnArgs,
+  type ItemOf,
+  type OptionArgs,
 } from '@ember-formwright/ember'
 
 /** The power-select args a field's `Control` forwards as they are. */
@@ -62,6 +65,7 @@ export interface PowerSelectControlSignature {
   /** A wrapper around power-select, carrying the control's hooks and any attributes. */
   Element: HTMLDivElement
   Args: ControlSignature['Args'] &
+    OptionArgs &
     ForwardedArgs & {
       /** Runs before the field's own keyboard handling; return false to stop it. */
       onKeydown?: (select: AnySelect, event: KeyboardEvent) => boolean | void | undefined
@@ -267,4 +271,23 @@ export function registerPowerSelectControls({
 }: { single?: string; multiple?: string } = {}): void {
   registerControl(single, PowerSelectControl)
   registerControl(multiple, PowerSelectMultipleControl)
+}
+
+type PowerSelectArgsOf<T> = OptionArgs<T> &
+  Omit<OwnArgs<PowerSelectControlSignature>, keyof OptionArgs>
+
+declare module '@ember-formwright/ember' {
+  interface FormwrightChoiceControls<T> {
+    /** `registerPowerSelectControls()`'s default names; declare yours if you pass others. */
+    'power-select': ControlSignature<
+      NonNullable<T> | null,
+      PowerSelectArgsOf<NonNullable<T>>,
+      HTMLDivElement
+    >
+    'power-select-multiple': ControlSignature<
+      ItemOf<T>[],
+      PowerSelectArgsOf<ItemOf<T>>,
+      HTMLDivElement
+    >
+  }
 }

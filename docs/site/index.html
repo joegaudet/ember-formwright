@@ -293,8 +293,9 @@ import '@ember-formwright/ember/theme.css' // optional
         <p>
           With Glint, a form is typed by its <code>@model</code>. Every <code>@for</code> must be a
           real path, nested forms check against their own model, and each field's value and
-          <code>@format</code> take the type at its path. A typo is a build error, not a blank field
-          in production.
+          <code>@format</code> take the type at its path. Its <code>@control</code> must store what
+          the path holds, and it takes only that control's args. A typo is a build error, not a
+          blank field in production.
         </p>
         <div class="grid">
           <pre><code class="language-typescript">import { tracked } from '@glimmer/tracking'
@@ -306,7 +307,7 @@ class Address {
 }
 class Order {
   @tracked email = ''
-  @tracked seats = 1
+  @tracked seats: number | null = 1
   address = new Address()
 }
 const shout = (text: string) =&gt; text.toUpperCase()
@@ -314,8 +315,8 @@ const shout = (text: string) =&gt; text.toUpperCase()
 export const OrderForm: TOC&lt;{ Args: { order: Order } }&gt; = &lt;template&gt;
   &lt;Form @model={{@order}} as |f|&gt;
     &lt;f.Field @for="emial" /&gt;
-    &lt;f.Field @for="seats" @format={{shout}} /&gt;
-    &lt;f.Field @for="seats" as |field|&gt;{{field.value}}&lt;/f.Field&gt;
+    &lt;f.Field @for="seats" @control="number" @format={{shout}} /&gt;
+    &lt;f.Field @for="seats" @control="text" /&gt;
     &lt;f.Form @model={{@order.address}} as |a|&gt;
       &lt;a.Field @for="email" /&gt;
     &lt;/f.Form&gt;
@@ -327,10 +328,13 @@ order-form.gts(17,15): error TS2820: Type '"emial"' is not
   assignable to type '"email" | "seats" | "address" |
   "address.city"'. Did you mean '"email"'?
 
-order-form.gts(18,28): error TS2322: Type '(text: string)
-  =&gt; string' is not assignable to type '(value: number)
-  =&gt; string'.
-    Type 'number' is not assignable to type 'string'.
+order-form.gts(18,46): error TS2322: Type '(text: string)
+  =&gt; string' is not assignable to type '(value: number |
+  null) =&gt; string'.
+
+order-form.gts(19,28): error TS2322: Type '"text"' is not
+  assignable to type 'ControlFor&lt;number | null&gt; |
+  undefined'.
 
 order-form.gts(21,17): error TS2322: Type '"email"' is not
   assignable to type '"city"'.</code></pre>

@@ -27,7 +27,7 @@ export class OrderState extends Enum {
 
 export class Order {
   /** Holds the enum member itself. */
-  @tracked state: OrderState = OrderState.Pending
+  @tracked state: OrderState | null = OrderState.Pending
   /** Holds the raw string, as an API would send it. */
   @tracked nextState = 'shipped'
 }

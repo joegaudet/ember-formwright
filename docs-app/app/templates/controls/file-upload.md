@@ -16,6 +16,9 @@ import '@ember-formwright/file-upload/theme.css' // optional: follows the Formwr
 registerFileUploadControls() // @control="file" and @control="files"
 ```
 
+The package types these names for Glint: which paths each fits, and which args it takes. If
+you register under other names, [declare them](./custom-controls.md#use-it-pass-it-or-register-it).
+
 ## Choosing files
 
 `file` stores one `File` (or `null`), and `files` an array of them. Choose with the button or

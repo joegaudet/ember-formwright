@@ -11,7 +11,7 @@ import { TestForm } from 'test-app/tests/helpers/test-form'
 class User {
   @tracked name = 'Ada'
   @tracked email = ''
-  @tracked age = 36
+  @tracked age: number | null = 36
 }
 
 module('Integration | Form', function (hooks) {
@@ -492,7 +492,7 @@ module('Integration | Form', function (hooks) {
     await render(
       <template>
         <Form @model={{user}} @inline={{true}} as |f|>
-          <f.Field @for="age" @label="Age" @format={{format}} />
+          <f.Field @for="age" @control="number" @label="Age" @format={{format}} />
         </Form>
       </template>,
     )

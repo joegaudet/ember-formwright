@@ -4,7 +4,8 @@ import { Plan } from './plan.ts'
 
 export class Address {
   @tracked city = 'Lisbon'
-  @tracked country = 'pt'
+  /** A select stores null when its blank option is picked. */
+  @tracked country: string | null = 'pt'
 }
 
 export class Account {

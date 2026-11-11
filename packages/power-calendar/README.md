@@ -17,6 +17,9 @@ import '@ember-formwright/power-calendar/theme.css' // optional; after the Formw
 registerPowerCalendarControls() // @control="date-picker" and @control="date-range"
 ```
 
+The package types these names for Glint: which paths each fits, and which args it takes. If
+you register under other names, [declare them](https://joegaudet.com/ember-formwright/guide/controls/custom-controls.md).
+
 Render `<BasicDropdownWormhole />` (from `ember-basic-dropdown/components/basic-dropdown-wormhole`)
 once in your application template; calendars open into it. In tests, add
 `<div id="ember-basic-dropdown-wormhole"></div>` next to `#ember-testing` in `tests/index.html`.

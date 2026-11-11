@@ -1,11 +1,13 @@
 import Component from '@glimmer/component'
 import { on } from '@ember/modifier'
-import type { ControlSignature } from './signature.ts'
+import type { ControlSignature, LengthArgs, RangeArgs } from './signature.ts'
 
 const NATIVE_TYPES: Record<string, string> = { input: 'text', datetime: 'datetime-local' }
 const NUMERIC = new Set(['number', 'range'])
 
-export default class Input extends Component<ControlSignature<string | number | null>> {
+export default class Input extends Component<
+  ControlSignature<string | number | null, LengthArgs & RangeArgs>
+> {
   get inputType() {
     return NATIVE_TYPES[this.args.type] ?? this.args.type
   }

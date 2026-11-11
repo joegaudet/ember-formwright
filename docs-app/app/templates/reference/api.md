@@ -32,6 +32,14 @@ Generated from the packages' TypeScript declarations.
 
 <APIDocs @package="@ember-formwright/ember" @module="declarations/registry" @name="registerControl" />
 
+<APIDocs @package="@ember-formwright/ember" @module="declarations/registry" @name="FormwrightControls" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/registry" @name="FormwrightChoiceControls" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/controls/signature" @name="ControlWiring" />
+
+<APIDocs @package="@ember-formwright/ember" @module="declarations/controls/signature" @name="OptionArgs" />
+
 ## Adapters and validation
 
 <APIDocs @package="@ember-formwright/ember" @module="declarations/adapter" @name="ModelAdapter" />

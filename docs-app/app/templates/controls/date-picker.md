@@ -17,6 +17,9 @@ import '@ember-formwright/power-calendar/theme.css' // optional: follows the For
 registerPowerCalendarControls() // @control="date-picker" and @control="date-range"
 ```
 
+The package types these names for Glint: which paths each fits, and which args it takes. If
+you register under other names, [declare them](./custom-controls.md#use-it-pass-it-or-register-it).
+
 The calendar opens in a dropdown, which renders into a wormhole. Put one in your application
 template, as for [power select](./power-select.md):
 

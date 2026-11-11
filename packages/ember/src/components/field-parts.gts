@@ -12,7 +12,7 @@ import type { FieldBlockParams } from '../layout.ts'
 
 interface PartSignature<E extends Element> {
   Element: E
-  Args: { field: Field<any, any> }
+  Args: { field: Field<any, any, any, any> }
 }
 
 /** `<label for>` the control, or a group's `<legend>`. */
@@ -59,7 +59,7 @@ export const FieldGroup: TOC<PartSignature<HTMLFieldSetElement> & { Blocks: { de
   </template>
 
 interface FieldControlSignature {
-  Args: { field: Field<any, any>; hasBlock: boolean }
+  Args: { field: Field<any, any, any, any>; hasBlock: boolean }
   Blocks: { default: [FieldBlockParams] }
 }
 
@@ -109,17 +109,17 @@ export const FieldControl: TOC<FieldControlSignature> = <template>
             describedBy=(if field.isGroup undefined field.describedBy)
             placeholder=field.args.placeholder
             label=field.args.label
-            options=field.args.options
-            optionKey=field.args.optionKey
-            optionLabel=field.args.optionLabel
-            storeKey=field.args.storeKey
-            min=field.args.min
-            max=field.args.max
-            step=field.args.step
-            maxLength=field.args.maxLength
-            showCount=field.args.showCount
-            currency=field.args.currency
-            locale=field.args.locale
+            options=field.loose.options
+            optionKey=field.loose.optionKey
+            optionLabel=field.loose.optionLabel
+            storeKey=field.loose.storeKey
+            min=field.loose.min
+            max=field.loose.max
+            step=field.loose.step
+            maxLength=field.loose.maxLength
+            showCount=field.loose.showCount
+            currency=field.loose.currency
+            locale=field.loose.locale
             callout=field.useCallout
           )
           as |Control|

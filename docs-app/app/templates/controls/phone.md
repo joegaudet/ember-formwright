@@ -17,6 +17,9 @@ import { registerPhoneControl } from '@ember-formwright/maskito/phone'
 registerPhoneControl() // @control="phone"
 ```
 
+The package types these names for Glint: which paths each fits, and which args it takes. If
+you register under other names, [declare them](./custom-controls.md#use-it-pass-it-or-register-it).
+
 ## Typing and storing
 
 The model stores the number in [E.164](https://en.wikipedia.org/wiki/E.164) form,

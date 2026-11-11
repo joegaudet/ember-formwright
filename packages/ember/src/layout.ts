@@ -3,18 +3,18 @@ import type { ControlSignature } from './controls/signature.ts'
 import DefaultLayout from './components/default-layout.gts'
 
 /**
- * The control yielded by a field's block, with the field's wiring already bound. Its extra
- * args depend on which control the field uses (`@maxLength`, `@currency`, `@mask`, ...),
- * so they're typed loosely.
+ * The control yielded by a field's block, with the field's wiring already bound: any of its
+ * args can still be passed, e.g. ones the field doesn't take (`@mask`). Typed by the field's
+ * control; a layout sees it loosely.
  */
-export type BoundControl = ComponentLike<{
-  Element: HTMLElement
-  Args: Partial<ControlSignature['Args']> & Record<string, unknown>
+export type BoundControl<S = ControlSignature<any, any>> = ComponentLike<{
+  Element: S extends { Element: infer E } ? E : null
+  Args: Partial<S extends { Args: infer A } ? A : never>
 }>
 
 /** What a field's block receives (and what a layout passes on to it). */
-export interface FieldBlockParams<V = unknown> {
-  Control: BoundControl
+export interface FieldBlockParams<V = unknown, C extends BoundControl<any> = BoundControl> {
+  Control: C
   id: string
   value: V
   errors: string[]

@@ -12,7 +12,7 @@ import {
   type CountryCode,
   type MetadataJson,
 } from 'libphonenumber-js/core'
-import { registerControl, type ControlSignature } from '@ember-formwright/ember'
+import { registerControl, type ControlSignature, type OwnArgs } from '@ember-formwright/ember'
 
 export type { CountryCode, MetadataJson }
 
@@ -170,3 +170,10 @@ export function registerPhoneControl(name = 'phone'): void {
 }
 
 export { PhoneControl }
+
+declare module '@ember-formwright/ember' {
+  interface FormwrightControls {
+    /** `registerPhoneControl()`'s default name; declare yours if you pass another. */
+    phone: ControlSignature<string | null, OwnArgs<PhoneSignature>, HTMLInputElement>
+  }
+}

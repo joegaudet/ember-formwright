@@ -4,7 +4,7 @@ import { on } from '@ember/modifier'
 import { Form } from '@ember-formwright/ember'
 
 export class Shipment {
-  @tracked carrier = 'Canada Post'
+  @tracked carrier: string | null = 'Canada Post'
   @tracked tracking = 'CA123456789'
 }
 

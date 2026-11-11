@@ -109,7 +109,7 @@ module('Integration | review fixes', function (hooks) {
   })
 
   test('readonly blocks option controls too', async function (assert) {
-    const model = { size: 's', sizes: ['s'], pick: 's' }
+    const model = { size: 's' as string | null, sizes: ['s'], pick: 's' }
 
     await render(
       <template>
@@ -183,7 +183,7 @@ module('Integration | review fixes', function (hooks) {
   })
 
   test('Field forwards @currency, @locale, @maxLength and @showCount', async function (assert) {
-    const model = { price: 5, bio: 'hi' }
+    const model = { price: 5 as number | null, bio: 'hi' }
 
     await render(
       <template>

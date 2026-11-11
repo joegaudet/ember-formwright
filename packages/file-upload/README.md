@@ -15,6 +15,9 @@ import '@ember-formwright/file-upload/theme.css' // optional; after the Formwrig
 registerFileUploadControls() // @control="file" and @control="files"
 ```
 
+The package types these names for Glint: which paths each fits, and which args it takes. If
+you register under other names, [declare them](https://joegaudet.com/ember-formwright/guide/controls/custom-controls.md).
+
 ```gts
 {{! stores a File }}
 <f.Field @for="resume" @control="file" @label="Résumé" as |field|>
