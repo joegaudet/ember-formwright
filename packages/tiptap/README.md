@@ -33,7 +33,9 @@ you register under other names, [declare them](https://joegaudet.com/ember-formw
 The field stores HTML, or Tiptap's JSON document with `@output="json"`. An empty editor
 stores `''` (`null` for JSON), so required checks work. `field.Control` also takes `@toolbar`
 (the buttons to show, or `false`), `@extensions` (more Tiptap extensions) and `@starterKit`
-(StarterKit's options); the last two are read once, when the editor is created.
+(StarterKit's options); the last two are read once, when the editor is created. Button names
+go through the app's translator (`./messages` lists them), or take `@toolLabels`
+(`{ bold: 'Strong' }`) and `@toolbarLabel`.
 
 Toolbar buttons: `bold`, `italic`, `strike`, `heading-2`, `heading-3`, `bullet-list`,
 `ordered-list`, `blockquote`, `undo`, `redo`. Each has an accessible name, and the toggles

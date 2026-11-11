@@ -12,11 +12,13 @@ import type FileQueueService from 'ember-file-upload/services/file-queue'
 import {
   registerControl,
   labelOf,
+  translate,
   type ControlSignature,
   type OwnArgs,
   type ItemOf,
   type OptionAccessor,
 } from '@ember-formwright/ember'
+import { messages } from './messages.ts'
 
 /** Uploads a file the user chose, and resolves with what the field stores (an id, a URL, ...). */
 export type UploadFn = (file: UploadFile) => Promise<unknown>
@@ -38,6 +40,18 @@ export interface FileUploadControlSignature {
     upload?: UploadFn
     /** The drop zone's call to action. Default "Choose a file" or "Choose files". */
     prompt?: string
+    /** Shown while files are dragged over the drop zone. Default "Drop to add". */
+    dropLabel?: string
+    /** Follows the prompt where files can be dropped. Default "or drop here". */
+    dropHint?: string
+    /** The message for dropped files `@accept` turned away. Default "Not an accepted type: …". */
+    rejectedLabel?: (names: string) => string
+    /** A file's remove button's accessible name. Default "Remove <name>". */
+    removeLabel?: (name: string) => string
+    /** An upload's progress bar's accessible name. Default "Uploading <name>". */
+    uploadingLabel?: (name: string) => string
+    /** The button that retries a failed upload. Default "Retry". */
+    retryLabel?: string
   }
 }
 
@@ -131,12 +145,34 @@ export class FileUploadControl extends Component<FileUploadControlSignature> {
   }
 
   get prompt(): string {
-    return this.args.prompt ?? (this.multiple ? 'Choose files' : 'Choose a file')
+    return (
+      this.args.prompt ??
+      translate(this, this.multiple ? messages.chooseFiles : messages.chooseFile)
+    )
   }
 
-  get rejectedNames(): string {
-    return this.rejected.join(', ')
+  get dropLabel(): string {
+    return this.args.dropLabel ?? translate(this, messages.dropToAdd)
   }
+
+  get dropHint(): string {
+    return this.args.dropHint ?? translate(this, messages.orDropHere)
+  }
+
+  get retryLabel(): string {
+    return this.args.retryLabel ?? translate(this, messages.retry)
+  }
+
+  get rejectedText(): string {
+    const names = this.rejected.join(', ')
+    return this.args.rejectedLabel?.(names) ?? translate(this, messages.notAccepted, { names })
+  }
+
+  removeLabel = (name: string): string =>
+    this.args.removeLabel?.(name) ?? translate(this, messages.remove, { name })
+
+  uploadingLabel = (name: string): string =>
+    this.args.uploadingLabel?.(name) ?? translate(this, messages.uploading, { name })
 
   get isUploading(): boolean {
     return this.uploads.some(upload => !upload.failed)
@@ -215,7 +251,10 @@ export class FileUploadControl extends Component<FileUploadControlSignature> {
     } catch (error) {
       if (this.isDestroying) return
       entry.failed = true
-      entry.error = error instanceof Error ? error.message : String(error ?? 'Upload failed')
+      entry.error =
+        error instanceof Error
+          ? error.message
+          : String(error ?? translate(this, messages.uploadFailed))
     }
   }
 
@@ -296,10 +335,10 @@ export class FileUploadControl extends Component<FileUploadControlSignature> {
             </svg>
             <span class="fw-dropzone-text">
               {{#if dropzone.active}}
-                <strong>Drop to add</strong>
+                <strong>{{this.dropLabel}}</strong>
               {{else}}
                 <strong class="fw-dropzone-prompt">{{this.prompt}}</strong>
-                {{#if dropzone.supported}}<span> or drop here</span>{{/if}}
+                {{#if dropzone.supported}}<span> {{this.dropHint}}</span>{{/if}}
               {{/if}}
             </span>
             {{#if @accept}}
@@ -311,8 +350,7 @@ export class FileUploadControl extends Component<FileUploadControlSignature> {
 
       {{#if this.rejected.length}}
         <p class="fw-file-rejected" role="status" data-test-fw-file-rejected>
-          Not an accepted type:
-          {{this.rejectedNames}}
+          {{this.rejectedText}}
         </p>
       {{/if}}
 
@@ -327,7 +365,7 @@ export class FileUploadControl extends Component<FileUploadControlSignature> {
                 <button
                   type="button"
                   class="fw-file-remove"
-                  aria-label="Remove {{item.name}}"
+                  aria-label={{this.removeLabel item.name}}
                   data-test-fw-remove={{item.name}}
                   {{on "click" (fn this.remove item.value)}}
                 >×</button>
@@ -349,11 +387,11 @@ export class FileUploadControl extends Component<FileUploadControlSignature> {
                   class="fw-file-retry"
                   data-test-fw-retry={{upload.file.name}}
                   {{on "click" (fn this.retry upload)}}
-                >Retry</button>
+                >{{this.retryLabel}}</button>
                 <button
                   type="button"
                   class="fw-file-remove"
-                  aria-label="Remove {{upload.file.name}}"
+                  aria-label={{this.removeLabel upload.file.name}}
                   data-test-fw-remove={{upload.file.name}}
                   {{on "click" (fn this.dismiss upload)}}
                 >×</button>
@@ -363,7 +401,7 @@ export class FileUploadControl extends Component<FileUploadControlSignature> {
                   class="fw-file-progress"
                   max="100"
                   value={{upload.file.progress}}
-                  aria-label="Uploading {{upload.file.name}}"
+                  aria-label={{this.uploadingLabel upload.file.name}}
                 ></progress>
               {{/if}}
             </li>

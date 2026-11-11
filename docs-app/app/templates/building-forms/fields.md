@@ -21,6 +21,7 @@ an optional hint, the control, and its errors. Each part is wired for assistive 
 | `@currency`, `@locale`                                | For the currency control.                                                                                                          |
 | `@disabled`, `@readonly`, `@requireConfirm`           | Override the form's setting for this field.                                                                                        |
 | `@format`                                             | Formats the value shown in inline mode.                                                                                            |
+| `@applyLabel`, `@cancelLabel`                         | The accessible names of ✔ and ✘. See [Translation](../going-further/translation.md).                                               |
 
 ## Typed paths and values
 

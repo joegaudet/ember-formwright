@@ -27,7 +27,8 @@ is drawn from the field's value, so reset and rollback put back what was there.
 
 `@accept`, given to `field.Control`, is passed to the input as `accept`, and the drop zone
 applies the same filter: `.pdf`, `image/*`, `text/csv`, ... A dropped file it turns away is
-named under the zone.
+named under the zone. `@prompt` changes the zone's call to action; the other strings go
+through your translator, or take arguments (see [Translation](../going-further/translation.md)).
 
 <Example @name="controls-file-upload" @title="file and files" />
 

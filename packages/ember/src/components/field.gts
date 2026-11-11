@@ -26,6 +26,8 @@ import type {
   RangeArgs,
 } from '../controls/signature.ts'
 import { labelOf, matches } from '../controls/options.ts'
+import { translate } from '../i18n.ts'
+import { messages } from '../messages.ts'
 import {
   getDefaultLayout,
   resolveLayout,
@@ -131,6 +133,10 @@ export interface FieldArgs<
   readonly?: boolean
   /** Override the form's @requireConfirm for this field. */
   requireConfirm?: boolean
+  /** The apply button's accessible name (confirm and inline modes). Default "Apply". */
+  applyLabel?: string
+  /** The cancel button's accessible name (confirm and inline modes). Default "Cancel". */
+  cancelLabel?: string
   /** Formats the value when shown (inline editing). */
   format?: (value: PathValue<M, P>) => string
   /** Override the form's @layout for this field: a registered name or a component. */
@@ -210,6 +216,14 @@ export default class Field<
 
   get hintId() {
     return `${this.id}-hint`
+  }
+
+  get applyLabel(): string {
+    return this.args.applyLabel ?? translate(this, messages.apply)
+  }
+
+  get cancelLabel(): string {
+    return this.args.cancelLabel ?? translate(this, messages.cancel)
   }
 
   get errorsId() {

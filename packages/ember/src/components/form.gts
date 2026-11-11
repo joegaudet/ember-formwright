@@ -20,6 +20,8 @@ import type { FieldLayout } from '../layout.ts'
 import Field, { type ControlFor, type FieldArgs, type FieldSignature } from './field.gts'
 import Button from './button.gts'
 import Errors from './errors.gts'
+import { translate } from '../i18n.ts'
+import { messages } from '../messages.ts'
 
 /**
  * Where a form is in its life cycle:
@@ -496,8 +498,12 @@ export default class Form<M extends object = object>
           (hash
             Field=(this.bindField (component Field form=this))
             Form=(asNestedForm (component Form parent=this))
-            Submit=(component Button kind="submit" busy=this.root.isSubmitting text="Submit")
-            Reset=(component Button kind="reset" onClick=this.reset text="Reset")
+            Submit=(component
+              Button kind="submit" busy=this.root.isSubmitting text=(translate this messages.submit)
+            )
+            Reset=(component
+              Button kind="reset" onClick=this.reset text=(translate this messages.reset)
+            )
             Button=Button
             Errors=(component Errors errors=this.formErrors)
             state=this
@@ -520,8 +526,12 @@ export default class Form<M extends object = object>
           (hash
             Field=(this.bindField (component Field form=this))
             Form=(asNestedForm (component Form parent=this))
-            Submit=(component Button kind="submit" busy=this.isSubmitting text="Submit")
-            Reset=(component Button kind="reset" onClick=this.reset text="Reset")
+            Submit=(component
+              Button kind="submit" busy=this.isSubmitting text=(translate this messages.submit)
+            )
+            Reset=(component
+              Button kind="reset" onClick=this.reset text=(translate this messages.reset)
+            )
             Button=Button
             Errors=(component Errors errors=this.formErrors)
             state=this

@@ -454,3 +454,5 @@ export function form<T extends FormHarness>(
 ): HarnessDecorator<T> {
   return decorator((parent, key) => parent.form(name ?? key, Type))
 }
+
+export { registerTranslator, pseudoTranslator, type Message, type Translator } from './i18n.js'
