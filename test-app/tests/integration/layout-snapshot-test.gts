@@ -13,7 +13,7 @@ const SIZES = [
 class Model {
   @tracked name = 'Ada'
   @tracked email = 'nope'
-  @tracked size = 's'
+  @tracked size: string | null = 's'
   @tracked sizes: string[] = ['m']
   @tracked agree = false
   @tracked bio = ''

@@ -7,20 +7,20 @@ an optional hint, the control, and its errors. Each part is wired for assistive 
 
 ## Arguments
 
-| Argument                                              |                                                                                                                 |
-| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `@for`                                                | The model path: `"email"`, `"address.city"`, `"items[0].name"`.                                                 |
-| `@label`                                              | The field's `<label>`, or `<legend>` for group controls (radio, checkbox group).                                |
-| `@hint`                                               | Help text under the label. The control is `aria-describedby` it.                                                |
-| `@placeholder`                                        | Passed to the control; in inline mode, shown when there's no value.                                             |
-| `@required`                                           | Marks the control `required` and shows `*`. Validation is still the validator's job.                            |
-| `@control`                                            | A control name (`"email"`) or a component. Default `"input"`. See [Controls](../controls/built-in-controls.md). |
-| `@options`, `@optionKey`, `@optionLabel`, `@storeKey` | Options for select, radio and checkbox group.                                                                   |
-| `@min`, `@max`, `@step`                               | Bounds for number, range and date controls; `@max` also caps a checkbox group.                                  |
-| `@maxLength`, `@showCount`                            | Length cap and counter for text controls.                                                                       |
-| `@currency`, `@locale`                                | For the currency control.                                                                                       |
-| `@disabled`, `@readonly`, `@requireConfirm`           | Override the form's setting for this field.                                                                     |
-| `@format`                                             | Formats the value shown in inline mode.                                                                         |
+| Argument                                              |                                                                                                                                    |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `@for`                                                | The model path: `"email"`, `"address.city"`, `"items[0].name"`.                                                                    |
+| `@label`                                              | The field's `<label>`, or `<legend>` for group controls (radio, checkbox group).                                                   |
+| `@hint`                                               | Help text under the label. The control is `aria-describedby` it.                                                                   |
+| `@placeholder`                                        | Passed to the control; in inline mode, shown when there's no value.                                                                |
+| `@required`                                           | Marks the control `required` and shows `*`. Validation is still the validator's job.                                               |
+| `@control`                                            | A control name (`"email"`) or a component that fits the path. Default `"input"`. See [Controls](../controls/built-in-controls.md). |
+| `@options`, `@optionKey`, `@optionLabel`, `@storeKey` | Options for select, radio and checkbox group.                                                                                      |
+| `@min`, `@max`, `@step`                               | Bounds for number, range and date controls; `@max` also caps a checkbox group.                                                     |
+| `@maxLength`, `@showCount`                            | Length cap and counter for text controls.                                                                                          |
+| `@currency`, `@locale`                                | For the currency control.                                                                                                          |
+| `@disabled`, `@readonly`, `@requireConfirm`           | Override the form's setting for this field.                                                                                        |
+| `@format`                                             | Formats the value shown in inline mode.                                                                                            |
 
 ## Typed paths and values
 
@@ -50,9 +50,28 @@ code: `Path<Model>`, the union of paths, and `PathValue<Model, Path>`, the type 
 Paths go five levels deep, and stop at `Date`, `Map`, `Set` and other built-ins. A model typed
 loosely (`any`, `object`, or with an index signature such as `Record<string, unknown>`)
 accepts any string and gives `unknown` values, as do loose-mode `.hbs` templates. A nested
-form over one of those `unknown` values, like a changeset's `cs.address`, is loose too. Controls
-aren't typed against values: whether a control suits the value at its path is still up to
-you.
+form over one of those `unknown` values, like a changeset's `cs.address`, is loose too.
+
+## Typed controls
+
+The control must fit the path too: the path has to hold anything the control stores, and the
+control has to show anything the path holds. A field then takes only the args its control
+does, typed for that path.
+
+```
+<Form @model={{this.account}} as |f|>
+  <f.Field @for="seats" @control="number" @min={{1}} /> {{! ok: seats is number | null }}
+  <f.Field @for="seats" />                              {{! type error: a text input stores strings }}
+  <f.Field @for="terms" @control="text" />              {{! type error: terms is a boolean }}
+  <f.Field @for="email" @currency="EUR" />              {{! type error: only currency takes it }}
+  <f.Field @for="plan" @control="select" @options={{PLANS}} /> {{! the options must be plans }}
+</Form>
+```
+
+A field without `@control` is a text input, so a path that isn't a string needs one. Mind
+`null`: `number` and `currency` store `null` when emptied, and `select` when its blank
+option is picked, so their paths must allow it (`seats: number | null`). With `@storeKey`, the
+options can be anything: the field stores their keys. Loose paths take any control.
 
 ## What a field renders
 

@@ -4,10 +4,27 @@ export {
   type FormState,
   type FormStatus,
 } from './components/form.gts'
-export { default as Field, type FieldSignature } from './components/field.gts'
+export {
+  default as Field,
+  type ControlComponentFor,
+  type ControlFor,
+  type FieldArgs,
+  type FieldSignature,
+} from './components/field.gts'
 export { default as Button, type ButtonSignature } from './components/button.gts'
 export { default as Errors } from './components/errors.gts'
-export { registerControl, lookupControl, type ControlComponent } from './registry.ts'
+export {
+  registerControl,
+  lookupControl,
+  type ControlComponent,
+  type ControlName,
+  type ControlValue,
+  type Controls,
+  type ControlsFor,
+  type FormwrightBuiltinControls,
+  type FormwrightChoiceControls,
+  type FormwrightControls,
+} from './registry.ts'
 export {
   registerLayout,
   lookupLayout,
@@ -21,7 +38,18 @@ export {
   type FieldLayoutState,
 } from './layout.ts'
 export { default as DefaultLayout } from './components/default-layout.gts'
-export type { ControlSignature, OptionAccessor } from './controls/signature.ts'
+export type {
+  ControlSignature,
+  ControlWiring,
+  CurrencyArgs,
+  ItemOf,
+  LengthArgs,
+  MaxArgs,
+  OptionAccessor,
+  OptionArgs,
+  OwnArgs,
+  RangeArgs,
+} from './controls/signature.ts'
 export { keyOf, labelOf, matches, toStored } from './controls/options.ts'
 export { pojoAdapter, setDefaultAdapter, getDefaultAdapter, type ModelAdapter } from './adapter.ts'
 export { runValidator, type ErrorMap, type Validator, type ValidatorFn } from './validation.ts'

@@ -91,7 +91,8 @@ module('Integration | @ember-formwright/layouts', function (hooks) {
   for (const layout of LAYOUTS) {
     for (const control of GROUPS) {
       test(`${layout} × ${control}: the legend is the fieldset’s first child, and axe passes`, async function (assert) {
-        const model = { size: 's', sizes: ['m'] }
+        // The control and the path vary together, which types can't follow: a loose model.
+        const model: Record<string, unknown> = { size: 's', sizes: ['m'] }
         const path = control === 'radio' ? 'size' : 'sizes'
 
         await render(

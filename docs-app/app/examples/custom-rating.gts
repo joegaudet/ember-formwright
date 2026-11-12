@@ -76,11 +76,18 @@ export class StarRating extends Component<ControlSignature<number>> {
   </template>
 }
 
-function eqStar(a: number, b: number | undefined) {
+function eqStar(a: number, b: number | null | undefined) {
   return a === b
 }
 
 // A group control: its field renders a <fieldset> with the label as its <legend>.
+// Declaring the name types @control="rating": its fields take a number path.
+declare module '@ember-formwright/ember' {
+  interface FormwrightControls {
+    rating: ControlSignature<number>
+  }
+}
+
 registerControl('rating', StarRating, { group: true })
 
 export class Feedback {

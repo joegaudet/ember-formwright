@@ -77,15 +77,19 @@ type Dotted<P extends string> = P extends `${infer Head}[${infer Index}]${infer 
   : P
 
 /** One step down: a key of an object or an index of an array. Missing parents read as undefined. */
-type Step<T, K extends string> = T extends null | undefined
-  ? undefined
-  : T extends readonly (infer E)[]
-    ? K extends `${number}`
-      ? E
-      : never
-    : K extends keyof T
-      ? T[K]
-      : never
+type Step<T, K extends string> = 0 extends 1 & T
+  ? any
+  : unknown extends T
+    ? unknown
+    : T extends null | undefined
+      ? undefined
+      : T extends readonly (infer E)[]
+        ? K extends `${number}`
+          ? E
+          : never
+        : K extends keyof T
+          ? T[K]
+          : never
 
 type ValueAt<T, P extends string> = P extends `${infer K}.${infer Rest}`
   ? ValueAt<Step<T, K>, Rest>
@@ -99,4 +103,6 @@ export type PathValue<M, P extends string> = 0 extends 1 & M
   ? any
   : string extends P
     ? unknown
-    : ValueAt<M, Dotted<P>>
+    : object extends M
+      ? unknown
+      : ValueAt<M, Dotted<P>>

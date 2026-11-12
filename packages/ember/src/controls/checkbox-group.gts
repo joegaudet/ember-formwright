@@ -1,10 +1,12 @@
 import Component from '@glimmer/component'
 import { on } from '@ember/modifier'
 import { fn } from '@ember/helper'
-import type { ControlSignature } from './signature.ts'
+import type { ControlSignature, MaxArgs, OptionArgs } from './signature.ts'
 import { isDisabled, keyOf, labelOf, matches, toStored } from './options.ts'
 
-export default class CheckboxGroup extends Component<ControlSignature<unknown[]>> {
+export default class CheckboxGroup extends Component<
+  ControlSignature<unknown[], OptionArgs & MaxArgs>
+> {
   get options() {
     return this.args.options ?? []
   }

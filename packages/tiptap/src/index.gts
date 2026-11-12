@@ -8,7 +8,7 @@ import { modifier } from 'ember-modifier'
 import { Editor, type Content, type Extensions, type JSONContent } from '@tiptap/core'
 import type { EditorState } from '@tiptap/pm/state'
 import StarterKit from '@tiptap/starter-kit'
-import { registerControl, type ControlSignature } from '@ember-formwright/ember'
+import { registerControl, type ControlSignature, type OwnArgs } from '@ember-formwright/ember'
 
 /** A toolbar button, by name. */
 export type RichTextTool =
@@ -370,4 +370,27 @@ export function toPlainText(value: RichTextValue | undefined): string {
 /** Makes `@control="rich-text"` available to every form. Call once, e.g. in app.ts. */
 export function registerTiptapControl(name = 'rich-text'): void {
   registerControl(name, RichTextControl)
+}
+
+/** An empty document stores `''` in HTML, and `null` as JSON. */
+// shortcut: typed by the path, not by `@output` (which the field doesn't pass on), so a JSON path
+// without `@output="json"` type-checks; type it from the arg if the field ever forwards it.
+type RichTextStored<T> =
+  | Extract<NonNullable<T>, string>
+  | ([Extract<NonNullable<T>, JSONContent>] extends [never]
+      ? never
+      : Extract<NonNullable<T>, JSONContent> | null)
+
+declare module '@ember-formwright/ember' {
+  interface FormwrightChoiceControls<T> {
+    /**
+     * `registerTiptapControl()`'s default name; declare yours if you pass another. It stores
+     * an HTML string, or Tiptap's JSON with `@output="json"`.
+     */
+    'rich-text': ControlSignature<
+      RichTextStored<T>,
+      OwnArgs<RichTextControlSignature>,
+      HTMLDivElement
+    >
+  }
 }

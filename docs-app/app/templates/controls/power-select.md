@@ -17,6 +17,9 @@ import '@ember-formwright/power-select/theme.css' // optional: follows the Formw
 registerPowerSelectControls() // @control="power-select" and @control="power-select-multiple"
 ```
 
+The package types these names for Glint: which paths each fits, and which args it takes. If
+you register under other names, [declare them](./custom-controls.md#use-it-pass-it-or-register-it).
+
 Dropdowns render into a wormhole. Put one in your application template, as power-select's own
 docs describe:
 

@@ -9,7 +9,7 @@ const STATUSES = ['Open', 'Closed', 'Any']
 
 export class Filters {
   @tracked query = ''
-  @tracked status = 'Open'
+  @tracked status: string | null = 'Open'
 }
 
 export const createModel = () => new Filters()

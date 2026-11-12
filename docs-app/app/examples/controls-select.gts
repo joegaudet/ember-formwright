@@ -23,9 +23,9 @@ export class Checkout {
   /** Stores the whole option object. */
   @tracked country: Country | null = null
   /** Primitive options store themselves. */
-  @tracked size = 'M'
+  @tracked size: string | null = 'M'
   /** @storeKey stores just the option's key. */
-  @tracked plan = 'team'
+  @tracked plan: string | null = 'team'
 }
 
 export const createModel = () => new Checkout()

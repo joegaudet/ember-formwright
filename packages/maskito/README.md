@@ -12,6 +12,9 @@ import { registerMaskedControl } from '@ember-formwright/maskito'
 registerMaskedControl() // @control="masked"
 ```
 
+The package types these names for Glint: which paths each fits, and which args it takes. If
+you register under other names, [declare them](https://joegaudet.com/ember-formwright/guide/controls/custom-controls.md).
+
 ```gts
 const phoneMask = { mask: ['(', /\d/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/] }
 
@@ -38,6 +41,8 @@ npm install @maskito/kit @maskito/phone libphonenumber-js
 import { registerPhoneControl } from '@ember-formwright/maskito/phone'
 registerPhoneControl() // @control="phone"
 ```
+
+Like `masked`, `phone` is typed for Glint; declare any other name you register it under.
 
 ```gts
 import { formatPhone, isValidPhone } from '@ember-formwright/maskito/phone'

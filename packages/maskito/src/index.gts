@@ -2,9 +2,9 @@ import Component from '@glimmer/component'
 import { on } from '@ember/modifier'
 import { modifier } from 'ember-modifier'
 import { Maskito, type MaskitoOptions } from '@maskito/core'
-import { registerControl, type ControlSignature } from '@ember-formwright/ember'
+import { registerControl, type ControlSignature, type OwnArgs } from '@ember-formwright/ember'
 
-interface MaskedSignature {
+export interface MaskedSignature {
   Element: HTMLInputElement
   Args: ControlSignature<string>['Args'] & {
     /** Any Maskito options, e.g. from `@maskito/kit`'s maskitoNumberOptionsGenerator. */
@@ -55,3 +55,10 @@ export function registerMaskedControl(name = 'masked'): void {
 }
 
 export { Masked }
+
+declare module '@ember-formwright/ember' {
+  interface FormwrightControls {
+    /** `registerMaskedControl()`'s default name; declare yours if you pass another. */
+    masked: ControlSignature<string, OwnArgs<MaskedSignature>, HTMLInputElement>
+  }
+}

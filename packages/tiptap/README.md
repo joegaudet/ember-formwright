@@ -15,6 +15,9 @@ import '@ember-formwright/tiptap/theme.css' // optional; after the Formwright th
 registerTiptapControl() // @control="rich-text"
 ```
 
+The package types these names for Glint: which paths each fits, and which args it takes. If
+you register under other names, [declare them](https://joegaudet.com/ember-formwright/guide/controls/custom-controls.md).
+
 ```gts
 <f.Field @for="body" @control="rich-text" @label="Body" @placeholder="Write something" />
 
