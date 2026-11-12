@@ -43,6 +43,9 @@ around a native `<input type="file">` and lists the stored files with their size
 button. The list is drawn from the field's value, so reset and rollback just work; a stored
 value is named by `@optionLabel` (else its `label` or `name`). `field.Control` also takes
 `@accept` (applied to the picker and to drops) and `@prompt` (the zone's call to action).
+Its other strings go through the app's translator (`./messages` lists them), or take
+`@dropLabel`, `@dropHint`, `@retryLabel`, and the functions `@removeLabel`, `@uploadingLabel`
+and `@rejectedLabel`.
 
 ## Testing
 

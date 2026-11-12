@@ -35,12 +35,13 @@ as a change.
 
 Arguments for the editor go on `field.Control`:
 
-| Argument      |                                                                                                                                                           |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@output`     | `"html"` (default) stores an HTML string; `"json"` stores Tiptap's JSON document, and `null` when empty.                                                  |
-| `@toolbar`    | The buttons to show: `bold`, `italic`, `strike`, `heading-2`, `heading-3`, `bullet-list`, `ordered-list`, `blockquote`, `undo`, `redo`. `false` hides it. |
-| `@extensions` | More Tiptap extensions, added after StarterKit.                                                                                                           |
-| `@starterKit` | StarterKit's options, e.g. `{ heading: { levels: [2, 3] } }`.                                                                                             |
+| Argument                       |                                                                                                                                                           |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@output`                      | `"html"` (default) stores an HTML string; `"json"` stores Tiptap's JSON document, and `null` when empty.                                                  |
+| `@toolbar`                     | The buttons to show: `bold`, `italic`, `strike`, `heading-2`, `heading-3`, `bullet-list`, `ordered-list`, `blockquote`, `undo`, `redo`. `false` hides it. |
+| `@extensions`                  | More Tiptap extensions, added after StarterKit.                                                                                                           |
+| `@starterKit`                  | StarterKit's options, e.g. `{ heading: { levels: [2, 3] } }`.                                                                                             |
+| `@toolLabels`, `@toolbarLabel` | Button names, by tool (`{ bold: 'Strong' }`), and the toolbar's. Default: the translator's. See [Translation](../going-further/translation.md).           |
 
 `@extensions` and `@starterKit` are read once, when the editor is created.
 

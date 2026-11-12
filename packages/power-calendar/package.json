@@ -25,6 +25,10 @@
       "types": "./declarations/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./messages": {
+      "types": "./declarations/messages.d.ts",
+      "default": "./dist/messages.js"
+    },
     "./test-support": {
       "types": "./declarations/test-support/index.d.ts",
       "default": "./dist/test-support/index.js"

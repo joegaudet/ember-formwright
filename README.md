@@ -85,6 +85,7 @@ with their root: the parent first, then dirty (or new) children, breadth-first.
 | `@min`, `@max`, `@step`                               | Bounds; for `checkbox-group`, `@max` caps the selection.                                                                                                                    |
 | `@disabled`, `@readonly`, `@requireConfirm`           | Override the form.                                                                                                                                                          |
 | `@format`                                             | Formats the value shown in inline mode.                                                                                                                                     |
+| `@applyLabel`, `@cancelLabel`                         | The accessible names of ✔ and ✘ (confirm and inline modes). Default: the translator's, else "Apply" and "Cancel".                                                           |
 
 Built-in controls: `input`, `email`, `password`, `search`, `tel`, `url`, `number`, `range`,
 `color`, `date`, `datetime`, `time`, `textarea`, `select`, `radio`, `checkbox`,
@@ -127,6 +128,14 @@ declare module '@ember-formwright/ember' {
 Controls whose value follows the path, as a select's does, are declared in
 `FormwrightChoiceControls<T>`, with `T` the value at the path. See
 [Custom controls](https://joegaudet.com/ember-formwright/guide/controls/custom-controls.md).
+
+## Translation
+
+Register a translator as `translator:main` and every built-in string (Submit, Reset, ✔ and ✘,
+the add-ons' prompts and toolbar) goes through it; without one they stay English. Each package
+exports its messages at `./messages`. An argument such as `<f.Submit @text="Save" />` still wins.
+Validation messages come from your schema: zod and valibot have their own locales. See the
+[translation guide](https://joegaudet.com/ember-formwright/guide/going-further/translation.md).
 
 ## Adapters
 

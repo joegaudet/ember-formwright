@@ -8,7 +8,14 @@ import { modifier } from 'ember-modifier'
 import { Editor, type Content, type Extensions, type JSONContent } from '@tiptap/core'
 import type { EditorState } from '@tiptap/pm/state'
 import StarterKit from '@tiptap/starter-kit'
-import { registerControl, type ControlSignature, type OwnArgs } from '@ember-formwright/ember'
+import {
+  registerControl,
+  translate,
+  type ControlSignature,
+  type Message,
+  type OwnArgs,
+} from '@ember-formwright/ember'
+import { messages } from './messages.ts'
 
 /** A toolbar button, by name. */
 export type RichTextTool =
@@ -28,7 +35,9 @@ export type RichTextValue = string | JSONContent | null
 
 interface Tool {
   name: RichTextTool
-  label: string
+  /** Its accessible name, translated when shown so a locale change re-renders it. */
+  label: Message
+  labelValues?: Record<string, unknown>
   /** Toggles a mark or node, so it has a pressed state. */
   toggle: boolean
   run: (editor: Editor) => void
@@ -38,7 +47,7 @@ interface Tool {
 
 const mark = (
   name: RichTextTool,
-  label: string,
+  label: Message,
   type: string,
   run: (editor: Editor) => void,
 ): Tool => ({
@@ -52,7 +61,8 @@ const mark = (
 
 const heading = (level: 2 | 3): Tool => ({
   name: `heading-${level}`,
-  label: `Heading ${level}`,
+  label: messages.heading,
+  labelValues: { level },
   toggle: true,
   run: editor => editor.chain().focus().toggleHeading({ level }).run(),
   isActive: editor => editor.isActive('heading', { level }),
@@ -60,21 +70,23 @@ const heading = (level: 2 | 3): Tool => ({
 })
 
 const TOOLS: Tool[] = [
-  mark('bold', 'Bold', 'bold', e => e.chain().focus().toggleBold().run()),
-  mark('italic', 'Italic', 'italic', e => e.chain().focus().toggleItalic().run()),
-  mark('strike', 'Strikethrough', 'strike', e => e.chain().focus().toggleStrike().run()),
+  mark('bold', messages.bold, 'bold', e => e.chain().focus().toggleBold().run()),
+  mark('italic', messages.italic, 'italic', e => e.chain().focus().toggleItalic().run()),
+  mark('strike', messages.strike, 'strike', e => e.chain().focus().toggleStrike().run()),
   heading(2),
   heading(3),
-  mark('bullet-list', 'Bulleted list', 'bulletList', e =>
+  mark('bullet-list', messages.bulletList, 'bulletList', e =>
     e.chain().focus().toggleBulletList().run(),
   ),
-  mark('ordered-list', 'Numbered list', 'orderedList', e =>
+  mark('ordered-list', messages.orderedList, 'orderedList', e =>
     e.chain().focus().toggleOrderedList().run(),
   ),
-  mark('blockquote', 'Quote', 'blockquote', e => e.chain().focus().toggleBlockquote().run()),
+  mark('blockquote', messages.blockquote, 'blockquote', e =>
+    e.chain().focus().toggleBlockquote().run(),
+  ),
   {
     name: 'undo',
-    label: 'Undo',
+    label: messages.undo,
     toggle: false,
     run: e => e.chain().focus().undo().run(),
     isActive: () => false,
@@ -82,7 +94,7 @@ const TOOLS: Tool[] = [
   },
   {
     name: 'redo',
-    label: 'Redo',
+    label: messages.redo,
     toggle: false,
     run: e => e.chain().focus().redo().run(),
     isActive: () => false,
@@ -113,6 +125,10 @@ export interface RichTextControlSignature {
     extensions?: Extensions
     /** StarterKit's options, e.g. `{ heading: { levels: [2, 3] } }`. Read once. */
     starterKit?: Parameters<typeof StarterKit.configure>[0]
+    /** The toolbar's accessible name. Default "Formatting". */
+    toolbarLabel?: string
+    /** Button names (their title and accessible name), by tool: `{ bold: 'Strong' }`. */
+    toolLabels?: Partial<Record<RichTextTool, string>>
   }
 }
 
@@ -204,6 +220,13 @@ export class RichTextControl extends Component<RichTextControlSignature> {
 
   run = (tool: Tool): void => tool.run(this.editor)
 
+  get toolbarLabel(): string {
+    return this.args.toolbarLabel ?? translate(this, messages.toolbar)
+  }
+
+  labelFor = (tool: Tool): string =>
+    this.args.toolLabels?.[tool.name] ?? translate(this, tool.label, tool.labelValues)
+
   /** Keeps the editor's selection when a toolbar button is clicked. */
   keepFocus = (event: MouseEvent): void => event.preventDefault()
 
@@ -252,7 +275,7 @@ export class RichTextControl extends Component<RichTextControlSignature> {
         <div
           class="fw-rich-text-toolbar"
           role="toolbar"
-          aria-label="Formatting"
+          aria-label={{this.toolbarLabel}}
           aria-controls={{@id}}
         >
           {{#each this.groups as |group|}}
@@ -261,8 +284,8 @@ export class RichTextControl extends Component<RichTextControlSignature> {
                 <button
                   type="button"
                   class="fw-rich-text-tool fw-rich-text-tool--{{tool.name}}"
-                  title={{tool.label}}
-                  aria-label={{tool.label}}
+                  title={{this.labelFor tool}}
+                  aria-label={{this.labelFor tool}}
                   aria-pressed={{if
                     tool.toggle
                     (if (this.isPressed tool this.revision) "true" "false")

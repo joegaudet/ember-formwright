@@ -149,14 +149,14 @@ export const FieldControl: TOC<FieldControlSignature> = <template>
             <button
               type="button"
               class="fw-commit"
-              aria-label="Apply"
+              aria-label={{field.applyLabel}}
               data-test-fw-commit
               {{on "click" field.commit}}
             >✔</button>
             <button
               type="button"
               class="fw-cancel"
-              aria-label="Cancel"
+              aria-label={{field.cancelLabel}}
               data-test-fw-cancel
               {{on "click" field.cancel}}
             >✘</button>

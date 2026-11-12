@@ -14,10 +14,12 @@ import type {
 } from 'ember-power-calendar/utils'
 import {
   registerControl,
+  translate,
   type ControlSignature,
   type OwnArgs,
   type RangeArgs,
 } from '@ember-formwright/ember'
+import { messages } from './messages.ts'
 import { ensureDateLibrary } from './date-library.ts'
 import {
   formatDate,
@@ -109,7 +111,7 @@ export class DatePickerControl extends Component<DatePickerControlSignature> {
     const label = this.args.label
     if (!label) return undefined
     const shown = this.text || this.args.placeholder
-    return shown ? `${label}: ${shown}` : label
+    return shown ? translate(this, messages.trigger, { label, value: shown }) : label
   }
 
   get disabled(): boolean {

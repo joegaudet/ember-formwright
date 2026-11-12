@@ -1,1 +1,1 @@
-{ "order": ["data-layers", "changesets", "theming", "testing"] }
+{ "order": ["data-layers", "changesets", "theming", "translation", "testing"] }
