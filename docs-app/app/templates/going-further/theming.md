@@ -56,6 +56,9 @@ properties, plus `--fw-label-width` for `horizontal`.
 
 ## Styling without the theme
 
+For a finished design system instead, [Joinery](https://joegaudet.com/ember-joinery/) (shadcn/ui
+for Ember) renders Formwright fields with its own components through `@ember-joinery/formwright`.
+
 | Selector                                                               | On                                         |
 | ---------------------------------------------------------------------- | ------------------------------------------ |
 | `.fw-form`, `.fw-form--nested`                                         | The `<form>`; a nested form's `<fieldset>` |

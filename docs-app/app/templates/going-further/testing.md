@@ -103,6 +103,9 @@ The harnesses use these; you can too.
 | `data-test-fw-option="<key>"`                                             | An option of a select, radio or checkbox group                      |
 | `data-test-fw-submit`, `-reset`, `-button`                                | Buttons                                                             |
 
+For harnesses beyond forms, or one harness class that runs under Playwright, Cypress and jsdom as
+well as Ember, see [harnessed](https://joegaudet.com/harnessed/).
+
 <div class="callout">
 
 **Coming from ember-foxy-forms**
