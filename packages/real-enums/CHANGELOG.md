@@ -1,5 +1,9 @@
 # @ember-formwright/real-enums
 
+## 2.0.0
+
+No changes in this release.
+
 ## 1.3.0
 
 No changes in this release.
