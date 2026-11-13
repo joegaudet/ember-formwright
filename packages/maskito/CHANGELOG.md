@@ -1,5 +1,22 @@
 # @ember-formwright/maskito
 
+## 2.0.0
+
+### Major Changes
+
+- 199233b: Fields type their control against their path. `@control` must be a control that stores what the
+  path holds, and a field takes only its control's args, typed for that path. `ControlSignature`
+  is split into the wiring every control gets and its own args, and registered names are declared
+  in `FormwrightControls` (or `FormwrightChoiceControls<T>`, for controls whose value follows the
+  path). The add-ons declare their default names. See MIGRATION.md.
+
+### Patch Changes
+
+- Updated dependencies [332f045]
+- Updated dependencies [199233b]
+  - @ember-formwright/ember@2.0.0
+  - @ember-formwright/test-support@2.0.0
+
 ## 1.3.0
 
 ### Minor Changes

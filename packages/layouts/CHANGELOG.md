@@ -1,5 +1,13 @@
 # @ember-formwright/layouts
 
+## 2.0.0
+
+### Patch Changes
+
+- Updated dependencies [332f045]
+- Updated dependencies [199233b]
+  - @ember-formwright/ember@2.0.0
+
 ## 1.3.0
 
 ### Minor Changes
