@@ -13,7 +13,7 @@ class AccountHarness extends FormHarness {
 module('Example | require-confirm', function (hooks) {
   setupRenderingTest(hooks)
 
-  test('changes wait for ✔ or Enter; Esc cancels', async function (assert) {
+  test('changes wait for ✓ or Enter; Esc cancels', async function (assert) {
     const model = createModel()
     await render(<template><AccountForm @model={{model}} /></template>)
     const account = new AccountHarness()

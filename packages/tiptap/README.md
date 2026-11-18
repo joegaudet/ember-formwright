@@ -68,7 +68,7 @@ events.
 - **Trailing paragraph.** StarterKit keeps an empty paragraph after a final list or heading,
   so there is somewhere to type. It isn't stored.
 - **Keyboard.** Enter starts a paragraph and doesn't reach the field, so in confirm and
-  inline modes it doesn't commit; use ✔. Escape cancels as usual.
+  inline modes it doesn't commit; use ✓. Escape cancels as usual.
 - **Disabled and read-only.** The editor stops being editable and the toolbar is disabled.
 - **Labels.** The editor is a `div role="textbox"`, which `<label for>` doesn't name; the
   control passes `@label` as `aria-label`, and a click on the label focuses the editor.

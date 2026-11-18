@@ -1,6 +1,6 @@
 # Translation
 
-Formwright's own strings (the Submit and Reset buttons, the ✔ and ✘ of a confirmed field, the
+Formwright's own strings (the Submit and Reset buttons, the ✓ and ✕ of a confirmed field, the
 file upload's prompts, the rich-text toolbar) are English by default. Register one translator
 and every one of them goes through it, in every Formwright package.
 
@@ -72,7 +72,7 @@ An argument beats the translator. Use one to change a string in one place:
 | Where                         | Arguments                                                                                                                                  |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `<f.Submit>`, `<f.Reset>`     | `@text`, or a block                                                                                                                        |
-| `<f.Field>`                   | `@applyLabel`, `@cancelLabel`: the accessible names of ✔ and ✘                                                                             |
+| `<f.Field>`                   | `@applyLabel`, `@cancelLabel`: the accessible names of ✓ and ✕                                                                             |
 | file upload's `field.Control` | `@prompt`, `@dropLabel`, `@dropHint`, `@retryLabel`; `@removeLabel`, `@uploadingLabel` and `@rejectedLabel` take a function of the name(s) |
 | rich text's `field.Control`   | `@toolbarLabel`, and `@toolLabels`, by tool: `{ bold: 'Strong' }`                                                                          |
 
