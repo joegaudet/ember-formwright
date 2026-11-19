@@ -1,6 +1,8 @@
 # Custom controls
 
-A control is any component that renders `@value` and calls `@onChange(newValue)`. Formwright
+A control is any component that renders `@value` and calls `@onChange(newValue)`: in Ember's
+terms, any [invokable](https://guides.emberjs.com/release/typescript/core-concepts/invokables/)
+whose args fit. Formwright
 gives it the rest: an id for the label, disabled/readonly/required, `aria-invalid`, the
 options, and its place in the form's dirty state, validation and reset.
 
@@ -28,6 +30,33 @@ args where it passes them on (`@options`, `@min`, `@max`, `@step`, `@maxLength`,
 <f.Field @for="phone" @control="masked" as |field|>
   <field.Control @mask={{phoneMask}} />
 </f.Field>
+```
+
+The signature is all a field checks, so a control can be a class, a template-only component,
+or a component with some args already bound:
+
+```gts
+import type { TOC } from '@ember/component/template-only'
+
+const Shout = <template>…</template> as TOC<ControlSignature<string>>
+
+<f.Field @for="name" @control={{Shout}} />
+<f.Field @for="seats" @control={{Stepper}} />
+<f.Field @for="seats" @control={{component Stepper step=5}} />
+```
+
+The yielded `Control` is an invokable too, already wired to the field. Hand it to a component
+of your own with the `BoundControl` type; `BoundControl<ControlSignature<number>>` narrows it
+to one control's args:
+
+```gts
+import type { BoundControl } from '@ember-formwright/ember'
+
+const Framed = <template><div class="frame"><@control /></div></template> as TOC<{
+  Args: { control: BoundControl }
+}>
+
+<f.Field @for="name" as |field|><Framed @control={{field.Control}} /></f.Field>
 ```
 
 ## Use it: pass it, or register it
