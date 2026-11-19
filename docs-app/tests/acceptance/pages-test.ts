@@ -1,11 +1,15 @@
 import { module, test } from 'qunit'
 import { setupApplicationTest } from 'docs-app/tests/helpers'
-import { visit, waitFor, find } from '@ember/test-helpers'
+import { visit, waitFor, find, currentURL } from '@ember/test-helpers'
 
 /** Every guide page, as `<folder>/<page>.md`; each must render without an error. */
 const PAGES = [
   'getting-started/introduction.md',
   'getting-started/usage.md',
+  'accessibility/overview.md',
+  'accessibility/testing.md',
+  'internationalization/translation.md',
+  'internationalization/catalogs.md',
   'building-forms/forms.md',
   'building-forms/fields.md',
   'building-forms/layouts.md',
@@ -21,7 +25,6 @@ const PAGES = [
   'going-further/data-layers.md',
   'going-further/changesets.md',
   'going-further/theming.md',
-  'going-further/translation.md',
   'going-further/testing.md',
   'reference/api.md',
 ]
@@ -54,4 +57,12 @@ module('Acceptance | guide pages', function (hooks) {
       }
     })
   }
+
+  // Shipped READMEs link here; the page moved to the Internationalization section.
+  test('going-further/translation.md redirects to its new path', async function (assert) {
+    await visit('/going-further/translation.md')
+    assert.strictEqual(currentURL(), '/internationalization/translation.md')
+    await waitFor('.guide-prose h1', { timeout: 15000 })
+    assert.dom('.guide-prose h1').hasText('Translation')
+  })
 })

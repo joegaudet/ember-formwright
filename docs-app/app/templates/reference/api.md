@@ -48,7 +48,7 @@ Generated from the packages' TypeScript declarations.
 
 ## Translation
 
-See [Translation](../going-further/translation.md).
+See [Translation](../internationalization/translation.md).
 
 <APIDocs @package="@ember-formwright/ember" @module="declarations/i18n" @name="Translator" />
 

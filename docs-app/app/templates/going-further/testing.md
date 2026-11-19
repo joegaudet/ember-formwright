@@ -2,7 +2,8 @@
 
 `@ember-formwright/test-support` drives forms the way a user does, through selectors every
 Formwright form renders. Describe each form once as a harness class, then use it in any test.
-Every example in this guide has a **Test** tab with the test that covers it.
+Every example in this guide has a **Test** tab with the test that covers it. For axe audits and
+ARIA assertions, see [Accessibility testing](../accessibility/testing.md).
 
 ```bash
 npm install --save-dev @ember-formwright/test-support
