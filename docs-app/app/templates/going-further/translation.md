@@ -6,34 +6,40 @@ and every one of them goes through it, in every Formwright package.
 
 ## Registering a translator
 
-A translator is an object with a `locale` and a `t` function. Formwright looks it up as
-`translator:main` on the owner, so register it in an instance initializer:
+A translator is an object with a `locale` and a `t` function: the
+[msgid](https://github.com/joegaudet/msgid) contract. Formwright looks it up as `translator:main`
+on the owner, so register it in an instance initializer. msgid has an adapter for each common
+i18n library (`pnpm add msgid`); with ember-intl:
 
 ```ts
 // app/instance-initializers/translator.ts
 import type ApplicationInstance from '@ember/application/instance'
-import { format, type Translator } from '@ember-formwright/ember'
+import { intl } from 'msgid/intl'
 
 export function initialize(owner: ApplicationInstance) {
-  const intl = owner.lookup('service:intl')
-  const translator: Translator = {
-    get locale() {
-      return intl.primaryLocale
-    },
-    t: (message, values) =>
-      intl.exists(message.id) ? intl.t(message.id, values) : format(message, values),
-  }
-  owner.register('translator:main', translator, { instantiate: false })
+  owner.register('translator:main', intl(owner.lookup('service:intl')), { instantiate: false })
 }
 
 export default { initialize }
 ```
 
-That one is for ember-intl; any i18n library works the same way. `t` receives a message, with
-its stable `id` (`formwright.form.submit`), its English `message` (`Submit`, with `{name}`
-placeholders) and a `description` for translators, plus the placeholder values. `format`
-returns the English text, for messages your catalog doesn't have yet. Make `locale` tracked (a
-service's tracked property, as here) and changing it re-renders every string.
+The other adapters take your library's instance the same way:
+
+| i18n library                       | Adapter                                 |
+| ---------------------------------- | --------------------------------------- |
+| gettext (`.po` files)              | `gettext(catalog)` from `msgid/gettext` |
+| i18next                            | `i18next(i18n)` from `msgid/i18next`    |
+| FormatJS, react-intl or ember-intl | `intl(intl)` from `msgid/intl`          |
+| Lingui                             | `lingui(i18n)` from `msgid/lingui`      |
+
+Each one falls back to the English for a message its catalog lacks, or holds as an empty string,
+so you can translate one string at a time. The locale is the library's own (ember-intl's
+`primaryLocale` is tracked), so changing it re-renders every string.
+
+`t` receives a message, with its stable `id` (`formwright.form.submit`), its English `message`
+(`Submit`, with `{name}` placeholders) and a `description` for translators, plus the placeholder
+values. To write your own translator, `format(message, values)` from `@ember-formwright/ember`
+returns the English text.
 
 Libraries that follow the same contract, such as ember-joinery, read the same `translator:main`,
 so one registration translates them all.
@@ -64,6 +70,18 @@ import { messages as datePicker } from '@ember-formwright/power-calendar/message
 
 The other packages (maskito, power-select, layouts, warp-drive, changeset, real-enums,
 test-support) render no strings of their own.
+
+msgid's CLI builds a catalog from those modules:
+
+```sh
+# gettext: a template to translate, then a .po file converted for msgid/gettext
+msgid pot @ember-formwright/ember/messages @ember-formwright/file-upload/messages > formwright.pot
+msgid po2json pl.po --out translations/pl.json
+
+# ICU (FormatJS, ember-intl, Lingui) and i18next source catalogs
+msgid icu @ember-formwright/ember/messages --out translations/en.json
+msgid i18next @ember-formwright/ember/messages --out locales/en/translation.json
+```
 
 ## Changing one string
 

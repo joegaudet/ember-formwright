@@ -133,9 +133,11 @@ Controls whose value follows the path, as a select's does, are declared in
 
 Register a translator as `translator:main` and every built-in string (Submit, Reset, ✔ and ✘,
 the add-ons' prompts and toolbar) goes through it; without one they stay English. Each package
-exports its messages at `./messages`. An argument such as `<f.Submit @text="Save" />` still wins.
-Validation messages come from your schema: zod and valibot have their own locales. See the
-[translation guide](https://joegaudet.com/ember-formwright/guide/going-further/translation.md).
+exports its messages at `./messages`. [msgid](https://github.com/joegaudet/msgid)'s adapters
+(`msgid/gettext`, `msgid/i18next`, `msgid/intl`, `msgid/lingui`) make a translator from your i18n
+library, and its CLI (`msgid pot @ember-formwright/ember/messages`) builds a catalog. An
+argument such as `<f.Submit @text="Save" />` still wins. Validation messages come from your
+schema: zod and valibot have their own locales. See the [translation guide](https://joegaudet.com/ember-formwright/guide/going-further/translation.md).
 
 ## Adapters
 
