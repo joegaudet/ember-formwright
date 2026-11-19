@@ -3,9 +3,11 @@
  * `@for` path, and that a field only takes the args its control declares. Each
  * `@glint-expect-error` asserts that the line below it is rejected. Nothing here renders.
  */
+import Component from '@glimmer/component'
 import type { TOC } from '@ember/component/template-only'
 import {
   Form,
+  type BoundControl,
   registerControl,
   type ControlName,
   type ControlSignature,
@@ -69,6 +71,28 @@ const tags: Tag[] = [{ id: 'a', label: 'A', blurb: 'The first' }]
 
 /** A custom control passed as a component: it edits strings. */
 const Shout = <template></template> as TOC<ControlSignature<string>>
+
+/** A class-based control with an arg of its own. */
+class Stepper extends Component<ControlSignature<number | null, { step?: number }>> {
+  get step() {
+    return this.args.step ?? 1
+  }
+}
+
+/** Renders a field's yielded control, as a layout of your own would. */
+const Framed = <template><@control /></template> as TOC<{ Args: { control: BoundControl } }>
+
+/** Any invokable whose args fit is a control: template-only, a class, or one with args bound. */
+export const Invokables: TOC<{ Args: { profile: Profile } }> = <template>
+  <Form @model={{@profile}} as |f|>
+    <f.Field @for="name" @control={{Shout}} />
+    <f.Field @for="seats" @control={{Stepper}} />
+    <f.Field @for="seats" @control={{component Stepper step=5}} />
+    {{! @glint-expect-error: Stepper stores a number; name is a string }}
+    <f.Field @for="name" @control={{component Stepper step=5}} />
+    <f.Field @for="name" as |field|><Framed @control={{field.Control}} /></f.Field>
+  </Form>
+</template>
 
 /** Each control fits the value at its path. */
 export const Fits: TOC<{ Args: { profile: Profile; useKey: boolean } }> = <template>
