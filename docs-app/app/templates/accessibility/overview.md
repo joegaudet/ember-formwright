@@ -54,7 +54,7 @@ focus to it. Its errors are still announced.
 
 [Joinery](https://joegaudet.com/ember-joinery/) renders Formwright fields with its own
 components through `@ember-joinery/formwright`. Those controls follow
-[Joinery's accessibility](https://joegaudet.com/ember-joinery/guide/accessibility/overview.md).
+[Joinery's accessibility](https://joegaudet.com/ember-joinery/guide/accessibility/index.md).
 
 ## Testing
 
