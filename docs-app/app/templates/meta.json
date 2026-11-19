@@ -1,1 +1,11 @@
-{ "order": ["getting-started", "building-forms", "controls", "going-further", "reference"] }
+{
+  "order": [
+    "getting-started",
+    "accessibility",
+    "internationalization",
+    "building-forms",
+    "controls",
+    "going-further",
+    "reference"
+  ]
+}

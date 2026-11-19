@@ -129,7 +129,14 @@ Controls whose value follows the path, as a select's does, are declared in
 `FormwrightChoiceControls<T>`, with `T` the value at the path. See
 [Custom controls](https://joegaudet.com/ember-formwright/guide/controls/custom-controls.md).
 
-## Translation
+## Accessibility
+
+Every field gets a `<label for>`, a hint and errors wired to the control's `aria-describedby`,
+and an always-rendered `aria-live` error region; groups render a `<fieldset>` and `<legend>`. A
+failed submit focuses the first invalid control. See the guide's
+[Accessibility](https://joegaudet.com/ember-formwright/guide/accessibility/overview.md) section.
+
+## Internationalization
 
 Register a translator as `translator:main` and every built-in string (Submit, Reset, ✓ and ✕,
 the add-ons' prompts and toolbar) goes through it; without one they stay English. Each package
@@ -137,7 +144,9 @@ exports its messages at `./messages`. [msgid](https://github.com/joegaudet/msgid
 (`msgid/gettext`, `msgid/i18next`, `msgid/intl`, `msgid/lingui`) make a translator from your i18n
 library, and its CLI (`msgid pot @ember-formwright/ember/messages`) builds a catalog. An
 argument such as `<f.Submit @text="Save" />` still wins. Validation messages come from your
-schema: zod and valibot have their own locales. See the [translation guide](https://joegaudet.com/ember-formwright/guide/going-further/translation.md).
+schema: zod and valibot have their own locales. See the guide's
+[Internationalization](https://joegaudet.com/ember-formwright/guide/internationalization/translation.md)
+section.
 
 ## Adapters
 
