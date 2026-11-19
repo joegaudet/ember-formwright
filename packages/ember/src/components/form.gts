@@ -74,7 +74,7 @@ export interface FormSignature<M extends object = object> {
     inline?: boolean
     /** With @inline: edit in a popover anchored to the value. */
     callout?: boolean
-    /** Changes wait for an explicit commit (✔) or cancel (✘). */
+    /** Changes wait for an explicit commit (✓) or cancel (✕). */
     requireConfirm?: boolean
     /** Submit after every committed change. */
     autoSubmit?: boolean

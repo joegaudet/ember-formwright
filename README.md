@@ -61,7 +61,7 @@ const addressSchema = z.object({ city: z.string().min(1, 'City is required') })
 | `@onChange`                                                   | `(path, value, model)` after each committed change.                               |
 | `@disabled`, `@readonly`                                      | Flow down to every field.                                                         |
 | `@inline`, `@callout`                                         | Inline editing: show values, edit on click; `@callout` edits in a native popover. |
-| `@requireConfirm`                                             | Changes wait for ✔ (or Enter), ✘ (or Esc) discards them.                          |
+| `@requireConfirm`                                             | Changes wait for ✓ (or Enter), ✕ (or Esc) discards them.                          |
 | `@autoSubmit`                                                 | Submit after every committed change.                                              |
 | `@resetOnDestroy`                                             | Roll back unsaved changes on teardown. Default `true`.                            |
 
@@ -85,7 +85,7 @@ with their root: the parent first, then dirty (or new) children, breadth-first.
 | `@min`, `@max`, `@step`                               | Bounds; for `checkbox-group`, `@max` caps the selection.                                                                                                                    |
 | `@disabled`, `@readonly`, `@requireConfirm`           | Override the form.                                                                                                                                                          |
 | `@format`                                             | Formats the value shown in inline mode.                                                                                                                                     |
-| `@applyLabel`, `@cancelLabel`                         | The accessible names of ✔ and ✘ (confirm and inline modes). Default: the translator's, else "Apply" and "Cancel".                                                           |
+| `@applyLabel`, `@cancelLabel`                         | The accessible names of ✓ and ✕ (confirm and inline modes). Default: the translator's, else "Apply" and "Cancel".                                                           |
 
 Built-in controls: `input`, `email`, `password`, `search`, `tel`, `url`, `number`, `range`,
 `color`, `date`, `datetime`, `time`, `textarea`, `select`, `radio`, `checkbox`,
@@ -131,7 +131,7 @@ Controls whose value follows the path, as a select's does, are declared in
 
 ## Translation
 
-Register a translator as `translator:main` and every built-in string (Submit, Reset, ✔ and ✘,
+Register a translator as `translator:main` and every built-in string (Submit, Reset, ✓ and ✕,
 the add-ons' prompts and toolbar) goes through it; without one they stay English. Each package
 exports its messages at `./messages`. [msgid](https://github.com/joegaudet/msgid)'s adapters
 (`msgid/gettext`, `msgid/i18next`, `msgid/intl`, `msgid/lingui`) make a translator from your i18n
