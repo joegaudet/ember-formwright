@@ -61,6 +61,8 @@ function title(name: string): string {
     <a href="https://joegaudet.com/ember-formwright/" aria-current="page">Formwright</a>
     ·
     <a href="https://joegaudet.com/ember-joinery/">Joinery</a>
+    ·
+    <a href="https://joegaudet.com/switchyard/">switchyard</a>
   </footer>
   <BasicDropdownWormhole />
 </template>
