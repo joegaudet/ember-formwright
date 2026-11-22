@@ -1,3 +1,4 @@
+import { isFunction } from '@sindresorhus/is'
 import { pojoAdapter, type ErrorMap, type ModelAdapter } from '@ember-formwright/ember'
 
 /** The parts of an ember-changeset / validated-changeset changeset this package uses. */
@@ -55,7 +56,7 @@ export const changesetAdapter: ModelAdapter<ChangesetLike> = {
 
 function isChangeset(model: object): model is ChangesetLike {
   const { rollback, validate } = model as Partial<ChangesetLike>
-  return typeof rollback === 'function' && typeof validate === 'function'
+  return isFunction(rollback) && isFunction(validate)
 }
 
 /** A form `@validator` that runs the changeset's validations and shows them on their fields. */

@@ -1,3 +1,4 @@
+import { isString } from '@sindresorhus/is'
 import type { ComponentLike } from '@glint/template'
 import type { ControlSignature } from './controls/signature.ts'
 import DefaultLayout from './components/default-layout.gts'
@@ -85,12 +86,12 @@ export function lookupLayout(name: string): FieldLayout {
 
 /** A layout name or component, as a component. */
 export function resolveLayout(layout: string | FieldLayout): FieldLayout {
-  return typeof layout === 'string' ? lookupLayout(layout) : layout
+  return isString(layout) ? lookupLayout(layout) : layout
 }
 
 /** Sets the layout fields use when neither they nor their form has `@layout`. Call it at boot. */
 export function setDefaultLayout(layout: string | FieldLayout): void {
-  if (typeof layout === 'string') lookupLayout(layout)
+  if (isString(layout)) lookupLayout(layout)
   defaultLayout = layout
 }
 

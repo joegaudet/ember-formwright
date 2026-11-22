@@ -59,6 +59,7 @@
   },
   "dependencies": {
     "@embroider/addon-shim": "^1.10.3",
+    "@sindresorhus/is": "^8.1.0",
     "decorator-transforms": "^2.4.0",
     "ember-modifier": "^4.3.0"
   },
