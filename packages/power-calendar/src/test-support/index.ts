@@ -32,6 +32,7 @@ export class DatePickerHarness extends FieldHarness {
     )
   }
 
+  /** Whether the calendar is open. */
   get isOpen(): boolean {
     return this.trigger.getAttribute('aria-expanded') === 'true'
   }
@@ -49,6 +50,7 @@ export class DatePickerHarness extends FieldHarness {
       .textContent!.trim()
   }
 
+  /** Opens the calendar by clicking its trigger, unless it is already open. */
   async open(): Promise<void> {
     if (!this.isOpen) await click(this.trigger)
   }
@@ -58,10 +60,12 @@ export class DatePickerHarness extends FieldHarness {
     if (this.isOpen) await triggerKeyEvent(this.trigger, 'keydown', 'Escape')
   }
 
+  /** Pages the open calendar to the next month. */
   async nextMonth(): Promise<void> {
     await click(this.navButton('next'))
   }
 
+  /** Pages the open calendar to the previous month. */
   async previousMonth(): Promise<void> {
     await click(this.navButton('previous'))
   }

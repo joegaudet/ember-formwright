@@ -1,0 +1,47 @@
+# Formwright
+
+> Declarative, accessible forms for Ember. One `<Form>`, one `<f.Field>`: labels, ids, errors,
+> `aria-invalid`, dirty state, reset and nested saves are handled. Any validator (zod, valibot,
+> any Standard Schema), any data layer (WarpDrive, ember-data, ember-changeset, plain objects),
+> and harnesses for testing forms the way users use them. Ember 6.12 LTS and 7.x.
+
+```gts
+import { Form } from '@ember-formwright/ember'
+
+<template>
+  <Form @model={{@user}} @validator={{userSchema}} @onSubmit={{@save}} as |f|>
+    <f.Field @for="email" @control="email" @label="Email" />
+    <f.Submit />
+  </Form>
+</template>
+```
+
+## Packages
+
+- `@ember-formwright/ember`: the `Form`, `Field` and `Button` components, the built-in controls,
+  and the registries for controls, layouts and model adapters
+- `@ember-formwright/test-support`: form harnesses and normalized `data-test` selectors
+- `@ember-formwright/layouts`: horizontal, compact and checkbox-after field layouts, and an
+  Actions bar
+- `@ember-formwright/warp-drive`: a model adapter for WarpDrive / ember-data records
+- `@ember-formwright/changeset`: a model adapter and validator for ember-changeset
+- `@ember-formwright/real-enums`: real-enums classes as select, radio and checkbox options
+- `@ember-formwright/power-select`: searchable, async and multiple selects
+- `@ember-formwright/power-calendar`: date and date-range pickers
+- `@ember-formwright/maskito`: masked inputs and a phone number input
+- `@ember-formwright/file-upload`: file inputs and drop zones
+- `@ember-formwright/tiptap`: a rich-text control
+
+## Docs
+
+- [Site](https://joegaudet.com/ember-formwright/): overview and live demo
+- [Guide](https://joegaudet.com/ember-formwright/guide/): every argument, control and hook, each
+  with a live example
+- [API reference](https://joegaudet.com/ember-formwright/api/): every export of every package,
+  from the latest release
+- [llms-full.txt](https://joegaudet.com/ember-formwright/api/llms-full.txt): this file followed
+  by the whole API reference as Markdown
+- [api.json](https://joegaudet.com/ember-formwright/api/api.json): the API reference as
+  TypeDoc's JSON model, for tools
+- [README](https://github.com/joegaudet/ember-formwright#readme): install and usage
+- [Migrating from ember-foxy-forms](https://github.com/joegaudet/ember-formwright/blob/main/MIGRATION.md)

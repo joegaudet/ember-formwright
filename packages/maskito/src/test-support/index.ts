@@ -14,6 +14,7 @@ import { FieldHarness } from '@ember-formwright/test-support'
 export class PhoneHarness extends FieldHarness {
   static override controls = ['phone']
 
+  /** The control's `<input>`. */
   get input(): HTMLInputElement {
     return this.control as HTMLInputElement
   }

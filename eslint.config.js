@@ -12,6 +12,8 @@ export default tseslint.config(
       '**/*.d.ts',
       '.claude/**',
       'docs/**',
+      // The site assembled for a local preview (CONTRIBUTING.md, The website).
+      '_site/**',
       'examples/**',
       'test-app/config/**',
       'docs-app/config/**',

@@ -41,6 +41,7 @@ export function toDateRange(value: unknown): { start: Date | undefined; end: Dat
   return { start: toDate(range.start), end: toDate(range.end) }
 }
 
+/** How a date is formatted for display. */
 export interface FormatOptions {
   /** A BCP 47 locale; default the browser's. */
   locale?: string

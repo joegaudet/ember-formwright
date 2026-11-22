@@ -1,0 +1,6 @@
+// For the API reference: TypeDoc can't parse .gts, so it reads the declarations `pnpm build` emits.
+{
+  "extends": "./tsconfig.json",
+  "include": ["declarations/**/*"],
+  "compilerOptions": { "rootDir": ".", "declarationDir": null, "noEmit": true }
+}

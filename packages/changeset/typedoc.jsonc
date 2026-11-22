@@ -1,0 +1,5 @@
+// The API reference's options for this package (TypeDoc, packages mode). Not typedoc.json: the
+// guide's Kolay reads a package's typedoc.json into its own TypeDoc run.
+{
+  "intentionallyNotExported": ["src/index.ts:ChangesetLike"],
+}

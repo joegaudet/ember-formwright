@@ -1,7 +1,10 @@
 name: pages
 
 # Publishes docs/site to GitHub Pages: the marketing page, plus the demo (built from test-app
-# into docs/site/demo) and the guide (built from docs-app into docs/site/guide).
+# into docs/site/demo), the guide (built from docs-app into docs/site/guide) and the API
+# reference (built by TypeDoc into api/). The demo and guide are built from main. The reference
+# is built from the latest release's sources, so it never shows unreleased API: release.yml
+# dispatches this after publishing, and a push to main keeps it at that release.
 on:
   push:
     branches: [main]
@@ -11,6 +14,12 @@ on:
       - 'test-app/index.html'
       - 'test-app/public/**'
       - 'docs-app/**'
+      - 'docs/api.css'
+      - 'typedoc.json'
+      - 'packages/*/typedoc.jsonc'
+      - 'packages/*/tsconfig.typedoc.json'
+      - 'scripts/typedoc-site.mjs'
+      - 'scripts/llms-full.mjs'
       - 'packages/*/src/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
@@ -32,6 +41,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
@@ -41,9 +52,27 @@ jobs:
       - run: pnpm build
       - run: pnpm demo:build
       - run: pnpm guide:build
+      # shortcut: only src comes from the tag, so a package added since the last release shows
+      # up early; build the whole tag in a worktree if that starts to matter.
+      - name: Use the latest release's sources for the API reference
+        run: |
+          tag=$(git describe --tags --abbrev=0 --match 'v*')
+          git checkout "$tag" -- ':(glob)packages/*/src/**'
+          # "Defined in" links point at the release's lines (packages mode only reads
+          # gitRevision from packageOptions). CI gates the docs on main; this renders what
+          # shipped, so a warning doesn't block a deploy.
+          node -e '
+            const fs = require("node:fs"), c = JSON.parse(fs.readFileSync("typedoc.json"))
+            c.packageOptions.gitRevision = process.argv[1]
+            c.treatWarningsAsErrors = false
+            fs.writeFileSync("typedoc.json", JSON.stringify(c))
+          ' "$tag"
+      - run: pnpm build
+      - run: pnpm docs:api
       - uses: actions/configure-pages@v6
+      - run: |
+          cp -R docs/site _site
+          cp -R docs/api _site/api
       - uses: actions/upload-pages-artifact@v5
-        with:
-          path: docs/site
       - id: deployment
         uses: actions/deploy-pages@v5
