@@ -58,7 +58,9 @@ export default class ProfileForm extends Component<{ Args: { model: Profile } }>
       <p class="status" data-test-summary>
         {{#if f.state.status.isSubmitting}}
           Saving…
-        {{else if f.state.status.isNotClean}}
+        {{else if f.state.status.isInvalid}}
+          Fix the errors above.
+        {{else if f.state.status.isDirty}}
           You have unsaved changes.
         {{else}}
           Everything is saved.

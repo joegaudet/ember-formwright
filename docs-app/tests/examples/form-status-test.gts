@@ -24,11 +24,12 @@ module('Example | form-status', function (hooks) {
 
     await profile.name.fillIn('')
     assert.strictEqual(profile.status, 'dirty')
-    assert.dom('[data-test-summary]').hasText('You have unsaved changes.', 'status.isNotClean')
+    assert.dom('[data-test-summary]').hasText('You have unsaved changes.', 'status.isDirty')
 
     await profile.submit()
     assert.strictEqual(profile.status, 'invalid')
     assert.deepEqual(profile.name.errors, ['Name is required'])
+    assert.dom('[data-test-summary]').hasText('Fix the errors above.', 'status.isInvalid')
 
     await profile.name.fillIn('Grace')
     assert.strictEqual(profile.status, 'dirty')

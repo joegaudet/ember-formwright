@@ -1,6 +1,6 @@
 import { module, test } from 'qunit'
 import { setupRenderingTest } from 'test-app/tests/helpers'
-import { render, click, settled } from '@ember/test-helpers'
+import { render, click, settled, waitUntil } from '@ember/test-helpers'
 import type { TOC } from '@ember/component/template-only'
 import { tracked } from '@glimmer/tracking'
 import {
@@ -15,6 +15,10 @@ import { TestForm } from 'test-app/tests/helpers/test-form'
 
 class User {
   @tracked name = 'Ada'
+}
+
+class Shown {
+  @tracked value = true
 }
 
 /** Shows the field's status, and which of its `is` predicates hold. */
@@ -91,7 +95,7 @@ module('Integration | state machines', function (hooks) {
     assert.strictEqual(state.status, FormStatus.Dirty, 'fixing the error leaves it dirty')
 
     void click('[data-test-fw-submit]')
-    await new Promise(r => setTimeout(r, 10))
+    await waitUntil(() => state.status.isSubmitting)
     assert.strictEqual(state.status, FormStatus.Submitting)
     assert.dom('[data-test-is]').hasText('submitting')
     assert.dom('form').hasAttribute('data-status', 'submitting', 'data-status keeps the value')
@@ -190,5 +194,75 @@ module('Integration | state machines', function (hooks) {
     await ui.name.commit()
     assert.dom('[data-test-field-status]').hasText('idle')
     assert.strictEqual(user.name, 'Grace')
+  })
+
+  test('a validator that throws does not wedge the next submit', async function (assert) {
+    const user = new User()
+    let explode = true
+    let saves = 0
+    const validator = (): ErrorMap<User> => {
+      if (explode) throw new Error('validator bug')
+      return {}
+    }
+    const onSubmit = () => void saves++
+    let state!: FormState<User>
+    const keep = (s: FormState<User>) => void (state = s)
+
+    await render(
+      <template>
+        <Form @model={{user}} @validator={{validator}} @onSubmit={{onSubmit}} as |f|>
+          {{keep f.state}}
+          <f.Field @for="name" @label="Name" />
+        </Form>
+      </template>,
+    )
+
+    const warnings: unknown[] = []
+    const warn = console.warn
+    console.warn = (...args: unknown[]) => void warnings.push(args.join(' '))
+    try {
+      await ui.name.fillIn('Grace')
+      await assert.rejects(state.submit(), /validator bug/)
+      // Internal: a submit that throws must leave the machine idle, ready for the next one.
+      const { lifecycle } = state as unknown as { lifecycle: { state: { submission: string } } }
+      assert.strictEqual(String(lifecycle.state.submission), 'idle')
+      explode = false
+      await state.submit()
+    } finally {
+      console.warn = warn
+    }
+    assert.strictEqual(saves, 1, 'the second submit saves')
+    assert.deepEqual(warnings, [], 'the machine took every event')
+  })
+
+  test('form and field state can still be read after teardown', async function (assert) {
+    const user = new User()
+    const shown = new Shown()
+    let state!: FormState<User>
+    let fieldState!: FieldLayoutSignature['Args']['field']
+    const keep = (s: FormState<User>) => void (state = s)
+    const keepField = (f: FieldLayoutSignature['Args']['field']) => void (fieldState = f)
+    const Keeping: TOC<FieldLayoutSignature> = <template>
+      {{keepField @field}}
+      <@parts.Label />
+      <@parts.Control as |control|>{{yield control}}</@parts.Control>
+    </template>
+
+    await render(
+      <template>
+        {{#if shown.value}}
+          <Form @model={{user}} @layout={{Keeping}} as |f|>
+            {{keep f.state}}
+            <f.Field @for="name" @label="Name" />
+          </Form>
+        {{/if}}
+      </template>,
+    )
+    shown.value = false
+    await settled()
+
+    assert.false(state.isSubmitting)
+    assert.strictEqual(state.status, FormStatus.Clean)
+    assert.strictEqual(fieldState.status, FieldStatus.Idle)
   })
 })

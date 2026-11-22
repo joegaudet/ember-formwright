@@ -23,7 +23,7 @@ import Button from './button.gts'
 import Errors from './errors.gts'
 import { translate } from '../i18n.ts'
 import { messages } from '../messages.ts'
-import { FormMachine, FormStatus } from '../machines.ts'
+import { FormMachine, FormStatus, Submission, Validity } from '../machines.ts'
 
 /** What `<Form as |f|>` exposes as `f.state`. */
 export interface FormState<M extends object = object> {
@@ -205,12 +205,12 @@ export default class Form<M extends object = object>
   }
 
   get isSubmitting(): boolean {
-    return this.submitMachine.state.submission.isSaving
+    return this.submitMachine.matches(Submission.Saving)
   }
 
   /** After a failed submit, every change revalidates so errors clear as they're fixed. */
   get hasFailedSubmit(): boolean {
-    return this.submitMachine.state.validity.isFailed
+    return this.submitMachine.matches(Validity.Failed)
   }
 
   get adapter(): ModelAdapter<M> {
@@ -400,13 +400,19 @@ export default class Form<M extends object = object>
     const lifecycle = this.submitMachine
 
     lifecycle.submit()
-    if (!(await this.validate())) {
-      lifecycle.invalid()
-      this.args.didNotSubmit?.(this.errors)
-      await this.focusFirstInvalid()
-      return
+    try {
+      if (!(await this.validate())) {
+        lifecycle.invalid()
+        this.args.didNotSubmit?.(this.errors)
+        await this.focusFirstInvalid()
+        return
+      }
+      if (this.args.willSubmit && !(await this.args.willSubmit(model))) return lifecycle.cancel()
+    } catch (error) {
+      // A validator or @willSubmit that throws must not leave the next submit unhandled.
+      if (lifecycle.matches(Submission.Validating)) lifecycle.cancel()
+      throw error
     }
-    if (this.args.willSubmit && !(await this.args.willSubmit(model))) return lifecycle.cancel()
 
     lifecycle.save()
     try {

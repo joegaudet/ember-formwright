@@ -61,7 +61,8 @@ a string. Ask it a question instead of comparing strings:
 
 ```hbs
 {{#if f.state.status.isSubmitting}}Saving…{{/if}}
-{{#if f.state.status.isNotClean}}You have unsaved changes.{{/if}}
+{{#if f.state.status.isInvalid}}Fix the errors above.{{/if}}
+{{#if f.state.status.isNotSubmitting}}<f.Reset />{{/if}}
 ```
 
 | Predicate                         | True when the status is…     |
@@ -77,20 +78,26 @@ text. `status.label` is `Dirty`, and `FormStatus.values` lists all four, in orde
 
 ### Events
 
-The form runs a [Switchyard](https://joegaudet.com/switchyard/) state machine. Your app sends
-it events through the form; the machine decides what each one does from the state it's in.
+Under the status runs a [Switchyard](https://joegaudet.com/switchyard/) state machine with two
+parallel regions. `submission` walks a submit through `idle`, `validating` and `saving`;
+`validity` remembers whether a submit failed validation. The form sends it these events:
 
-| Event    | Sent by                                 | What it does                                                      |
-| -------- | --------------------------------------- | ----------------------------------------------------------------- |
-| `submit` | `<f.Submit>`, Enter, `f.state.submit()` | Validates. Invalid: `invalid`. Valid: `@willSubmit`, then saves.  |
-| `change` | a control, or ✓ under `@requireConfirm` | Writes the value. After a failed submit, re-validates.            |
-| `reset`  | `<f.Reset>`, `f.state.reset()`          | `@willReset`, then rolls back, clears errors and a failed submit. |
+| Event     | When                                    | Transition                                            |
+| --------- | --------------------------------------- | ----------------------------------------------------- |
+| `submit`  | `<f.Submit>`, Enter, `f.state.submit()` | `submission`: `idle` → `validating`                   |
+| `invalid` | validation found errors                 | `submission` → `idle`; `validity` → `failed`          |
+| `cancel`  | `@willSubmit` returned false, or threw  | `submission` → `idle`                                 |
+| `save`    | validation passed                       | `submission`: `validating` → `saving`                 |
+| `saved`   | every form in the tree saved            | `submission` → `idle`; `validity` → `unchecked`       |
+| `failed`  | a save threw                            | `submission` → `idle`                                 |
+| `reset`   | `<f.Reset>`, `f.state.reset()`          | `validity` → `unchecked`; a save in flight carries on |
 
-A submit while one is saving joins it instead of saving twice; with `@autoSubmit` a change
-during a save saves once more when it finishes. A failed validation is remembered until the
-next save or reset, so the form keeps re-validating on change, even across a failed save.
-Clean and dirty aren't events: the form works them out by comparing each value with its
-baseline, so a change made outside the form still counts.
+`status` is `submitting` while `submission` is `saving`, and `invalid` while `validity` is
+`failed` and errors remain. A failed validation is remembered until the next save or reset, so
+the form keeps re-validating on change, even across a failed save. A submit while one is in
+flight joins it; with `@autoSubmit` a change during a save saves once more when it finishes.
+Clean and dirty aren't states of the machine: the form works them out by comparing each value
+with its baseline, so a change made outside the form still counts.
 
 ### Field status
 

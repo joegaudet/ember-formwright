@@ -1,5 +1,5 @@
 import { tracked } from '@glimmer/tracking'
-import { is, isNot } from '@real-enums/core'
+import { Enum, is, isNot } from '@real-enums/core'
 import { Machine, State, region, transition } from '@switchyard-ts/core'
 
 /**
@@ -10,10 +10,11 @@ import { Machine, State, region, transition } from '@switchyard-ts/core'
  * - `Invalid`: a submit failed validation; the form re-validates on every change
  * - `Submitting`: the save is in flight
  *
- * A real-enums enum: ask it `status.isDirty` or `status.isNotSubmitting`, compare it with
- * `FormStatus.Dirty`, or render it, which prints its value (`dirty`).
+ * Worked out from the form's machine and its baselines, not a machine state itself. A
+ * real-enums enum: ask it `status.isDirty` or `status.isNotSubmitting`, compare it with
+ * `FormStatus.Dirty`, or read `status.value` (`dirty`).
  */
-export class FormStatus extends State {
+export class FormStatus extends Enum {
   static Clean = FormStatus.of('clean')
   static Dirty = FormStatus.of('dirty')
   static Invalid = FormStatus.of('invalid')
@@ -34,7 +35,8 @@ export class FormStatus extends State {
  *
  * - `Idle`: showing its value, or a live control that writes straight to the model
  * - `Editing`: its inline editor is open; it may hold a value awaiting ✓ or ✕
- * - `Pending`: it holds a value awaiting ✓ or ✕, outside an inline editor (`@requireConfirm`)
+ * - `Pending`: it holds a value awaiting ✓ or ✕ outside an open inline editor (`@requireConfirm`,
+ *   or an invalid inline field)
  */
 export class FieldStatus extends State {
   static Idle = FieldStatus.of('idle')
@@ -79,16 +81,12 @@ export class Submission extends State {
   static Idle = Submission.of('idle')
   static Validating = Submission.of('validating')
   static Saving = Submission.of('saving')
-
-  @is() declare isSaving: boolean
 }
 
 /** Whether a submit failed validation since the last save or reset. */
 export class Validity extends State {
   static Unchecked = Validity.of('unchecked')
   static Failed = Validity.of('failed')
-
-  @is() declare isFailed: boolean
 }
 
 const anyValidity = [Validity.Unchecked, Validity.Failed]

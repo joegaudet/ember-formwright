@@ -6,7 +6,7 @@ import { guidFor } from '@ember/object/internals'
 import { htmlSafe } from '@ember/template'
 import { modifier } from 'ember-modifier'
 import { machine } from '@switchyard-ts/ember'
-import { FieldMachine, type FieldStatus } from '../machines.ts'
+import { FieldMachine, FieldStatus } from '../machines.ts'
 import type Form from './form.gts'
 import { FieldLabel, FieldHint, FieldControl, FieldErrors, FieldGroup } from './field-parts.gts'
 import { normalizePath, type Path, type PathValue } from '../path.ts'
@@ -208,7 +208,8 @@ export default class Field<
   }
 
   get status(): FieldStatus {
-    return this.lifecycle.state
+    // A stopped machine (the field was torn down) has no state.
+    return this.lifecycle.state ?? FieldStatus.Idle
   }
 
   /** A value the user chose but hasn't committed yet (confirm or inline mode). */
@@ -218,7 +219,7 @@ export default class Field<
 
   /** The inline editor is open. */
   get isEditing(): boolean {
-    return this.status.isEditing
+    return this.lifecycle.matches(FieldStatus.Editing)
   }
 
   get form(): Form<M> {
