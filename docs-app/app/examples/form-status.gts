@@ -50,7 +50,19 @@ export default class ProfileForm extends Component<{ Args: { model: Profile } }>
       <p class="status">
         <code>f.state.status</code>
         is
-        <output class="status-badge" data-status={{f.state.status}}>{{f.state.status}}</output>
+        <output
+          class="status-badge"
+          data-status={{f.state.status.value}}
+        >{{f.state.status.value}}</output>
+      </p>
+      <p class="status" data-test-summary>
+        {{#if f.state.status.isSubmitting}}
+          Saving…
+        {{else if f.state.status.isNotClean}}
+          You have unsaved changes.
+        {{else}}
+          Everything is saved.
+        {{/if}}
       </p>
       <p class="status status-note" aria-live="polite">{{this.note}}</p>
     </Form>

@@ -20,9 +20,11 @@ module('Example | form-status', function (hooks) {
 
     assert.strictEqual(profile.status, 'clean')
     assert.dom('.status-badge').hasText('clean')
+    assert.dom('[data-test-summary]').hasText('Everything is saved.')
 
     await profile.name.fillIn('')
     assert.strictEqual(profile.status, 'dirty')
+    assert.dom('[data-test-summary]').hasText('You have unsaved changes.', 'status.isNotClean')
 
     await profile.submit()
     assert.strictEqual(profile.status, 'invalid')

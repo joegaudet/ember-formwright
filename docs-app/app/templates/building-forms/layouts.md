@@ -76,8 +76,9 @@ A layout is a component with `FieldLayoutSignature`. It gets two args:
 
 - `@parts`: components already wired to the field. A layout places them; it never renders a
   label or an error itself.
-- `@field`: read-only state (`id`, `controlName`, `isGroup`, `isInvalid`, `isDirty`,
-  `disabled`, `required`).
+- `@field`: read-only state (`id`, `controlName`, `status`, `isGroup`, `isInvalid`,
+  `isDirty`, `disabled`, `required`). `status` is a
+  [`FieldStatus`](forms.md#field-status): ask it `@field.status.isPending`.
 
 | Part      | Renders                                                                           |
 | --------- | --------------------------------------------------------------------------------- |

@@ -1,9 +1,5 @@
-export {
-  default as Form,
-  type FormSignature,
-  type FormState,
-  type FormStatus,
-} from './components/form.gts'
+export { default as Form, type FormSignature, type FormState } from './components/form.gts'
+export { FormStatus, FieldStatus } from './machines.ts'
 export {
   default as Field,
   type ControlComponentFor,

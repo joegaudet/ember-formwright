@@ -254,7 +254,7 @@ import '@ember-formwright/ember/theme.css' // optional
 
     &lt;f.Errors /&gt;
     &lt;f.Submit&gt;Place order&lt;/f.Submit&gt;
-    {{#if f.state.isDirty}}Unsaved changes{{/if}}
+    {{#if f.state.status.isNotClean}}Unsaved changes{{/if}}
   &lt;/Form&gt;
 &lt;/template&gt;</code></pre>
         <p>
@@ -421,6 +421,20 @@ const validator = (user: User) =&gt; ({
             <span>Reset</span> <code>dirty</code> or <code>invalid</code> → <code>clean</code>
           </li>
         </ul>
+        <p>
+          The machine is a <a href="https://joegaudet.com/switchyard/">Switchyard</a> statechart.
+          <code>&lt;f.Submit&gt;</code>, <code>&lt;f.Reset&gt;</code> and every control send it
+          events (<code>submit</code>, <code>reset</code>, <code>change</code>), and each field runs
+          its own (<code>edit</code>, <code>change</code>, <code>commit</code>, <code>cancel</code>)
+          for values awaiting ✓. The status is a
+          <a href="https://joegaudet.com/real-enums/">real-enums</a> enum, so you ask it a question
+          instead of comparing strings:
+        </p>
+        <pre><code class="language-handlebars">{{#if f.state.status.isSubmitting}}Saving…{{/if}}
+{{#if f.state.status.isNotClean}}You have unsaved changes.{{/if}}
+
+{{! in a layout: a value held for ✓ or ✕ }}
+{{#if @field.status.isPending}}Press Enter to apply{{/if}}</code></pre>
         <div class="overflow-auto">
           <table class="striped">
             <thead>

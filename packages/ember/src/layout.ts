@@ -1,6 +1,7 @@
 import type { ComponentLike } from '@glint/template'
 import type { ControlSignature } from './controls/signature.ts'
 import DefaultLayout from './components/default-layout.gts'
+import type { FieldStatus } from './machines.ts'
 
 /**
  * The control yielded by a field's block, with the field's wiring already bound: any of its
@@ -24,6 +25,8 @@ export interface FieldBlockParams<V = unknown, C extends BoundControl<any> = Bou
 /** A field's state, for a layout to read. */
 export interface FieldLayoutState {
   readonly id: string
+  /** `idle`, `editing` or `pending`; ask it `status.isPending`, `status.isNotIdle`. */
+  readonly status: FieldStatus
   readonly controlName: string
   /** The control is a group (radio, checkbox-group): `Group` renders a fieldset. */
   readonly isGroup: boolean

@@ -5,6 +5,7 @@ import { hash } from '@ember/helper'
 import { on } from '@ember/modifier'
 import { waitForPromise } from '@ember/test-waiters'
 import { modifier } from 'ember-modifier'
+import { machine } from '@switchyard-ts/ember'
 import type { ComponentLike, WithBoundArgs } from '@glint/template'
 import { getDefaultAdapter, type ModelAdapter } from '../adapter.ts'
 import {
@@ -22,16 +23,7 @@ import Button from './button.gts'
 import Errors from './errors.gts'
 import { translate } from '../i18n.ts'
 import { messages } from '../messages.ts'
-
-/**
- * Where a form is in its life cycle:
- *
- * - `clean`: every field matches its baseline (the value it rendered with, or last saved)
- * - `dirty`: a field differs from its baseline
- * - `invalid`: a submit failed validation; the form re-validates on every change
- * - `submitting`: the save is in flight
- */
-export type FormStatus = 'clean' | 'dirty' | 'invalid' | 'submitting'
+import { FormMachine, FormStatus } from '../machines.ts'
 
 /** What `<Form as |f|>` exposes as `f.state`. */
 export interface FormState<M extends object = object> {
@@ -162,9 +154,8 @@ export default class Form<M extends object = object>
   implements FormState<M>
 {
   @tracked errors: ErrorMap<M> = noErrors()
-  @tracked isSubmitting = false
-  /** After a failed submit, every change revalidates so errors clear as they're fixed. */
-  @tracked hasFailedSubmit = false
+  /** The submit's state machine: only a root form has one; a nested form shares its root's. */
+  lifecycle?: FormMachine
   /**
    * Not tracked: fields and nested forms register while the form renders, and writing
    * tracked state there trips Ember's backtracking assertion. `version` is bumped instead:
@@ -187,7 +178,8 @@ export default class Form<M extends object = object>
 
   constructor(owner: Owner, args: FormSignature<M>['Args']) {
     super(owner, args)
-    args.parent?.adopt(this)
+    if (args.parent) args.parent.adopt(this)
+    else this.lifecycle = machine(this, new FormMachine())
   }
 
   get model(): M {
@@ -205,6 +197,20 @@ export default class Form<M extends object = object>
 
   get root(): Form<any> {
     return this.args.parent ? this.args.parent.root : this
+  }
+
+  /** The root form's machine. */
+  get submitMachine(): FormMachine {
+    return this.root.lifecycle!
+  }
+
+  get isSubmitting(): boolean {
+    return this.submitMachine.state.submission.isSaving
+  }
+
+  /** After a failed submit, every change revalidates so errors clear as they're fixed. */
+  get hasFailedSubmit(): boolean {
+    return this.submitMachine.state.validity.isFailed
   }
 
   get adapter(): ModelAdapter<M> {
@@ -245,9 +251,9 @@ export default class Form<M extends object = object>
 
   /** A nested form shares its root's submit, so it reports the root's submitting and failed state. */
   get status(): FormStatus {
-    if (this.root.isSubmitting) return 'submitting'
-    if (this.root.hasFailedSubmit && !this.isValid) return 'invalid'
-    return this.isDirty ? 'dirty' : 'clean'
+    if (this.isSubmitting) return FormStatus.Submitting
+    if (this.hasFailedSubmit && !this.isValid) return FormStatus.Invalid
+    return this.isDirty ? FormStatus.Dirty : FormStatus.Clean
   }
 
   get isValid(): boolean {
@@ -342,7 +348,7 @@ export default class Form<M extends object = object>
   commit<P extends Path<M>>(path: P, value: PathValue<M, P>): void {
     this.adapter.set(this.model, path, value)
     this.args.onChange?.(path, value, this.model)
-    if (this.root.hasFailedSubmit) void waitForPromise(this.root.validate())
+    if (this.hasFailedSubmit) void waitForPromise(this.root.validate())
     if (this.args.autoSubmit) void this.root.submitTree(true)
   }
 
@@ -391,16 +397,18 @@ export default class Form<M extends object = object>
 
   async runSubmit(): Promise<void> {
     const model = this.model
+    const lifecycle = this.submitMachine
 
+    lifecycle.submit()
     if (!(await this.validate())) {
-      this.hasFailedSubmit = true
+      lifecycle.invalid()
       this.args.didNotSubmit?.(this.errors)
       await this.focusFirstInvalid()
       return
     }
-    if (this.args.willSubmit && !(await this.args.willSubmit(model))) return
+    if (this.args.willSubmit && !(await this.args.willSubmit(model))) return lifecycle.cancel()
 
-    this.isSubmitting = true
+    lifecycle.save()
     try {
       await this.save()
       // Breadth-first: a child saves after its parent, so it can rely on the parent's id.
@@ -410,11 +418,11 @@ export default class Form<M extends object = object>
         level = level.flatMap(c => c.children)
       }
       this.markSaved()
+      lifecycle.saved()
     } catch (error) {
+      lifecycle.failed()
       if (!this.args.failedSubmit) throw error
       this.args.failedSubmit(error)
-    } finally {
-      if (!this.isDestroying) this.isSubmitting = false
     }
   }
 
@@ -438,7 +446,6 @@ export default class Form<M extends object = object>
     const baseline = this.baselineOf()
     for (const path of baseline.keys()) baseline.set(path, snapshotOf(this.readAt(path)))
     this.version++ // the baseline isn't tracked
-    this.hasFailedSubmit = false
     this.children.forEach(c => c.markSaved())
   }
 
@@ -458,7 +465,7 @@ export default class Form<M extends object = object>
     }
     for (const field of this.fields) field.discard()
     this.errors = noErrors()
-    this.hasFailedSubmit = false
+    this.lifecycle?.reset()
     this.children.forEach(c => c.rollback())
   }
 
@@ -489,7 +496,7 @@ export default class Form<M extends object = object>
         class="fw-form fw-form--nested"
         disabled={{this.disabled}}
         data-test-fw-form={{this.name}}
-        data-status={{this.status}}
+        data-status={{this.status.value}}
         ...attributes
         {{this.capture}}
       >
@@ -499,7 +506,7 @@ export default class Form<M extends object = object>
             Field=(this.bindField (component Field form=this))
             Form=(asNestedForm (component Form parent=this))
             Submit=(component
-              Button kind="submit" busy=this.root.isSubmitting text=(translate this messages.submit)
+              Button kind="submit" busy=this.isSubmitting text=(translate this messages.submit)
             )
             Reset=(component
               Button kind="reset" onClick=this.reset text=(translate this messages.reset)
@@ -517,7 +524,7 @@ export default class Form<M extends object = object>
         data-test-fw-form={{this.name}}
         data-submitting={{if this.isSubmitting ""}}
         data-dirty={{if this.isDirty ""}}
-        data-status={{this.status}}
+        data-status={{this.status.value}}
         ...attributes
         {{this.capture}}
         {{on "submit" this.onSubmit}}

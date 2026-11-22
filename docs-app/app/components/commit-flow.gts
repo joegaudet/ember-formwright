@@ -2,7 +2,7 @@ import Component from '@glimmer/component'
 import { tracked } from '@glimmer/tracking'
 import { on } from '@ember/modifier'
 import { fn } from '@ember/helper'
-import type { FormStatus } from '@ember-formwright/ember'
+import { FormStatus } from '@ember-formwright/ember'
 
 type Mode = 'form' | 'inline'
 type Layer = 'default' | 'warp-drive' | 'changeset'
@@ -47,7 +47,7 @@ const same = (text: string): Record<Layer, string> => ({
 
 const start: Step = {
   action: 'Start',
-  status: 'clean',
+  status: FormStatus.Clean,
   values: { field: OLD, saved: OLD },
   ui: { text: OLD },
   caption: {
@@ -68,7 +68,7 @@ function writes(value: string): Record<Layer, string> {
 /** A form field writes through the adapter as you type. */
 const type = (value: string): Step => ({
   action: `Type “${value}”`,
-  status: 'dirty',
+  status: FormStatus.Dirty,
   values: { field: shown(value), pending: shown(value), saved: OLD },
   from: 'field',
   to: 'pending',
@@ -79,7 +79,7 @@ const type = (value: string): Step => ({
 /** An inline field keeps its own draft; nothing is written. */
 const draft = (value: string): Step => ({
   action: `Click ${OLD}, type “${value}”`,
-  status: 'clean',
+  status: FormStatus.Clean,
   values: { field: shown(value), draft: shown(value), saved: OLD },
   from: 'field',
   to: 'draft',
@@ -93,7 +93,7 @@ const draft = (value: string): Step => ({
 
 const commit = (value: string): Step => ({
   action: 'Commit (✓ or Enter)',
-  status: 'dirty',
+  status: FormStatus.Dirty,
   values: { field: shown(value), pending: shown(value), saved: OLD },
   from: 'draft',
   to: 'pending',
@@ -106,7 +106,7 @@ const edit = (mode: Mode, value: string): Step[] =>
 
 const submitting: Step = {
   action: 'Submit',
-  status: 'submitting',
+  status: FormStatus.Submitting,
   values: { field: NEW, pending: NEW, saved: OLD },
   from: 'pending',
   to: 'saved',
@@ -120,7 +120,7 @@ const submitting: Step = {
 
 const saved: Step = {
   action: 'Saved',
-  status: 'clean',
+  status: FormStatus.Clean,
   values: { field: NEW, saved: NEW },
   from: 'pending',
   to: 'saved',
@@ -134,7 +134,7 @@ const saved: Step = {
 
 const failed: Step = {
   action: 'The save fails',
-  status: 'dirty',
+  status: FormStatus.Dirty,
   values: { field: NEW, pending: NEW, saved: OLD },
   from: 'saved',
   to: 'pending',
@@ -148,7 +148,7 @@ const failed: Step = {
 
 const invalid: Step = {
   action: 'Submit',
-  status: 'invalid',
+  status: FormStatus.Invalid,
   values: { field: BLANK, pending: BLANK, saved: OLD },
   ui: { text: '', press: 'submit', error: same(REQUIRED) },
   caption: {
@@ -173,7 +173,7 @@ const fix = (mode: Mode): Step[] => {
 
 const reset: Step = {
   action: 'Reset',
-  status: 'clean',
+  status: FormStatus.Clean,
   values: { field: OLD, saved: OLD },
   from: 'pending',
   to: 'field',
@@ -187,7 +187,7 @@ const reset: Step = {
 
 const cancel: Step = {
   action: 'Cancel (✕ or Esc)',
-  status: 'clean',
+  status: FormStatus.Clean,
   values: { field: OLD, saved: OLD },
   from: 'draft',
   to: 'field',
@@ -215,13 +215,6 @@ const LANES: Record<Layer, Record<'pending' | 'saved', string>> = {
   'warp-drive': { pending: 'Record (unsaved)', saved: 'Server' },
   changeset: { pending: 'Changeset', saved: 'Model' },
 }
-
-const STATES: { status: FormStatus; label: string }[] = [
-  { status: 'clean', label: 'Clean' },
-  { status: 'dirty', label: 'Dirty' },
-  { status: 'invalid', label: 'Invalid' },
-  { status: 'submitting', label: 'Submitting' },
-]
 
 const PLAY_EVERY_MS = 2200
 
@@ -254,13 +247,18 @@ export class CommitFlow extends Component {
   }
 
   get states() {
-    return STATES.map(state => ({ ...state, current: state.status === this.step.status }))
+    // A real enum: its members, in order, each with a label ("Clean").
+    return FormStatus.values.map(status => ({
+      status,
+      label: status.label,
+      current: status === this.step.status,
+    }))
   }
 
   /** The `f.state` flags behind the status. */
   get flags(): string {
     const { status } = this.step
-    return `isDirty: ${status !== 'clean'} · isValid: ${status !== 'invalid'} · isSubmitting: ${status === 'submitting'}`
+    return `isDirty: ${status.isNotClean} · isValid: ${status.isNotInvalid} · isSubmitting: ${status.isSubmitting}`
   }
 
   get lanes() {
@@ -302,7 +300,7 @@ export class CommitFlow extends Component {
       inline,
       error: error?.[this.layer],
       // A form's field is always an input; an inline field only while it's open, or invalid.
-      editing: !inline || Boolean(editing) || this.step.status === 'invalid',
+      editing: !inline || Boolean(editing) || this.step.status.isInvalid,
       submit: press === 'submit',
       reset: press === 'reset',
       // Commit and cancel close the inline editor; a badge shows which one was pressed.
@@ -484,14 +482,14 @@ export class CommitFlow extends Component {
         <ol class="flow-states" aria-label="The form's status">
           {{#each this.states as |state|}}
             <li
-              class="flow-state is-{{state.status}}"
+              class="flow-state is-{{state.status.value}}"
               aria-current={{if state.current "step"}}
-              data-test-flow-state={{state.status}}
+              data-test-flow-state={{state.status.value}}
             >{{state.label}}</li>
           {{/each}}
         </ol>
         <code class="flow-status" data-test-flow-status>
-          f.state.status: '{{this.step.status}}' ·
+          f.state.status: '{{this.step.status.value}}' ·
           {{this.flags}}
         </code>
       </div>

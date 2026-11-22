@@ -13,8 +13,8 @@ already keep track of changes and undo them:
 
 - **A baseline per field.** When a field first renders, its form records the value it shows.
   After a successful submit, the saved values become the new baseline.
-- **One status.** `f.state.status` is `clean`, `dirty`, `invalid` or `submitting`, and
-  `data-status` on the `<form>` mirrors it. See [States](../building-forms/forms.md#states).
+- **One status.** `f.state.status` is `clean`, `dirty`, `invalid` or `submitting` (ask it
+  `status.isDirty`), and `data-status` on the `<form>` mirrors it. See [States](../building-forms/forms.md#states).
 - **Dirty state.** `f.state.isDirty` (and `data-dirty` on the form) is true while any field
   differs from its baseline. Type the old value back and the field is clean again. Nested forms
   count toward their parent.
@@ -89,8 +89,9 @@ the animation below shows both.
 
 ## One state machine, three data layers
 
-Every form runs the same [state machine](../building-forms/forms.md#states): `clean`, `dirty`,
-`invalid` and `submitting`, read as `f.state.status`. The data layer never changes the states,
+Every form runs the same [Switchyard](https://joegaudet.com/switchyard/)
+[state machine](../building-forms/forms.md#states): `clean`, `dirty`, `invalid` and
+`submitting`, read as `f.state.status`. The data layer never changes the states,
 only where pending changes live and who rolls them back. In a form, every change writes
 through the adapter at once. Inline, the field keeps a draft until you commit it
 with ✓ or Enter, and ✕ or Esc drops it. Submit saves the pending changes, and Reset rolls them
