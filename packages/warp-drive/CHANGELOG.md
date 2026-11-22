@@ -1,5 +1,12 @@
 # @ember-formwright/warp-drive
 
+## 2.0.1
+
+### Patch Changes
+
+- Updated dependencies [194ca7f]
+  - @ember-formwright/ember@2.0.1
+
 ## 2.0.0
 
 ### Patch Changes

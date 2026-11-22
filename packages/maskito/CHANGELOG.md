@@ -1,5 +1,13 @@
 # @ember-formwright/maskito
 
+## 2.0.1
+
+### Patch Changes
+
+- Updated dependencies [194ca7f]
+  - @ember-formwright/ember@2.0.1
+  - @ember-formwright/test-support@2.0.1
+
 ## 2.0.0
 
 ### Major Changes
