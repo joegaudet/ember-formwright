@@ -67,8 +67,11 @@ const addressSchema = z.object({ city: z.string().min(1, 'City is required') })
 
 It yields `Field`, `Form` (nested, renders a `<fieldset>`; pass `@legend`), `Submit`, `Reset`,
 `Button`, `Errors` (form-level errors) and `state` (`status`, `isDirty`, `isSubmitting`,
-`isValid`, `errors`, `submit()`, `reset()`, `validate()`). `status` is the form's state:
-`clean`, `dirty`, `invalid` or `submitting`, also set as `data-status` on the `<form>`.
+`isValid`, `errors`, `submit()`, `reset()`, `validate()`). `status` is the form's state, a
+[real-enums](https://joegaudet.com/real-enums/) enum: `clean`, `dirty`, `invalid` or
+`submitting`. Ask it `status.isSubmitting` or `status.isNotSubmitting`; it is also set as
+`data-status` on the `<form>`. The form runs on a [Switchyard](https://joegaudet.com/switchyard/)
+state machine.
 
 Validation runs on submit. After a failed submit it re-runs on every change, so errors clear as
 they are fixed, and focus moves to the first invalid control. Nested forms validate and save

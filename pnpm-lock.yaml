@@ -400,12 +400,21 @@ importers:
       '@embroider/addon-shim':
         specifier: ^1.10.3
         version: 1.10.3
+      '@real-enums/core':
+        specifier: ^2.3.0
+        version: 2.3.0
       '@sindresorhus/is':
         specifier: ^8.1.0
         version: 8.1.0
       '@standard-schema/spec':
         specifier: ^1.1.0
         version: 1.1.0
+      '@switchyard-ts/core':
+        specifier: ^0.1.0
+        version: 0.1.0(@real-enums/core@2.3.0)
+      '@switchyard-ts/ember':
+        specifier: ^0.1.0
+        version: 0.1.0(@babel/core@7.29.7)(@switchyard-ts/core@0.1.0(@real-enums/core@2.3.0))(ember-resources@7.1.0(@glimmer/component@2.2.1)(@glint/template@1.9.0))(ember-source@7.3.1(@glimmer/component@2.2.1))
       decorator-transforms:
         specifier: ^2.4.0
         version: 2.4.0(@babel/core@7.29.7)
@@ -2646,6 +2655,10 @@ packages:
     resolution: {integrity: sha512-r1WzYXBD8cqlglOi4ilN9BphX74mJmH2hhiogzYbcNCHhtXnG7tw/9Iq54UGZ+cpDkgGHjL0xLwj9QLUoKJxmg==}
     engines: {node: '>=18.12'}
 
+  '@real-enums/core@2.3.0':
+    resolution: {integrity: sha512-EKgaEbnmM9HXaG4rNt/fnXzs77WFiuVI5AaveU3OHi9XFCh6+lvNtlyhDCT+Fqx/oZ0OzA1dfCwoG2TcErww2w==}
+    engines: {node: '>=22.12.0'}
+
   '@replit/codemirror-lang-svelte@6.0.0':
     resolution: {integrity: sha512-U2OqqgMM6jKelL0GNWbAmqlu1S078zZNoBqlJBW+retTc5M4Mha6/Y2cf4SVg6ddgloJvmcSpt4hHrVoM4ePRA==}
     peerDependencies:
@@ -2966,6 +2979,26 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@switchyard-ts/core@0.1.0':
+    resolution: {integrity: sha512-+5SZHJvwcvZlv28PS+EpN67yEX+TR9ieEDa1HfZNWOZRtK+ZZTUfWCPjxW7ILjMCq6oa3AEjbhlqPpt4S1KhvQ==}
+    engines: {node: '>=22.12.0'}
+    peerDependencies:
+      '@real-enums/core': ^2.2.0
+
+  '@switchyard-ts/ember@0.1.0':
+    resolution: {integrity: sha512-Id2M8HF4im9in2M1AhZqytdUGoNxuI7VBkJwG5ryxhhen3eQrWdOwfnJp+zw+8w/O0T6C+QGeU16cKYBwCkvDw==}
+    engines: {node: '>=22.12.0'}
+    peerDependencies:
+      '@switchyard-ts/core': ^0.1.0
+      '@switchyard-ts/graph': ^0.1.0
+      ember-resources: '>= 7.0.0'
+      ember-source: '>= 6.12.0'
+    peerDependenciesMeta:
+      '@switchyard-ts/graph':
+        optional: true
+      ember-resources:
+        optional: true
 
   '@tiptap/core@3.32.1':
     resolution: {integrity: sha512-ImhEufkmqFK1mIbcYAZOhoBColsdy4sepB3Wd6vDPULbonGXL1LliLs79IiVY1hzmqkBksxwyqkyPxlcFMNTdQ==}
@@ -10400,6 +10433,8 @@ snapshots:
       '@pnpm/error': 1000.1.0
       find-up: 5.0.0
 
+  '@real-enums/core@2.3.0': {}
+
   '@replit/codemirror-lang-svelte@6.0.0(@codemirror/autocomplete@6.20.3)(@codemirror/lang-css@6.3.1)(@codemirror/lang-html@6.4.12)(@codemirror/lang-javascript@6.2.5)(@codemirror/language@6.13.1)(@codemirror/state@6.7.6)(@codemirror/view@6.43.14)(@lezer/common@1.5.3)(@lezer/highlight@1.2.5)(@lezer/javascript@1.5.6)(@lezer/lr@1.4.11)':
     dependencies:
       '@codemirror/autocomplete': 6.20.3
@@ -10612,6 +10647,25 @@ snapshots:
   '@socket.io/component-emitter@3.1.2': {}
 
   '@standard-schema/spec@1.1.0': {}
+
+  '@switchyard-ts/core@0.1.0(@real-enums/core@2.3.0)':
+    dependencies:
+      '@real-enums/core': 2.3.0
+      '@sindresorhus/is': 8.1.0
+
+  '@switchyard-ts/ember@0.1.0(@babel/core@7.29.7)(@switchyard-ts/core@0.1.0(@real-enums/core@2.3.0))(ember-resources@7.1.0(@glimmer/component@2.2.1)(@glint/template@1.9.0))(ember-source@7.3.1(@glimmer/component@2.2.1))':
+    dependencies:
+      '@ember/test-waiters': 4.1.2
+      '@embroider/addon-shim': 1.10.3
+      '@switchyard-ts/core': 0.1.0(@real-enums/core@2.3.0)
+      decorator-transforms: 2.4.0(@babel/core@7.29.7)
+      ember-modifier: 4.3.0(@babel/core@7.29.7)
+      ember-source: 7.3.1(@glimmer/component@2.2.1)
+    optionalDependencies:
+      ember-resources: 7.1.0(@glimmer/component@2.2.1)(@glint/template@1.9.0)
+    transitivePeerDependencies:
+      - '@babel/core'
+      - supports-color
 
   '@tiptap/core@3.32.1(@tiptap/pm@3.32.1)':
     dependencies:

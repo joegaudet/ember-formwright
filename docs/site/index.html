@@ -421,6 +421,22 @@ const validator = (user: User) =&gt; ({
             <span>Reset</span> <code>dirty</code> or <code>invalid</code> → <code>clean</code>
           </li>
         </ul>
+        <p>
+          Underneath runs a <a href="https://joegaudet.com/switchyard/">Switchyard</a> statechart: a
+          submit walks <code>idle</code> → <code>validating</code> → <code>saving</code> on events
+          (<code>submit</code>, <code>invalid</code>, <code>save</code>, <code>saved</code>,
+          <code>failed</code>, <code>reset</code>), while a parallel region remembers a failed
+          validation. Each field runs its own machine (<code>edit</code>, <code>change</code>,
+          <code>commit</code>, <code>cancel</code>) for values awaiting ✓. The status is a
+          <a href="https://joegaudet.com/real-enums/">real-enums</a> enum, so you ask it a question
+          instead of comparing strings:
+        </p>
+        <pre><code class="language-handlebars">{{#if f.state.status.isSubmitting}}Saving…{{/if}}
+{{#if f.state.status.isInvalid}}Fix the errors above.{{/if}}
+{{#if f.state.status.isNotSubmitting}}&lt;f.Reset /&gt;{{/if}}
+
+{{! in a layout: a value held for ✓ or ✕ }}
+{{#if @field.status.isPending}}Press Enter to apply{{/if}}</code></pre>
         <div class="overflow-auto">
           <table class="striped">
             <thead>

@@ -282,7 +282,7 @@ module('Integration | Form', function (hooks) {
       <template>
         <Form @model={{user}} @validator={{validator}} @onSubmit={{onSubmit}} as |f|>
           <f.Field @for="name" @label="Name" />
-          <span data-test-status>{{f.state.status}}</span>
+          <span data-test-status>{{f.state.status.value}}</span>
           <f.Submit />
           <f.Reset />
         </Form>
@@ -325,7 +325,7 @@ module('Integration | Form', function (hooks) {
       <template>
         <Form @model={{user}} @onSubmit={{onSubmit}} @failedSubmit={{failedSubmit}} as |f|>
           <f.Field @for="name" @label="Name" />
-          <span data-test-status>{{f.state.status}}</span>
+          <span data-test-status>{{f.state.status.value}}</span>
         </Form>
       </template>,
     )

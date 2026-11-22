@@ -1,5 +1,35 @@
 # Migrating
 
+## From Formwright 2.x to 3.0
+
+3.0 runs forms and fields on [Switchyard](https://joegaudet.com/switchyard/) state machines.
+Forms behave as before; what changes is the type of `f.state.status`.
+
+- **`f.state.status` is a `FormStatus`, not a string.** It is a
+  [real-enums](https://joegaudet.com/real-enums/) enum member. Rendering it and `data-status`
+  are unchanged, but a strict comparison with a string is now always false:
+
+  ```ts
+  // 2.x
+  if (state.status === 'dirty') { … }
+  // 3.0
+  if (state.status.isDirty) { … }            // or state.status === FormStatus.Dirty
+  const raw: string = state.status.value      // the old string
+  ```
+
+  With Glint, `{{f.state.status}}` as text is a type error (the enum is a `String` object):
+  render `{{f.state.status.value}}`, and pass `data-status={{f.state.status.value}}`.
+  In templates, swap `(eq f.state.status "submitting")` for `f.state.status.isSubmitting`. Each
+  status has `is…` and `isNot…` predicates.
+
+- **`FormStatus` is a class.** `import type { FormStatus }` still works, but it now types the
+  enum member, not the `'clean' | 'dirty' | 'invalid' | 'submitting'` union. Import it as a
+  value to compare: `import { FormStatus } from '@ember-formwright/ember'`.
+- **Custom layouts get `@field.status`.** It is new, so nothing breaks; a layout implementing
+  `FieldLayoutState` itself needs a `status`.
+- **A nested form's `f.state.isSubmitting`** now reports its root's submit, matching its
+  `status`.
+
 ## From Formwright 1.x to 2.0
 
 2.0 types each field's control against its path. Nothing changes at runtime; `ember-tsc` reports

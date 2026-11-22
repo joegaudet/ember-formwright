@@ -54,6 +54,68 @@ The same machine runs with every data layer; only where the pending changes live
 with the default adapter, WarpDrive and ember-changeset. A nested form reports its own status
 on its fieldset, and shares its root's `submitting` and `invalid`.
 
+### Asking the status: `is` and `isNot`
+
+`f.state.status` is a `FormStatus`, a [real-enums](https://joegaudet.com/real-enums/) enum, not
+a string. Ask it a question instead of comparing strings:
+
+```hbs
+{{#if f.state.status.isSubmitting}}Saving…{{/if}}
+{{#if f.state.status.isInvalid}}Fix the errors above.{{/if}}
+{{#if f.state.status.isNotSubmitting}}<f.Reset />{{/if}}
+```
+
+| Predicate                         | True when the status is…     |
+| --------------------------------- | ---------------------------- |
+| `isClean`, `isNotClean`           | `clean` / anything else      |
+| `isDirty`, `isNotDirty`           | `dirty` / anything else      |
+| `isInvalid`, `isNotInvalid`       | `invalid` / anything else    |
+| `isSubmitting`, `isNotSubmitting` | `submitting` / anything else |
+
+In code, compare it with a member: `state.status === FormStatus.Dirty`. To show it, render
+`{{f.state.status.value}}` (the plain string, `dirty`); Glint won't take the enum itself as
+text. `status.label` is `Dirty`, and `FormStatus.values` lists all four, in order.
+
+### Events
+
+Under the status runs a [Switchyard](https://joegaudet.com/switchyard/) state machine with two
+parallel regions. `submission` walks a submit through `idle`, `validating` and `saving`;
+`validity` remembers whether a submit failed validation. The form sends it these events:
+
+| Event     | When                                    | Transition                                            |
+| --------- | --------------------------------------- | ----------------------------------------------------- |
+| `submit`  | `<f.Submit>`, Enter, `f.state.submit()` | `submission`: `idle` → `validating`                   |
+| `invalid` | validation found errors                 | `submission` → `idle`; `validity` → `failed`          |
+| `cancel`  | `@willSubmit` returned false, or threw  | `submission` → `idle`                                 |
+| `save`    | validation passed                       | `submission`: `validating` → `saving`                 |
+| `saved`   | every form in the tree saved            | `submission` → `idle`; `validity` → `unchecked`       |
+| `failed`  | a save threw                            | `submission` → `idle`                                 |
+| `reset`   | `<f.Reset>`, `f.state.reset()`          | `validity` → `unchecked`; a save in flight carries on |
+
+`status` is `submitting` while `submission` is `saving`, and `invalid` while `validity` is
+`failed` and errors remain. A failed validation is remembered until the next save or reset, so
+the form keeps re-validating on change, even across a failed save. A submit while one is in
+flight joins it; with `@autoSubmit` a change during a save saves once more when it finishes.
+Clean and dirty aren't states of the machine: the form works them out by comparing each value
+with its baseline, so a change made outside the form still counts.
+
+### Field status
+
+Each field has a status too, for the moment between choosing a value and applying it. A
+layout reads it as `@field.status`, a `FieldStatus`:
+
+| Status    | When                                                                    |
+| --------- | ----------------------------------------------------------------------- |
+| `idle`    | Showing its value, or a live control that writes straight to the model. |
+| `editing` | Its inline editor is open. It may hold a value awaiting ✓ or ✕.         |
+| `pending` | It holds a value awaiting ✓ or ✕, outside an inline editor.             |
+
+Its events are `edit` (open the inline editor), `change` (hold a value, when it needs a
+confirm), `commit` (✓ or Enter: write the value) and `cancel` (✕ or Esc, or a reset). Ask it
+`status.isPending`, `status.isNotIdle`, and so on, as with the form.
+
+<Example @name="field-status" @title="A field holding a value" />
+
 ## Lifecycle hooks
 
 Hooks let your app react to what the form does. Submit the example empty, then with an email,

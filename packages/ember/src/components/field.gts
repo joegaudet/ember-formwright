@@ -1,12 +1,13 @@
 import { isObject, isString } from '@sindresorhus/is'
 import Component from '@glimmer/component'
 import type Owner from '@ember/owner'
-import { tracked } from '@glimmer/tracking'
 import { hash } from '@ember/helper'
 import { on } from '@ember/modifier'
 import { guidFor } from '@ember/object/internals'
 import { htmlSafe } from '@ember/template'
 import { modifier } from 'ember-modifier'
+import { machine } from '@switchyard-ts/ember'
+import { FieldMachine, FieldStatus } from '../machines.ts'
 import type Form from './form.gts'
 import { FieldLabel, FieldHint, FieldControl, FieldErrors, FieldGroup } from './field-parts.gts'
 import { normalizePath, type Path, type PathValue } from '../path.ts'
@@ -189,9 +190,8 @@ export default class Field<
   extends Component<FieldSignature<M, P, C, S>>
   implements FieldLayoutState
 {
-  /** A value the user chose but hasn't committed yet (confirm or inline mode). */
-  @tracked buffer: { value: PathValue<M, P> } | null = null
-  @tracked isEditing = false
+  /** The field's state machine; it holds a value the user chose but hasn't committed yet. */
+  lifecycle: FieldMachine<PathValue<M, P>>
   /** Read once: a field's path is its identity in the form's baseline. */
   readonly path: P
 
@@ -199,12 +199,28 @@ export default class Field<
     super(owner, args)
     // Normalizing only rewrites `items[0]` as `items.0`, which addresses the same value.
     this.path = normalizePath(args.for) as P
+    this.lifecycle = machine(this, new FieldMachine<PathValue<M, P>>())
     args.form.register(this)
   }
 
   willDestroy(): void {
     super.willDestroy()
     this.args.form.unregister(this)
+  }
+
+  get status(): FieldStatus {
+    // A stopped machine (the field was torn down) has no state.
+    return this.lifecycle.state ?? FieldStatus.Idle
+  }
+
+  /** A value the user chose but hasn't committed yet (confirm or inline mode). */
+  get buffer(): { value: PathValue<M, P> } | null {
+    return this.lifecycle.buffer
+  }
+
+  /** The inline editor is open. */
+  get isEditing(): boolean {
+    return this.lifecycle.matches(FieldStatus.Editing)
   }
 
   get form(): Form<M> {
@@ -352,14 +368,13 @@ export default class Field<
   /** Controls aren't typed against values, so what they send is taken as the path's type. */
   onChange = (sent: unknown) => {
     const value = sent as PathValue<M, P>
-    if (this.requiresConfirm) this.buffer = { value }
+    if (this.requiresConfirm) this.lifecycle.change(value)
     else this.form.commit(this.path, value)
   }
 
   commit = () => {
     if (this.buffer) this.form.commit(this.path, this.buffer.value)
-    this.buffer = null
-    this.isEditing = false
+    this.lifecycle.commit()
   }
 
   cancel = () => {
@@ -368,12 +383,11 @@ export default class Field<
 
   /** Drops an uncommitted value; the form calls this on reset. */
   discard(): void {
-    this.buffer = null
-    this.isEditing = false
+    this.lifecycle.cancel()
   }
 
   edit = () => {
-    this.isEditing = true
+    this.lifecycle.edit()
   }
 
   onCalloutToggle = (event: Event) => {
