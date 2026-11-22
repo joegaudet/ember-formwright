@@ -1,6 +1,6 @@
 {
   "name": "@ember-formwright/tiptap",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A rich-text control for Formwright, powered by Tiptap.",
   "keywords": [
     "ember-addon",

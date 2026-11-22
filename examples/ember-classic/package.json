@@ -10,8 +10,8 @@
     "test": "ember test"
   },
   "dependencies": {
-    "@ember-formwright/ember": "^2.0.0",
-    "@ember-formwright/test-support": "^2.0.0"
+    "@ember-formwright/ember": "^2.0.1",
+    "@ember-formwright/test-support": "^2.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
