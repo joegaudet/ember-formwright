@@ -1,3 +1,4 @@
+import { isNumber, isString } from '@sindresorhus/is'
 import { getDefaultLocale, registerDateLibrary, type DateLibrary } from 'ember-power-calendar/utils'
 
 /*
@@ -149,8 +150,8 @@ const DURATION_UNITS: Record<string, number> = {
 
 function normalizeDuration(value: unknown): number | null | undefined {
   if (value === null) return null
-  if (typeof value === 'number') return value
-  if (typeof value === 'string') {
+  if (isNumber(value)) return value
+  if (isString(value)) {
     const [, quantity = '', unit = 'd'] = value.match(/(\d+)\s*([a-z]*)/i) ?? []
     return parseInt(quantity, 10) * (DURATION_UNITS[unit.charAt(0)] ?? DAY_MS)
   }

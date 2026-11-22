@@ -1,3 +1,4 @@
+import { isFunction } from '@sindresorhus/is'
 import { get, set } from '@ember/object'
 
 /**
@@ -29,7 +30,7 @@ export const pojoAdapter: ModelAdapter = {
   },
   save: model => {
     const save = (model as { save?: () => unknown }).save
-    return typeof save === 'function' ? save.call(model) : undefined
+    return isFunction(save) ? save.call(model) : undefined
   },
 }
 

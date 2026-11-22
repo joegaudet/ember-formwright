@@ -1,3 +1,4 @@
+import { isObject, isString } from '@sindresorhus/is'
 import Component from '@glimmer/component'
 import type Owner from '@ember/owner'
 import { hash } from '@ember/helper'
@@ -260,12 +261,12 @@ export default class Field<
 
   get controlName(): string {
     const control = this.loose.control ?? 'input'
-    return typeof control === 'string' ? control : 'custom'
+    return isString(control) ? control : 'custom'
   }
 
   get control(): ControlComponent {
     const control = this.loose.control ?? 'input'
-    return typeof control === 'string' ? lookupControl(control) : control
+    return isString(control) ? lookupControl(control) : control
   }
 
   get isGroup() {
@@ -348,7 +349,7 @@ export default class Field<
     const labelFor = (v: unknown) => {
       const option = options?.find(o => matches(v, o, optionKey))
       // Without the option (e.g. options from an async search), an object value is its own option.
-      if (option === undefined && (typeof v !== 'object' || v === null)) return String(v)
+      if (option === undefined && !isObject(v)) return String(v)
       return labelOf(option ?? v, optionLabel)
     }
     return Array.isArray(value) ? value.map(labelFor).join(', ') : labelFor(value)

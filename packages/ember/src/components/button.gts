@@ -1,3 +1,4 @@
+import { isFunction } from '@sindresorhus/is'
 import Component from '@glimmer/component'
 import { tracked } from '@glimmer/tracking'
 import { on } from '@ember/modifier'
@@ -39,7 +40,7 @@ export default class Button extends Component<ButtonSignature> {
     if (this.busy || !this.args.onClick) return
     const result = this.args.onClick()
     // Any thenable (native, RSVP, ...) marks the button busy until it settles.
-    if (typeof (result as PromiseLike<unknown> | undefined)?.then === 'function') {
+    if (isFunction((result as PromiseLike<unknown> | undefined)?.then)) {
       this.acting = true
       try {
         await waitForPromise(Promise.resolve(result))

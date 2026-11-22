@@ -1,3 +1,4 @@
+import { isNumber } from '@sindresorhus/is'
 import { getContext, type TestContext } from '@ember/test-helpers'
 
 // The msgid contract's types, declared structurally: Formwright doesn't depend on `msgid`.
@@ -57,7 +58,7 @@ export const pseudoTranslator: Translator = {
   locale: 'en-XA',
   t(message, values = {}) {
     const count = values['count']
-    const one = typeof count !== 'number' || new Intl.PluralRules('en').select(count) === 'one'
+    const one = !isNumber(count) || new Intl.PluralRules('en').select(count) === 'one'
     const text = message.plural !== undefined && !one ? message.plural : message.message
     const filled = text
       .split(/(\{\w+\})/)

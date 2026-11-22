@@ -375,6 +375,9 @@ importers:
       '@embroider/addon-shim':
         specifier: ^1.10.3
         version: 1.10.3
+      '@sindresorhus/is':
+        specifier: ^8.1.0
+        version: 8.1.0
     devDependencies:
       '@ember-formwright/ember':
         specifier: workspace:*
@@ -400,6 +403,9 @@ importers:
       '@real-enums/core':
         specifier: ^2.3.0
         version: 2.3.0
+      '@sindresorhus/is':
+        specifier: ^8.1.0
+        version: 8.1.0
       '@standard-schema/spec':
         specifier: ^1.1.0
         version: 1.1.0
@@ -464,6 +470,9 @@ importers:
       '@embroider/addon-shim':
         specifier: ^1.10.3
         version: 1.10.3
+      '@sindresorhus/is':
+        specifier: ^8.1.0
+        version: 8.1.0
       decorator-transforms:
         specifier: ^2.4.0
         version: 2.4.0(@babel/core@7.29.7)
@@ -668,6 +677,9 @@ importers:
       '@embroider/addon-shim':
         specifier: ^1.10.3
         version: 1.10.3
+      '@sindresorhus/is':
+        specifier: ^8.1.0
+        version: 8.1.0
       decorator-transforms:
         specifier: ^2.4.0
         version: 2.4.0(@babel/core@7.29.7)
@@ -833,6 +845,9 @@ importers:
       '@embroider/addon-shim':
         specifier: ^1.10.3
         version: 1.10.3
+      '@sindresorhus/is':
+        specifier: ^8.1.0
+        version: 8.1.0
     devDependencies:
       '@ember/library-tsconfig':
         specifier: ^3.0.0
@@ -852,6 +867,9 @@ importers:
       '@embroider/addon-shim':
         specifier: ^1.10.3
         version: 1.10.3
+      '@sindresorhus/is':
+        specifier: ^8.1.0
+        version: 8.1.0
       decorator-transforms:
         specifier: ^2.4.0
         version: 2.4.0(@babel/core@7.29.7)

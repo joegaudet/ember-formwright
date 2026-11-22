@@ -1,3 +1,4 @@
+import { isObject } from '@sindresorhus/is'
 import { blur, click, fillIn, find, select as selectOption, settled } from '@ember/test-helpers'
 
 /**
@@ -421,7 +422,7 @@ export interface HarnessDecorator<T> {
 
 function decorator<T>(get: (form: FormHarness, key: string) => T): HarnessDecorator<T> {
   return ((_target: unknown, contextOrKey: string | ClassAccessorDecoratorContext) => {
-    const standard = typeof contextOrKey === 'object'
+    const standard = isObject(contextOrKey)
     const key = String(standard ? contextOrKey.name : contextOrKey)
     function getter(this: FormHarness) {
       return get(this, key)

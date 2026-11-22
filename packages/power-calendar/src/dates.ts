@@ -1,3 +1,5 @@
+import { isString } from '@sindresorhus/is'
+
 /** A stored date: an ISO `YYYY-MM-DD` string, or a `Date` with `@storeDate`. */
 export type DateValue = string | Date
 
@@ -20,7 +22,7 @@ export function toDate(value: unknown): Date | undefined {
       ? undefined
       : new Date(value.getFullYear(), value.getMonth(), value.getDate())
   }
-  if (typeof value === 'string') {
+  if (isString(value)) {
     const match = ISO_DATE.exec(value)
     if (match) return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
   }
