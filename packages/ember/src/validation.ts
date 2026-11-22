@@ -1,3 +1,4 @@
+import { isObject } from '@sindresorhus/is'
 import type { StandardSchemaV1 } from '@standard-schema/spec'
 import { normalizePath, type Path } from './path.ts'
 
@@ -22,7 +23,7 @@ export type ValidatorFn<M> = (
 export type Validator<M = any> = StandardSchemaV1 | ValidatorFn<M>
 
 function isStandardSchema(v: unknown): v is StandardSchemaV1 {
-  return typeof v === 'object' && v !== null && '~standard' in v
+  return isObject(v) && '~standard' in v
 }
 
 export async function runValidator<M>(

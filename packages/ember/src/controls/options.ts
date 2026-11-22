@@ -1,12 +1,9 @@
+import { isFunction, isObject } from '@sindresorhus/is'
 import { get } from '@ember/object'
 import type { OptionAccessor } from './signature.ts'
 
-function isObject(v: unknown): v is object {
-  return typeof v === 'object' && v !== null
-}
-
 function read(option: unknown, accessor: OptionAccessor | undefined, fallbacks: string[]): unknown {
-  if (typeof accessor === 'function') return accessor(option)
+  if (isFunction(accessor)) return accessor(option)
   if (!isObject(option)) return option
   if (accessor) return get(option, accessor)
   for (const key of fallbacks) if (key in option) return (option as Record<string, unknown>)[key]

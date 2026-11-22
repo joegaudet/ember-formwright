@@ -37,14 +37,15 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@embroider/addon-shim": "^1.10.3"
+    "@embroider/addon-shim": "^1.10.3",
+    "@sindresorhus/is": "^8.1.0"
   },
   "peerDependencies": {
     "@ember-formwright/ember": "workspace:^"
   },
   "devDependencies": {
-    "@ember/library-tsconfig": "^3.0.0",
     "@ember-formwright/ember": "workspace:*",
+    "@ember/library-tsconfig": "^3.0.0",
     "ember-source": "~7.3.0",
     "typescript": "~6.0.3"
   },

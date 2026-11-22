@@ -1,3 +1,4 @@
+import { isNumber } from '@sindresorhus/is'
 import Component from '@glimmer/component'
 import type Owner from '@ember/owner'
 import { tracked } from '@glimmer/tracking'
@@ -186,7 +187,7 @@ export class FileUploadControl extends Component<FileUploadControlSignature> {
       return {
         value,
         name,
-        size: typeof size === 'number' ? formatSize(size, this.args.locale) : undefined,
+        size: isNumber(size) ? formatSize(size, this.args.locale) : undefined,
         kind: kindOf(name),
       }
     })

@@ -1,3 +1,4 @@
+import { isNumber } from '@sindresorhus/is'
 import { getOwner } from '@ember/owner'
 
 // The msgid contract (structurally the same types; Formwright doesn't depend on `msgid`).
@@ -28,7 +29,7 @@ export function format(message: Message, values?: Record<string, unknown>): stri
   const count = values?.['count']
   const text =
     message.plural !== undefined &&
-    typeof count === 'number' &&
+    isNumber(count) &&
     new Intl.PluralRules('en').select(count) !== 'one'
       ? message.plural
       : message.message

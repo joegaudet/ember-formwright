@@ -52,11 +52,12 @@
     "prepack": "rollup --config"
   },
   "dependencies": {
+    "@ember/test-waiters": "^4.1.2",
     "@embroider/addon-shim": "^1.10.3",
+    "@sindresorhus/is": "^8.1.0",
     "@standard-schema/spec": "^1.1.0",
     "decorator-transforms": "^2.4.0",
-    "ember-modifier": "^4.3.0",
-    "@ember/test-waiters": "^4.1.2"
+    "ember-modifier": "^4.3.0"
   },
   "peerDependencies": {
     "@glimmer/component": ">= 2.0.0",
