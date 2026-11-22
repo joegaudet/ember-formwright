@@ -29,6 +29,7 @@ function title(name: string): string {
     <nav aria-label="Site">
       <a href="https://joegaudet.com/ember-formwright/">Home</a>
       <a href="https://joegaudet.com/ember-formwright/demo/">Demo</a>
+      <a href="https://joegaudet.com/ember-formwright/api/">API</a>
       <a href="https://github.com/joegaudet/ember-formwright">GitHub</a>
     </nav>
   </header>

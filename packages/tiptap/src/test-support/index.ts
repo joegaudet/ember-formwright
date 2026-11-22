@@ -41,6 +41,7 @@ export class RichTextHarness extends FieldHarness {
     return this.editor.getText()
   }
 
+  /** Whether the editor takes input: false while the field is disabled or read-only. */
   get isEditable(): boolean {
     return this.editor.isEditable
   }

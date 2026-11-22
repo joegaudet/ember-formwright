@@ -42,6 +42,7 @@ export {
 } from './dates.ts'
 export { nativeDateLibrary } from './date-library.ts'
 
+/** The signature of the `date-picker` and `date-range` controls. */
 export interface DatePickerControlSignature {
   /** A wrapper around the trigger and its dropdown, carrying the control's hooks and attributes. */
   Element: HTMLDivElement

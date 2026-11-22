@@ -61,6 +61,7 @@ type ForwardedArgs = Pick<
 
 type AnySelect = Select<unknown, boolean>
 
+/** The signature of the `power-select` and `power-select-multiple` controls. */
 export interface PowerSelectControlSignature {
   /** A wrapper around power-select, carrying the control's hooks and any attributes. */
   Element: HTMLDivElement

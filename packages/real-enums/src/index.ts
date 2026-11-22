@@ -7,13 +7,17 @@ export interface EnumLike {
   readonly values: ReadonlyArray<EnumMember>
 }
 
+/** One member of a real-enums class: its raw `value` and its display `label`. */
 export interface EnumMember {
   readonly value: string
   readonly label: string
 }
 
+/** Narrows {@link enumOptions}: keep `only` these members, or all `except` these. */
 export interface EnumOptionsFilter<M extends EnumMember> {
+  /** Keep just these members, in the enum's order. */
   only?: readonly M[]
+  /** Leave these members out. */
   except?: readonly M[]
 }
 

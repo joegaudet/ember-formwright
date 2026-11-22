@@ -4,6 +4,7 @@ import { modifier } from 'ember-modifier'
 import { Maskito, type MaskitoOptions } from '@maskito/core'
 import { registerControl, type ControlSignature, type OwnArgs } from '@ember-formwright/ember'
 
+/** The signature of the `masked` control: a text input that formats as it is typed in. */
 export interface MaskedSignature {
   Element: HTMLInputElement
   Args: ControlSignature<string>['Args'] & {

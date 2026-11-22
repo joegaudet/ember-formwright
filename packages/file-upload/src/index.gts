@@ -24,6 +24,7 @@ import { messages } from './messages.ts'
 /** Uploads a file the user chose, and resolves with what the field stores (an id, a URL, ...). */
 export type UploadFn = (file: UploadFile) => Promise<unknown>
 
+/** The signature of the `file` and `files` controls. */
 export interface FileUploadControlSignature {
   /** A wrapper around the drop zone and the file list, carrying the control's hooks. */
   Element: HTMLDivElement
@@ -101,6 +102,7 @@ function kindOf(name: string): string {
 
 const UNITS = ['byte', 'kilobyte', 'megabyte', 'gigabyte'] as const
 
+/** A file size for people, in decimal units: "512 bytes", "1.5 kB", "2 MB". */
 export function formatSize(bytes: number, locale?: string): string {
   let size = bytes
   let unit = 0

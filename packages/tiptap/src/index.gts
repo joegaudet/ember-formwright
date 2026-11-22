@@ -114,6 +114,7 @@ const GROUPS: RichTextTool[][] = [
 /** Every button, the default `@toolbar`. */
 export const DEFAULT_TOOLBAR: readonly RichTextTool[] = GROUPS.flat()
 
+/** The signature of the `rich-text` control: a toolbar over a Tiptap editor. */
 export interface RichTextControlSignature {
   /** The wrapper around the toolbar and the editor. */
   Element: HTMLDivElement

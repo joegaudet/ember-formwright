@@ -10,3 +10,6 @@ testem.log
 docs/site/demo/
 docs/site/guide/
 docs/site/404.html
+docs/api/
+docs/api-md/
+_site/

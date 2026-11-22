@@ -16,6 +16,7 @@ import { registerControl, type ControlSignature, type OwnArgs } from '@ember-for
 
 export type { CountryCode, MetadataJson }
 
+/** The signature of the `phone` control: a masked input for one phone number. */
 export interface PhoneSignature {
   Element: HTMLInputElement
   Args: ControlSignature<string | null>['Args'] & {

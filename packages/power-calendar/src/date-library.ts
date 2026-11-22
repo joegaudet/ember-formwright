@@ -185,6 +185,10 @@ function endOfWeek(day: Date, start: number): Date {
   return d
 }
 
+/**
+ * An ember-power-calendar date library built on `Date` and `Intl`, with no dependencies.
+ * `registerPowerCalendarControls` registers it unless the app registered one of its own.
+ */
 export const nativeDateLibrary: DateLibrary = {
   add,
   formatDate,

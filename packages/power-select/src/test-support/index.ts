@@ -34,6 +34,7 @@ export class PowerSelectHarness extends FieldHarness {
     return `[data-test-fw-path="${CSS.escape(path)}"]`
   }
 
+  /** Whether this is a multiple select (`power-select-multiple`). */
   get isMultiple(): boolean {
     return this.type === 'power-select-multiple' || this.trigger.matches('[aria-multiselectable]')
   }

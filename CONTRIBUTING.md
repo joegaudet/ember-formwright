@@ -101,3 +101,23 @@ and the release script opens the version PR as the person releasing. To set the 
 `docs/site/demo/` by `pnpm demo:build`. When a change touches anything the site shows
 (packages, controls, arguments, an API used in a snippet), update `docs/site/` in the same PR.
 `docs/social-card.html` is the source of `docs/site/social-card.png`.
+
+The **API reference** at `/ember-formwright/api/` is generated: TypeDoc builds it from the
+packages' TSDoc (`pnpm docs:api`, after `pnpm build`) into `docs/api/`, styled by `docs/api.css`
+and `scripts/typedoc-site.mjs`, with `docs/api/llms-full.txt` beside it. TypeDoc can't read
+`.gts`, so the Ember packages are documented from their emitted declarations (each one's
+`typedoc.jsonc` and `tsconfig.typedoc.json`). A component's page shows its signature, not its
+class members. Pages deploys the reference from the latest release tag's sources, after each
+release. `node --test scripts/*.test.mjs` fails on any warning: an exported declaration without
+a doc comment, a broken `{@link}`, or an exported signature that names a type the package
+doesn't export (list a type meant to stay private in the package's `typedoc.jsonc`
+`intentionallyNotExported`). `@ember-formwright/ember` and `@ember-formwright/test-support`
+don't check for missing doc comments or unexported types yet: their `typedoc.jsonc` turns that
+off until their comments are filled in.
+
+To preview the site with the reference, assembled the way Pages deploys it:
+
+```bash
+pnpm build && pnpm docs:api && rm -rf _site && cp -R docs/site _site && cp -R docs/api _site/api
+python3 -m http.server 8766 --directory _site
+```

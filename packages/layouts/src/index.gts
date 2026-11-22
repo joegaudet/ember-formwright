@@ -50,7 +50,8 @@ export const CheckboxAfter: TOC<FieldLayoutSignature> = <template>
   {{/if}}
 </template>
 
-interface ActionsSignature {
+/** The signature of {@link Actions}: a `<div>` with a `left` and a `right` block. */
+export interface ActionsSignature {
   Element: HTMLDivElement
   Blocks: {
     /** Buttons on the start side, e.g. `<f.Submit>` and `<f.Reset>`. */
